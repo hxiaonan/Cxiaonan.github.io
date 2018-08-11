@@ -62,9 +62,9 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-Linux系统raid1更换故障硬盘处理过程" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-linux" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/08/11/Linux系统raid1更换故障硬盘处理过程/" class="article-date">
+    <a href="/2018/08/11/linux/" class="article-date">
   <time datetime="2018-08-11T02:06:14.000Z" itemprop="datePublished">2018-08-11</time>
 </a>
     
@@ -76,7 +76,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/11/Linux系统raid1更换故障硬盘处理过程/">Linux系统raid1更换故障硬盘处理过程</a>
+      <a class="article-title" href="/2018/08/11/linux/">Linux系统raid1更换故障硬盘处理过程</a>
     </h1>
   
 
@@ -87,13 +87,13 @@
         <p>raid1 更换故障硬盘处理过程：<br> 1.服务器两个硬盘/dev/sda 和/dev/sdb组成raid1,结构如下<br>   /dev/sda1+/dev/sdb1=/dev/md0<br>   /dev/sda2+/dev/sdb2=/dev/md1<br>  现在通过cat /proc/mdstat发现/dev/sdb不正常，需要更换<br> 2.先在系统移除/dev/sdb,操作时需要先移除/dev/sdb的每一个分区<br>   a.移除/dev/sdb1<br>     先标记/dev/sdb1为fail<br>         [root@servera~]#mdadm –manage /dev/md0 –fail /dev/sdb1<br>     这时输入cat /proc/mdstat 应该可以看到以下信息<br>          Personalities:[linear][multipath][raid0][raid1][raid5][raid4][[raid6][raid10]<br>          md0:active raid1 sda1[0] sdb1<a href="F">2</a><br>              24418688 block [2/][U_]<br>          md1:active raid1 sda2[0] sdb2[1]<br>              24418688 blocks [2/2][UU]<br>          unused devices:<none><br></none></p>
         
           <p class="article-more-link">
-            <a href="/2018/08/11/Linux系统raid1更换故障硬盘处理过程/#more">Read More</a>
+            <a href="/2018/08/11/linux/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/11/Linux系统raid1更换故障硬盘处理过程/" data-id="cjkp28j2l00012ovqm5721imy" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/11/linux/" data-id="cjkp2g0rq00004pvq3b4k7c97" class="article-share-link">Share</a>
       
       
     </footer>
@@ -130,7 +130,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/08/testtopicture/" data-id="cjkp28j2o00022ovqgzleeykf" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/08/testtopicture/" data-id="cjkp2g0sa00024pvqvcb2vdv0" class="article-share-link">Share</a>
       
       
     </footer>
@@ -167,7 +167,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/06/testpirtuce/" data-id="cjkp28j2000002ovqx0kxdh8h" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/06/testpirtuce/" data-id="cjkp2g0s600014pvqfsuk5k9x" class="article-share-link">Share</a>
       
       
     </footer>
@@ -208,7 +208,7 @@
       <ul>
         
           <li>
-            <a href="/2018/08/11/Linux系统raid1更换故障硬盘处理过程/">Linux系统raid1更换故障硬盘处理过程</a>
+            <a href="/2018/08/11/linux/">Linux系统raid1更换故障硬盘处理过程</a>
           </li>
         
           <li>
