@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Linux系统raid1更换故障硬盘处理过程 | 那小子真帅！</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="raid1 更换故障硬盘处理过程： 1.服务器两个硬盘/dev/sda 和/dev/sdb组成raid1,结构如下   /dev/sda1+/dev/sdb1=/dev/md0   /dev/sda2+/dev/sdb2=/dev/md1  现在通过cat /proc/mdstat发现/dev/sdb不正常，需要更换 2.先在系统移除/dev/sdb,操作时需要先移除/dev/sdb的每一个分区">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux系统raid1更换故障硬盘处理过程">
+<meta property="og:url" content="http://yoursite.com/2018/08/11/Linux系统raid1更换故障硬盘处理过程/index.html">
+<meta property="og:site_name" content="那小子真帅！">
+<meta property="og:description" content="raid1 更换故障硬盘处理过程： 1.服务器两个硬盘/dev/sda 和/dev/sdb组成raid1,结构如下   /dev/sda1+/dev/sdb1=/dev/md0   /dev/sda2+/dev/sdb2=/dev/md1  现在通过cat /proc/mdstat发现/dev/sdb不正常，需要更换 2.先在系统移除/dev/sdb,操作时需要先移除/dev/sdb的每一个分区">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-08-11T06:48:37.970Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux系统raid1更换故障硬盘处理过程">
+<meta name="twitter:description" content="raid1 更换故障硬盘处理过程： 1.服务器两个硬盘/dev/sda 和/dev/sdb组成raid1,结构如下   /dev/sda1+/dev/sdb1=/dev/md0   /dev/sda2+/dev/sdb2=/dev/md1  现在通过cat /proc/mdstat发现/dev/sdb不正常，需要更换 2.先在系统移除/dev/sdb,操作时需要先移除/dev/sdb的每一个分区">
+  
+    <link rel="alternate" href="/atom.xml" title="那小子真帅！" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">那小子真帅！</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Linux系统raid1更换故障硬盘处理过程" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/11/Linux系统raid1更换故障硬盘处理过程/" class="article-date">
+  <time datetime="2018-08-11T02:06:14.000Z" itemprop="datePublished">2018-08-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Linux系统raid1更换故障硬盘处理过程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>raid1 更换故障硬盘处理过程：<br> 1.服务器两个硬盘/dev/sda 和/dev/sdb组成raid1,结构如下<br>   /dev/sda1+/dev/sdb1=/dev/md0<br>   /dev/sda2+/dev/sdb2=/dev/md1<br>  现在通过cat /proc/mdstat发现/dev/sdb不正常，需要更换<br> 2.先在系统移除/dev/sdb,操作时需要先移除/dev/sdb的每一个分区<br>   a.移除/dev/sdb1<br>     先标记/dev/sdb1为fail<br>         [root@servera~]#mdadm –manage /dev/md0 –fail /dev/sdb1<br>     这时输入cat /proc/mdstat 应该可以看到以下信息<br>          Personalities:[linear][multipath][raid0][raid1][raid5][raid4][[raid6][raid10]<br>          md0:active raid1 sda1[0] sdb1<a href="F">2</a><br>              24418688 block [2/][U_]<br>          md1:active raid1 sda2[0] sdb2[1]<br>              24418688 blocks [2/2][UU]<br>          unused devices:<none><br><a id="more"></a><br>移除/dev/sdb1<br>     [root@servera~]#mdadm –manage /dev/md0 –remove /dev/sdb1<br>这时系统返回的结果应该是<br>     mdadm:hot removed /dev/sdb1<br>这时输入cat /proc/mdstat 应该可以看到以下信息<br>     Personalitie:[linear][multipath][raid0][raid1][raid5][raid4][raid6][raid10]<br>     md0:active raid1 sda1[0]<br>     244186688?blocks [2/1][U_]</none></p>
+<pre><code>md1:active raid1 sda2[0] sdb2[1]
+
+244186688?blocks [2/2][UU]
+unused devices:&lt;none&gt;
+</code></pre><p>   b.用相同方法移除/dev/sdb2<br>     [root@servera~]#mdadm –manage /dev/md1 –fail /dev/sdb2<br>     [root@servera~]#cat /proc/mdstat</p>
+<pre><code>    Personalities:[linear][multipath][raid0][raid1][raid5][raid4][[raid6][raid10]
+    md0:active raid1 sda1[0]
+    24418688 blocks [2/1][U_]
+
+    md1:active raid1 sda2[0] sdb2[2](F)
+    24418688 blocks [2/1][U_]
+    unused devices:&lt;none&gt;
+[root@servera~]#mdadm --manage /dev/md1 --remove /dev/sdb2
+ mdadm:hot removed /dev/sdb2
+[root@servera~]#cat /proc/mdstat
+Personalities :[linear][multipath][raid0][raid1][raid5][raid4][raid6][raid10]
+md0:active raid1 sda1[0]
+     24418688 blocks [2/1][U_]
+unused devices:&lt;none&gt;
+s这时可以看到只有/dev/sda 在工作。
+</code></pre><p>3.关机<br>   {root@servera~}#shutdown - now<br>4.将硬盘/dev/sdb更换为新的硬盘，开机<br>5.系统启动完成以后，给新硬盘/dev/sdb做与/dev/sda相同的分区，可以用下面的命令完成<br>     [root@servera~]#sfdisk -d /dev/sda | sfdisk /dev/sda<br>      上面的命令表示从/dev/sda复制分区表至/dev/sdb.<br>      然后可以输入fdisk -l 查看两个硬盘分区是否相同<br>6.然后把/dev/sdb的分区挂到raid1里面<br>      [root@servera~]#mdadm –manage /dev/md0 –add /dev/sdb1<br>       系统应该返回mdadm:re-added /dev/sdb1<br>      [root@servera~]#mdadm –manage /dev/md1 –add /dev/sdb2<br>      系统使用cat /proc/mdstat 查看结果<br>      Personalities:[linear][multipath][raid0][raid1][raid5][raid4][raid6][raid10]<br>      md0:active raid1 sda1[0] sdb1[1]<br>          2418688 blocks [2/1][U_]<br>          [=&gt;…………] recovery = 9.9% (2423168/24428688) finish=2.8min<br>      speed=127535K/sec<br>      md1:active raid1 sda2[0] sdb2[1]<br>          24418688 blocks [2/1][U_]<br>          [=&gt;…………] recovery = 6.4% (1572096//24418688) finish=1.9min<br>      speed=196512K/sec<br>      unused devices:<none><br>      When the synchronization is finished,the output will look like this:<br>      server1：~#cat /proc/mdstat<br>      Personalities:[linear][multipath][raid0][raid5][raid4][raid6][raid10]<br>      md0:active raid1 sda1[0] sdb1[1]<br>          24418688 blocks [2/2][UU]<br>      md1:active raid1 sda2[0] sdb2[1]<br>          24418688 blocks [2/2][UU]<br>      unused devices:<none><br>至此大功告成啦，慢慢等系统自动同步数据到/dev/sdb.</none></none></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/08/11/Linux系统raid1更换故障硬盘处理过程/" data-id="cjkp28j2l00012ovqm5721imy" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/08/08/testtopicture/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">抓到一只帅哥的图片</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/08/11/Linux系统raid1更换故障硬盘处理过程/">Linux系统raid1更换故障硬盘处理过程</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/08/testtopicture/">抓到一只帅哥的图片</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/06/testpirtuce/">testpirtuce</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Xiaonan Chen<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
