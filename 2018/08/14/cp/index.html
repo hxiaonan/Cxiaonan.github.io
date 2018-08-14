@@ -7,17 +7,17 @@
   
   <title>cp | 那小子真帅！</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="使用VIM时，鼠标右键不能粘贴而是进入VISUAL模式。网上查找一番找到了解决方法：方法一：在普通模式下键入 set mouse-=a 方法二：编辑~/.vimrc 文件，加入如下代码： if has(‘mouse’)set mouse-=aendif 方法一每次打开VIM时都需要设置一次。方法二改了配置文件后，问题就解决了。参考：www.varesano.net/blog/fabio/disab">
+  <meta name="description" content="使用VIM时，鼠标右键不能粘贴而是进入VISUAL模式。网上查找一番找到了解决方法：方法一：在普通模式下键入 set mouse-=a 方法二：编辑~/.vimrc 文件，加入如下代码： if has(&amp;apos;mouse&amp;apos;) set mouse-=a  endif 方法一每次打开VIM时都需要设置一次。方法二改了配置文件后，问题就解决了。参考：www.varesano.net/blo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cp">
 <meta property="og:url" content="http://yoursite.com/2018/08/14/cp/index.html">
 <meta property="og:site_name" content="那小子真帅！">
-<meta property="og:description" content="使用VIM时，鼠标右键不能粘贴而是进入VISUAL模式。网上查找一番找到了解决方法：方法一：在普通模式下键入 set mouse-=a 方法二：编辑~/.vimrc 文件，加入如下代码： if has(‘mouse’)set mouse-=aendif 方法一每次打开VIM时都需要设置一次。方法二改了配置文件后，问题就解决了。参考：www.varesano.net/blog/fabio/disab">
+<meta property="og:description" content="使用VIM时，鼠标右键不能粘贴而是进入VISUAL模式。网上查找一番找到了解决方法：方法一：在普通模式下键入 set mouse-=a 方法二：编辑~/.vimrc 文件，加入如下代码： if has(&amp;apos;mouse&amp;apos;) set mouse-=a  endif 方法一每次打开VIM时都需要设置一次。方法二改了配置文件后，问题就解决了。参考：www.varesano.net/blo">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-14T08:06:35.633Z">
+<meta property="og:updated_time" content="2018-08-14T09:31:14.835Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cp">
-<meta name="twitter:description" content="使用VIM时，鼠标右键不能粘贴而是进入VISUAL模式。网上查找一番找到了解决方法：方法一：在普通模式下键入 set mouse-=a 方法二：编辑~/.vimrc 文件，加入如下代码： if has(‘mouse’)set mouse-=aendif 方法一每次打开VIM时都需要设置一次。方法二改了配置文件后，问题就解决了。参考：www.varesano.net/blog/fabio/disab">
+<meta name="twitter:description" content="使用VIM时，鼠标右键不能粘贴而是进入VISUAL模式。网上查找一番找到了解决方法：方法一：在普通模式下键入 set mouse-=a 方法二：编辑~/.vimrc 文件，加入如下代码： if has(&amp;apos;mouse&amp;apos;) set mouse-=a  endif 方法一每次打开VIM时都需要设置一次。方法二改了配置文件后，问题就解决了。参考：www.varesano.net/blo">
   
     <link rel="alternate" href="/atom.xml" title="那小子真帅！" type="application/atom+xml">
   
@@ -87,15 +87,17 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>使用VIM时，鼠标右键不能粘贴而是进入VISUAL模式。网上查找一番找到了解决方法：<br>方法一：在普通模式下键入</p>
-<p>set mouse-=a</p>
-<p>方法二：编辑~/.vimrc 文件，加入如下代码：</p>
-<p>if has(‘mouse’)<br>set mouse-=a<br>endif</p>
-<p>方法一每次打开VIM时都需要设置一次。方法二改了配置文件后，问题就解决了。参考：<br><a href="http://www.varesano.net/blog/fabio/disable%20vim%20automatic%20visual%20mode%20using%20mouse" target="_blank" rel="noopener">www.varesano.net/blog/fabio/disable%20vim%20automatic%20visual%20mode%20using%20mouse</a></p>
+<pre><code>set mouse-=a
+</code></pre><p>方法二：编辑~/.vimrc 文件，加入如下代码：</p>
+<pre><code>if has(&apos;mouse&apos;)
+set mouse-=a 
+endif
+</code></pre><p>方法一每次打开VIM时都需要设置一次。方法二改了配置文件后，问题就解决了。参考：<br><a href="http://www.varesano.net/blog/fabio/disable%20vim%20automatic%20visual%20mode%20using%20mouse" target="_blank" rel="noopener">www.varesano.net/blog/fabio/disable%20vim%20automatic%20visual%20mode%20using%20mouse</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/14/cp/" data-id="cjktfbkwj00002nvq5ky45cx5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/14/cp/" data-id="cjkticmxz00023svqj8yjttm4" class="article-share-link">Share</a>
       
       
     </footer>

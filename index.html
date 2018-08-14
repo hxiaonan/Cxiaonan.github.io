@@ -85,15 +85,17 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>使用VIM时，鼠标右键不能粘贴而是进入VISUAL模式。网上查找一番找到了解决方法：<br>方法一：在普通模式下键入</p>
-<p>set mouse-=a</p>
-<p>方法二：编辑~/.vimrc 文件，加入如下代码：</p>
-<p>if has(‘mouse’)<br>set mouse-=a<br>endif</p>
-<p>方法一每次打开VIM时都需要设置一次。方法二改了配置文件后，问题就解决了。参考：<br><a href="http://www.varesano.net/blog/fabio/disable%20vim%20automatic%20visual%20mode%20using%20mouse" target="_blank" rel="noopener">www.varesano.net/blog/fabio/disable%20vim%20automatic%20visual%20mode%20using%20mouse</a></p>
+<pre><code>set mouse-=a
+</code></pre><p>方法二：编辑~/.vimrc 文件，加入如下代码：</p>
+<pre><code>if has(&apos;mouse&apos;)
+set mouse-=a 
+endif
+</code></pre><p>方法一每次打开VIM时都需要设置一次。方法二改了配置文件后，问题就解决了。参考：<br><a href="http://www.varesano.net/blog/fabio/disable%20vim%20automatic%20visual%20mode%20using%20mouse" target="_blank" rel="noopener">www.varesano.net/blog/fabio/disable%20vim%20automatic%20visual%20mode%20using%20mouse</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/14/cp/" data-id="cjktfbkwj00002nvq5ky45cx5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/14/cp/" data-id="cjkticmxz00023svqj8yjttm4" class="article-share-link">Share</a>
       
       
     </footer>
@@ -134,7 +136,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/13/newlinux/" data-id="cjktfbkxd00042nvq517oxsow" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/13/newlinux/" data-id="cjkticmxu00013svql9dw73ht" class="article-share-link">Share</a>
       
       
     </footer>
@@ -175,7 +177,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/11/linux/" data-id="cjktfbkx200012nvq06cepu9z" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/11/linux/" data-id="cjkticmxd00003svqps7cw2iq" class="article-share-link">Share</a>
       
       
     </footer>
@@ -212,7 +214,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/08/testtopicture/" data-id="cjktfbkxa00032nvqyag4wm4d" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/08/testtopicture/" data-id="cjkticmyt00043svq5tznw0kd" class="article-share-link">Share</a>
       
       
     </footer>
@@ -249,7 +251,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/06/testpirtuce/" data-id="cjktfbkx700022nvqbitn4muy" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/06/testpirtuce/" data-id="cjkticmyq00033svqeykl1yx0" class="article-share-link">Share</a>
       
       
     </footer>
