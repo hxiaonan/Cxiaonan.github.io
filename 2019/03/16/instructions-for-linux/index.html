@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="小南同学的运维之路">
 <meta property="og:description" content="Linux系统需要定期巡检，以检查服务器软硬件使用情况，相当于对人的体检，确保可以及时发现问题、解决问题，降低损失，常用的巡检命令如下：  # uname -a # 查看内核/操作系统/CPU信息 # head -n 1 /etc/issue # 查看操作系统版本 # cat /proc/cpuinfo # 查看CPU信息 # hostname # 查看计算机名 # lspci -tv # 列出所">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-16T08:07:02.362Z">
+<meta property="og:updated_time" content="2019-03-16T09:07:08.391Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="instructions-for-linux">
 <meta name="twitter:description" content="Linux系统需要定期巡检，以检查服务器软硬件使用情况，相当于对人的体检，确保可以及时发现问题、解决问题，降低损失，常用的巡检命令如下：  # uname -a # 查看内核/操作系统/CPU信息 # head -n 1 /etc/issue # 查看操作系统版本 # cat /proc/cpuinfo # 查看CPU信息 # hostname # 查看计算机名 # lspci -tv # 列出所">
@@ -124,10 +124,10 @@
 # cut -d: -f1 /etc/passwd # 查看系统所有用户
 # cut -d: -f1 /etc/group # 查看系统所有组
 # crontab -l # 查看所有用户的定时任务
-</code></pre><p>Linux系统需要别的机器访问自己，或者去访问别的机器，这就需要设置一些网络配置，常用命令如下：</p>
+</code></pre><a id="more"></a>
+<p>Linux系统需要别的机器访问自己，或者去访问别的机器，这就需要设置一些网络配置，常用命令如下：</p>
 <p>IP命令</p>
 <pre><code># ip addr show eth0 #查看eth0接口IP
-# ip -s link show eth0 #查看eth0接口IP流量
 # ip link set dev eth0 up      #up/down 起动／关闭设备
 # ip link set dev eth0 txqueuelen 100      #改变设备传输队列的长度
 # ip link set dev eth0 mtu 1500      #改变网络设备MTU(最大传输单元)的值
@@ -236,7 +236,7 @@ $ firewall-cmd --version #eg : 0.4.3.2
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/16/instructions-for-linux/" data-id="cjtb86uow00064nvq6ieni76b" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/16/instructions-for-linux/" data-id="cjtb8jkfu00056svqujab2la2" class="article-share-link">Share</a>
       
       
     </footer>
