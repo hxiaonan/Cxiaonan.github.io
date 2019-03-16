@@ -5,15 +5,19 @@
   
 
   
-  <title>小南同学的运维之路</title>
+  <title>instructions-for-linux | 小南同学的运维之路</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="小南同学的运维之路">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="Linux系统需要定期巡检，以检查服务器软硬件使用情况，相当于对人的体检，确保可以及时发现问题、解决问题，降低损失，常用的巡检命令如下：  # uname -a # 查看内核/操作系统/CPU信息 # head -n 1 /etc/issue # 查看操作系统版本 # cat /proc/cpuinfo # 查看CPU信息 # hostname # 查看计算机名 # lspci -tv # 列出所">
+<meta property="og:type" content="article">
+<meta property="og:title" content="instructions-for-linux">
+<meta property="og:url" content="http://yoursite.com/2019/03/16/instructions-for-linux/index.html">
 <meta property="og:site_name" content="小南同学的运维之路">
+<meta property="og:description" content="Linux系统需要定期巡检，以检查服务器软硬件使用情况，相当于对人的体检，确保可以及时发现问题、解决问题，降低损失，常用的巡检命令如下：  # uname -a # 查看内核/操作系统/CPU信息 # head -n 1 /etc/issue # 查看操作系统版本 # cat /proc/cpuinfo # 查看CPU信息 # hostname # 查看计算机名 # lspci -tv # 列出所">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-03-16T08:07:02.362Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="小南同学的运维之路">
+<meta name="twitter:title" content="instructions-for-linux">
+<meta name="twitter:description" content="Linux系统需要定期巡检，以检查服务器软硬件使用情况，相当于对人的体检，确保可以及时发现问题、解决问题，降低损失，常用的巡检命令如下：  # uname -a # 查看内核/操作系统/CPU信息 # head -n 1 /etc/issue # 查看操作系统版本 # cat /proc/cpuinfo # 查看CPU信息 # hostname # 查看计算机名 # lspci -tv # 列出所">
   
     <link rel="alternate" href="/atom.xml" title="小南同学的运维之路" type="application/atom+xml">
   
@@ -64,9 +68,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-instructions-for-linux" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-instructions-for-linux" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/03/16/instructions-for-linux/" class="article-date">
   <time datetime="2019-03-16T07:25:10.000Z" itemprop="datePublished">2019-03-16</time>
@@ -79,8 +81,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/16/instructions-for-linux/">instructions-for-linux</a>
+    <h1 class="article-title" itemprop="name">
+      instructions-for-linux
     </h1>
   
 
@@ -240,281 +242,19 @@ $ firewall-cmd --version #eg : 0.4.3.2
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-RHEL7题库" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/09/09/RHEL7题库/" class="article-date">
-  <time datetime="2018-09-09T11:53:35.000Z" itemprop="datePublished">2018-09-09</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/09/RHEL7题库/">RHEL7题库</a>
-    </h1>
+    <a href="/2018/09/09/RHEL7题库/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">RHEL7题库</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>RHCSA题库答案<br>    题目0 破解密码<br>    A 重置虚拟机的Root 密码，设置为redhat。<br>    B 设置 system1 的网络和主机名<br>    你的虚拟机的网络应该按照以下要求配置：</p>
-<pre><code> *    Hostname:desktopX.example.com
- *    IP address:172.25.x.10
- *    Netmask:255.255.255.0
- *    Gateway:172.25.x.254
- *     Name server:172.25.254.254
-参考步骤
-破解密码：
-(1)开机，快速的按上下键，选择第一个
-(2)按下字母e
-(3)找到linux16开头的行
-(4)到该行的最后，删除到ro
-(5)把ro 改成 rw rd.break
-(6)ctrl+x      
-(7)chroot /sysroot/
-(8)这时就可以修改root密码了
- passwd root
- (9) SElinux开启时必须需要创建，重打selinux标签，如果没这步，系统起不来
- touch /.autorelabel
- (10)exit
- (11)reboot
- 网络和主机名：
- (1)hostnamectl set-hostname desktopX.example.com
- (2)vim /etc/sysconfig/network-scripts/ifcfg-eth0 
- DEVICE=eth0
- BOOTPROTO=none
- ONBOOT=yes
- TYPE=Ethernet
- IPADDR1=172.25.0.10
- PREFIX1=24
- GATEWAY1=172.25.0.254
- DNS1=172.25.254.254
- (3)systemctl restart network
-</code></pre><p>模拟考试环境<br>下面我们模拟考试环境，破解desktop0的密码。<br>破解密码：<br>(1)开机，快速的按上下键，选择第一个<br><img src="/2018/09/09/RHEL7题库/1.jpg" alt="如图"><br>(2)按下字母e<br>(3)找到linux16开头的行<br><img src="/2018/09/09/RHEL7题库/2.jpg" alt="如图"><br>(4)到该行的最后，删除到ro<br>(5)把ro 改成 rw rd.break<br>(6)ctrl+x<br>(7)chroot /sysroot/,这里将文件系统切换到真正的根上面，可以看到提示符变成了“sh-4.2#”。<br><img src="/2018/09/09/RHEL7题库/3.jpg" alt="如图"><br>(8)这时就可以修改root密码了<br>passwd root<br><img src="/2018/09/09/RHEL7题库/4.jpg" alt="如图"><br>(9)重打selinux标签，如果没这步，系统起不来<br>touch /.autorelabel<br>(10)exit<br>(11)reboot<br><img src="/2018/09/09/RHEL7题库/5.jpg" alt="如图"><br>在实验环境中虚拟机是以DHCP的方式获得IP的，因此在本实验环境通过下面方法来修改IP。在考试中需要看清楚题目的要求的IP和网关和DNS，然后再修改网络配置，评分时会登陆你的虚拟机，IP不对将无法评分。<br>(1)ip addr show       #查看IP地址与子网掩码并记录下来<br>(2)route              #查看网关并记录下来<br>(3)cat /etc/resolv.conf   #查看DNS并记录下来<br>(4)hostname           #查看主机名<br><img src="/2018/09/09/RHEL7题库/6.jpg" alt="如图"><br>(5)然后写到配置文件中<br>vim /etc/sysconfig/network-scripts/ifcfg-eth0<br>DEVICE=eth0<br>BOOTPROTO=none<br>ONBOOT=yes<br>TYPE=Ethernet<br>IPADDR1=172.25.0.10<br>PREFIX1=24<br>GATEWAY1=172.25.0.254<br>DNS1=172.25.254.254<br>(6)重启网络<br>systemctl restart network</p>
-<p>注意事项<br>(1)    这题做成功没分，没做成功全部为0分。<br>(2)    这里改密码后要记得touch /.autorelabel，这里单词经常有同学写错的哈。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/09/RHEL7题库/" data-id="cjtb86unp00024nvqncb01y0f" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
-
-
-  
-    <article id="post-cp" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/08/14/cp/" class="article-date">
-  <time datetime="2018-08-14T07:48:49.000Z" itemprop="datePublished">2018-08-14</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/14/cp/">cp</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>使用VIM时，鼠标右键不能粘贴而是进入VISUAL模式。网上查找一番找到了解决方法：<br>方法一：在普通模式下键入</p>
-<pre><code>set mouse-=a
-</code></pre><p>方法二：编辑~/.vimrc 文件，加入如下代码：</p>
-<pre><code>if has(&apos;mouse&apos;)
-set mouse-=a 
-endif
-</code></pre><p>方法一每次打开VIM时都需要设置一次。方法二改了配置文件后，问题就解决了。参考：<br><a href="http://www.varesano.net/blog/fabio/disable%20vim%20automatic%20visual%20mode%20using%20mouse" target="_blank" rel="noopener">www.varesano.net/blog/fabio/disable%20vim%20automatic%20visual%20mode%20using%20mouse</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/14/cp/" data-id="cjtb86un100004nvqw9ml9n9f" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-newlinux" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/08/13/newlinux/" class="article-date">
-  <time datetime="2018-08-13T09:22:05.000Z" itemprop="datePublished">2018-08-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/13/newlinux/">newlinux</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>raid1 更换故障硬盘处理过程：<br> 1.服务器两个硬盘/dev/sda 和/dev/sdb组成raid1,结构如下<br>   /dev/sda1+/dev/sdb1=/dev/md0<br>   /dev/sda2+/dev/sdb2=/dev/md1<br>  现在通过cat /proc/mdstat发现/dev/sdb不正常，需要更换<br> 2.先在系统移除/dev/sdb,操作时需要先移除/dev/sdb的每一个分区<br>   a.移除/dev/sdb1<br>     先标记/dev/sdb1为fail<br>         [root@servera~]#mdadm –manage /dev/md0 –fail /dev/sdb1<br>     这时输入cat /proc/mdstat 应该可以看到以下信息<br>          Personalities:[linear][multipath][raid0][raid1][raid5][raid4][[raid6][raid10]<br>          md0:active raid1 sda1[0] sdb1<a href="F">2</a><br>              24418688 block [2/][U_]<br>          md1:active raid1 sda2[0] sdb2[1]<br>              24418688 blocks [2/2][UU]<br>          unused devices:<none><br></none></p>
-        
-          <p class="article-more-link">
-            <a href="/2018/08/13/newlinux/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/13/newlinux/" data-id="cjtb86unl00014nvqe2n5hfwl" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-linux" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/08/11/linux/" class="article-date">
-  <time datetime="2018-08-11T02:06:14.000Z" itemprop="datePublished">2018-08-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/11/linux/">Linux系统raid1更换故障硬盘处理过程</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>raid1 更换故障硬盘处理过程：<br> 1.服务器两个硬盘/dev/sda 和/dev/sdb组成raid1,结构如下<br>   /dev/sda1+/dev/sdb1=/dev/md0<br>   /dev/sda2+/dev/sdb2=/dev/md1<br>  现在通过cat /proc/mdstat发现/dev/sdb不正常，需要更换<br> 2.先在系统移除/dev/sdb,操作时需要先移除/dev/sdb的每一个分区<br>   a.移除/dev/sdb1<br>     先标记/dev/sdb1为fail<br>         [root@servera~]#mdadm –manage /dev/md0 –fail /dev/sdb1<br>     这时输入cat /proc/mdstat 应该可以看到以下信息<br>          Personalities:[linear][multipath][raid0][raid1][raid5][raid4][[raid6][raid10]<br>          md0:active raid1 sda1[0] sdb1<a href="F">2</a><br>              24418688 block [2/][U_]<br>          md1:active raid1 sda2[0] sdb2[1]<br>              24418688 blocks [2/2][UU]<br>          unused devices:<none><br></none></p>
-        
-          <p class="article-more-link">
-            <a href="/2018/08/11/linux/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/11/linux/" data-id="cjtb86unt00034nvqiivaz0o9" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-testtopicture" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/08/08/testtopicture/" class="article-date">
-  <time datetime="2018-08-08T07:40:02.000Z" itemprop="datePublished">2018-08-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/08/testtopicture/">抓到一只帅哥的图片</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="/2018/08/08/testtopicture/picture.png" alt="The gym i go to is full of hunks but i am too shy to speak to them."></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/08/testtopicture/" data-id="cjtb86uot00054nvqezjl9928" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-testpirtuce" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/08/06/testpirtuce/" class="article-date">
-  <time datetime="2018-08-06T08:45:01.000Z" itemprop="datePublished">2018-08-06</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/06/testpirtuce/">testpirtuce</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="/2018/08/06/testpirtuce/test.jpg" alt="测试插入图片"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/06/testpirtuce/" data-id="cjtb86uor00044nvqzzd3b77o" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
 
 </section>
         
