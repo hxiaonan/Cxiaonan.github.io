@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="小南同学的运维之路">
 <meta property="og:description" content="Linux系统需要定期巡检，以检查服务器软硬件使用情况，相当于对人的体检，确保可以及时发现问题、解决问题，降低损失，常用的巡检命令如下：  # uname -a # 查看内核/操作系统/CPU信息 # head -n 1 /etc/issue # 查看操作系统版本 # cat /proc/cpuinfo # 查看CPU信息 # hostname # 查看计算机名 # lspci -tv # 列出所">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-16T09:07:08.391Z">
+<meta property="og:updated_time" content="2019-03-16T09:22:46.510Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="instructions-for-linux">
 <meta name="twitter:description" content="Linux系统需要定期巡检，以检查服务器软硬件使用情况，相当于对人的体检，确保可以及时发现问题、解决问题，降低损失，常用的巡检命令如下：  # uname -a # 查看内核/操作系统/CPU信息 # head -n 1 /etc/issue # 查看操作系统版本 # cat /proc/cpuinfo # 查看CPU信息 # hostname # 查看计算机名 # lspci -tv # 列出所">
@@ -160,7 +160,7 @@
 # netstat -at   #列出所有TCP端口
 # netstat -au   #列出所有UDP端口
 # netstat -r    #显示核心路由信息
-# netstat -r    #显示网络接口列表
+# netstat -i    #显示网络接口列表
 # netstat -tpnl #显看已连接的TCP端口，以及PID
 # netstat -nat | grep“192.168.1.15:22”| awk&apos;{print $ 5}&apos;| awk -F：&apos;{print $ 1}&apos;| sort | uniq -c | sort -nr | head -20 #查看连接某服务端口最多的的IP地址
 # netstat -anp | grep 3306 -c     ＃查看3306端口（mysql）的链接数
@@ -236,7 +236,7 @@ $ firewall-cmd --version #eg : 0.4.3.2
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/16/instructions-for-linux/" data-id="cjtb8jkfu00056svqujab2la2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/16/instructions-for-linux/" data-id="cjtbaaeyt00069jvqqk48kgey" class="article-share-link">Share</a>
       
       
     </footer>
