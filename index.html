@@ -66,6 +66,71 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-owncloud" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/05/28/owncloud/" class="article-date">
+  <time datetime="2019-05-28T02:23:09.000Z" itemprop="datePublished">2019-05-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/28/owncloud/">owncloud</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>owncloud 数据库从SQLite 迁移到MySQL/MariaDB遇到的坑</p>
+<pre><code>1. 查看配置文件config.php，找到字符&apos;dbtype&apos;=&gt;&apos;sqlite3&apos;证明数据库类型为SQLite
+2. 修改配置文件config.php   备注：本文的配置文件路径/var/www/html/owncloud/config/config.php
+   修改配置文件config.php，将installed那行改为：&apos;installed&apos; =&gt; false,
+
+3. 新建MySQL数据库
+
+注：这里就是我自己入的坑了，我利用PHPmyadmin登录进去，新建一个用户并建一个同名的数据库，
+设置密码后，授权所有权限。设置完后，访问owncloud 安装页面，重新配置OWNCLOUD管理员用户，配置数据库。
+提交后出现mysql：ERROR 1045 (28000): Access denied for user &apos;owncloud@&apos;localhost&apos; (using password: YES)错误！
+然后用SHELL命令进去mysql #mysql -u root -p
+#select user,password from mysql.user;  //查看数据库账号和密码
+//发现新建的owncloud没有设置密码，好，手动再设置密码。设置完毕后再次提交，显示还是一样的错误。
+/*好小子，我就把这个账号删除了！重新来过！*/
+#mysql -uroot -p //进去mysql
+MySQL&gt; create database owncloud;  //新建数据库owncloud
+Query OK, 1 row affected (0.00 sec)
+
+MySQL&gt; CREATE USER &apos;owncloud&apos;@&apos;localhost&apos; IDENTIFIED BY &apos;owncloud&apos;; //新建数据库用户owncloud,密码owncloud
+Query OK, 0 rows affected (0.00 sec)
+
+MySQL&gt; GRANT ALL PRIVILEGES ON owncloud.* TO &apos;owncloud&apos;@&apos;localhost&apos;; //分配用户权限
+Query OK, 0 rows affected (0.00 sec)
+
+MySQL&gt; FLUSH PRIVILEGES;   //刷新用户权限
+Query OK, 0 rows affected (0.00 sec)
+4. 重新创建owncloud管理员用户，配置数据库
+浏览器访问 localhost/owncloud/，重新配置数据库
+</code></pre><p>   1st.管理员用户和密码填写用SQLite时配置的那个一样<br>   2nd.文件夹采用默认<br>   3rd.配置数据库 选择MySQL并根据你的数据库填写下面四栏信息<br>   备注：owncloud<br>         owncloud<br>         owncloud<br>         localhost<br>填写完毕后提交，居然安装成功了！！！！我也一脸懵逼啊，为啥之前是使用PHPmyadmin建的数据库和账号不可以呢？还是权限没设置对！！！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/05/28/owncloud/" data-id="cjw78h9p00005awvq6ylqyl05" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Recruit-marriage" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/05/03/Recruit-marriage/" class="article-date">
@@ -103,7 +168,7 @@ I think everything we do should use our hearts. Once you fully open the heart fo
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/03/Recruit-marriage/" data-id="cjv889fz600010vvqabpptw1p" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/05/03/Recruit-marriage/" data-id="cjw78h9o50001awvq6t9e0poi" class="article-share-link">Share</a>
       
       
     </footer>
@@ -148,7 +213,7 @@ I think everything we do should use our hearts. Once you fully open the heart fo
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/17/pdf-upload-test/" data-id="cjv889fzj00030vvqfz933d80" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/17/pdf-upload-test/" data-id="cjw78h9p90007awvqixvz6dtk" class="article-share-link">Share</a>
       
       
     </footer>
@@ -223,7 +288,7 @@ I think everything we do should use our hearts. Once you fully open the heart fo
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/16/instructions-for-linux/" data-id="cjv889g2200060vvqxaad5cor" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/16/instructions-for-linux/" data-id="cjw78h9p40006awvqcdo766dw" class="article-share-link">Share</a>
       
       
     </footer>
@@ -294,7 +359,7 @@ I think everything we do should use our hearts. Once you fully open the heart fo
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/09/RHEL7题库/" data-id="cjv889fwj00000vvqddmg43ph" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/09/RHEL7题库/" data-id="cjw78h9nb0000awvqm2cn9bsg" class="article-share-link">Share</a>
       
       
     </footer>
@@ -337,7 +402,7 @@ endif
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/14/cp/" data-id="cjv889fze00020vvq6eoy53m4" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/14/cp/" data-id="cjw78h9o80002awvqofsp1yzc" class="article-share-link">Share</a>
       
       
     </footer>
@@ -378,7 +443,7 @@ endif
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/13/newlinux/" data-id="cjv889g2000050vvq9cm3zh8e" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/13/newlinux/" data-id="cjw78h9oc0004awvqvv48z6xl" class="article-share-link">Share</a>
       
       
     </footer>
@@ -419,7 +484,7 @@ endif
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/11/linux/" data-id="cjv889g1y00040vvqxptcj49s" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/11/linux/" data-id="cjw78h9oa0003awvqd7b4i8j2" class="article-share-link">Share</a>
       
       
     </footer>
@@ -460,6 +525,10 @@ endif
       <ul>
         
           <li>
+            <a href="/2019/05/28/owncloud/">owncloud</a>
+          </li>
+        
+          <li>
             <a href="/2019/05/03/Recruit-marriage/">Recruit marriage</a>
           </li>
         
@@ -473,10 +542,6 @@ endif
         
           <li>
             <a href="/2018/09/09/RHEL7题库/">RHEL7题库</a>
-          </li>
-        
-          <li>
-            <a href="/2018/08/14/cp/">cp</a>
           </li>
         
       </ul>

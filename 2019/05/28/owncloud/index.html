@@ -5,19 +5,19 @@
   
 
   
-  <title>pdf-upload-test | 小南同学的运维之路</title>
+  <title>owncloud | 小南同学的运维之路</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="upload-pdf-test">
+  <meta name="description" content="owncloud 数据库从SQLite 迁移到MySQL/MariaDB遇到的坑 1. 查看配置文件config.php，找到字符&amp;apos;dbtype&amp;apos;=&amp;gt;&amp;apos;sqlite3&amp;apos;证明数据库类型为SQLite 2. 修改配置文件config.php   备注：本文的配置文件路径/var/www/html/owncloud/config/config.php">
 <meta property="og:type" content="article">
-<meta property="og:title" content="pdf-upload-test">
-<meta property="og:url" content="http://yoursite.com/2019/03/17/pdf-upload-test/index.html">
+<meta property="og:title" content="owncloud">
+<meta property="og:url" content="http://yoursite.com/2019/05/28/owncloud/index.html">
 <meta property="og:site_name" content="小南同学的运维之路">
-<meta property="og:description" content="upload-pdf-test">
+<meta property="og:description" content="owncloud 数据库从SQLite 迁移到MySQL/MariaDB遇到的坑 1. 查看配置文件config.php，找到字符&amp;apos;dbtype&amp;apos;=&amp;gt;&amp;apos;sqlite3&amp;apos;证明数据库类型为SQLite 2. 修改配置文件config.php   备注：本文的配置文件路径/var/www/html/owncloud/config/config.php">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-17T02:43:16.545Z">
+<meta property="og:updated_time" content="2019-05-28T03:53:30.329Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="pdf-upload-test">
-<meta name="twitter:description" content="upload-pdf-test">
+<meta name="twitter:title" content="owncloud">
+<meta name="twitter:description" content="owncloud 数据库从SQLite 迁移到MySQL/MariaDB遇到的坑 1. 查看配置文件config.php，找到字符&amp;apos;dbtype&amp;apos;=&amp;gt;&amp;apos;sqlite3&amp;apos;证明数据库类型为SQLite 2. 修改配置文件config.php   备注：本文的配置文件路径/var/www/html/owncloud/config/config.php">
   
     <link rel="alternate" href="/atom.xml" title="小南同学的运维之路" type="application/atom+xml">
   
@@ -68,10 +68,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-pdf-upload-test" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-owncloud" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/03/17/pdf-upload-test/" class="article-date">
-  <time datetime="2019-03-17T02:01:13.000Z" itemprop="datePublished">2019-03-17</time>
+    <a href="/2019/05/28/owncloud/" class="article-date">
+  <time datetime="2019-05-28T02:23:09.000Z" itemprop="datePublished">2019-05-28</time>
 </a>
     
   </div>
@@ -82,7 +82,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      pdf-upload-test
+      owncloud
     </h1>
   
 
@@ -90,20 +90,40 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><center>upload-pdf-test<center></center></center></p>
-<p><br><br>
+        <p>owncloud 数据库从SQLite 迁移到MySQL/MariaDB遇到的坑</p>
+<pre><code>1. 查看配置文件config.php，找到字符&apos;dbtype&apos;=&gt;&apos;sqlite3&apos;证明数据库类型为SQLite
+2. 修改配置文件config.php   备注：本文的配置文件路径/var/www/html/owncloud/config/config.php
+   修改配置文件config.php，将installed那行改为：&apos;installed&apos; =&gt; false,
 
-	<div class="row">
-    <embed src="/2019/03/17/pdf-upload-test/Red-Hat-Enterprise-Linux-7-Global-File-System-2-en-US.pdf" width="100%" height="550" type="application/pdf">
-	</div>
+3. 新建MySQL数据库
 
+注：这里就是我自己入的坑了，我利用PHPmyadmin登录进去，新建一个用户并建一个同名的数据库，
+设置密码后，授权所有权限。设置完后，访问owncloud 安装页面，重新配置OWNCLOUD管理员用户，配置数据库。
+提交后出现mysql：ERROR 1045 (28000): Access denied for user &apos;owncloud@&apos;localhost&apos; (using password: YES)错误！
+然后用SHELL命令进去mysql #mysql -u root -p
+#select user,password from mysql.user;  //查看数据库账号和密码
+//发现新建的owncloud没有设置密码，好，手动再设置密码。设置完毕后再次提交，显示还是一样的错误。
+/*好小子，我就把这个账号删除了！重新来过！*/
+#mysql -uroot -p //进去mysql
+MySQL&gt; create database owncloud;  //新建数据库owncloud
+Query OK, 1 row affected (0.00 sec)
 
-<br><br></p>
+MySQL&gt; CREATE USER &apos;owncloud&apos;@&apos;localhost&apos; IDENTIFIED BY &apos;owncloud&apos;; //新建数据库用户owncloud,密码owncloud
+Query OK, 0 rows affected (0.00 sec)
+
+MySQL&gt; GRANT ALL PRIVILEGES ON owncloud.* TO &apos;owncloud&apos;@&apos;localhost&apos;; //分配用户权限
+Query OK, 0 rows affected (0.00 sec)
+
+MySQL&gt; FLUSH PRIVILEGES;   //刷新用户权限
+Query OK, 0 rows affected (0.00 sec)
+4. 重新创建owncloud管理员用户，配置数据库
+浏览器访问 localhost/owncloud/，重新配置数据库
+</code></pre><p>   1st.管理员用户和密码填写用SQLite时配置的那个一样<br>   2nd.文件夹采用默认<br>   3rd.配置数据库 选择MySQL并根据你的数据库填写下面四栏信息<br>   备注：owncloud<br>         owncloud<br>         owncloud<br>         localhost<br>填写完毕后提交，居然安装成功了！！！！我也一脸懵逼啊，为啥之前是使用PHPmyadmin建的数据库和账号不可以呢？还是权限没设置对！！！</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/17/pdf-upload-test/" data-id="cjw78h9p90007awvqixvz6dtk" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/05/28/owncloud/" data-id="cjw78h9p00005awvq6ylqyl05" class="article-share-link">Share</a>
       
       
     </footer>
@@ -112,19 +132,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2019/05/03/Recruit-marriage/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Recruit marriage
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/03/16/instructions-for-linux/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/05/03/Recruit-marriage/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">instructions-for-linux</div>
+      <div class="article-nav-title">Recruit marriage</div>
     </a>
   
 </nav>
