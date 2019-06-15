@@ -66,6 +66,265 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-rhel7-specific" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/06/15/rhel7-specific/" class="article-date">
+  <time datetime="2019-06-15T02:14:59.000Z" itemprop="datePublished">2019-06-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/06/15/rhel7-specific/">rhel7_specific</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>RHEL7新特性详解</p>
+<pre><code>1，  首先RHEL7仅可用在以下平台：  64bit AMD ,  64bit Intel,   IBM Power, IBM System z系统，新版本的RHEL不再支持32bit架构了。
+
+2， GRUB2 比之前的GRUB更强大，支持BIOS，EFI和OpenFiremware ,支持MBR分区表和GPT分区表，还支持非Linux系统如NTFS等。
+
+3， 传统的文件系统是ext3, ext4,而RHEL7默认文件系统是XFS， 它支持在线调整大小。
+
+4， RHEL7支持多种安装方式，CDROM, ISO, PXE, USB
+
+一、systemd 服务管理和系统管理程序，提供了并行处理的能力。尽可能启动更少的进程，让进程并行启动，并实现按需启动。
+二、一个服务并认为是一个配置单元，可用的配置单元如下
+--service  #代表一个后台服务
+--socket   #代表一个套接字
+--device   #代表一个设备
+--mount    #代表一个挂载点
+--automount #代表一个自挂载点
+--swap      #交换配置单元用来管理交换分区
+--target    #此类配置单元为其他配置单元进行逻辑组合，它们本身实际上并不做什么，只是引用其他配置单元而已
+--timer     #定时器配置单元用来定时触发用户定义的操作，这类配置单元取代了atd、crond等传统的定时服务
+--snapshot  #与target配置单元相似，快照是一组配置单元，它保存了系统当前的运行状态
+</code></pre><p>服务管理工具对比，以下是RHEL6与RHEL7命令对比。</p>
+<pre><code>传统工具                    新工具                                描述
+service name start        systemctl start name.service       启动服务
+service name stop         systemctl stop  name.service       关闭服务
+service name restart      systemctl restart name.service     重启服务
+service name reload       systemctl reload  name.service     重新加载配置文件
+service name status       systemctl status  name.service     查看状态
+service --status-all      systemctl list-units--type service --all 查看所有服务状态
+chkconfig name on         systemctl enable name.service      开机启动
+chkconfig name off        systemctl disable name.service     开机禁止
+chkconfig --list name     systemctl status name.service      查看状态
+                          systemctl is-enabled name.service 
+chkconfig --list          systemctl list-units --type service 列出所有服务状态
+</code></pre><p>开机运行级别和切换运行级别，RHEL7取消了运行级别功能，取而代之的是Target Units，Target是其它systemd单元的逻辑集合。</p>
+<pre><code>RHEL6级别    RHEL7 Target Units                        描述
+   0          poweroff.target                          关机
+   1          rescue.target                          救援模式
+   2          multi-user.target                      多用户模式
+   3          multi-user.target                      多用户模式
+   4          multi-user.target                      多用户模式
+   5          graphical.target                       图形模式
+   6          reboot.target                          重启
+ runlevel     systemctl list-units --type target     查看当前加载的单元
+ telinitN     systemctl isolate name.target          切换Target Unit
+              systemctl get-default                  查看默认Target Unit
+              systemctl set-default name.target      修改默认Target Unit
+  其他的操纵模式
+  《1》救援模式  systemctl rescue
+  《2》应急模式  systemctl emergency
+</code></pre><p>电源管理RHEL6与RHEL7命令对比。</p>
+<pre><code>RHEL6         RHEL7                         描述
+halt         systemctl halt                 关机
+reboot       systemctl reboot               重启
+pm-suspend   systemctl suspend              暂停系统（保持系统状态到内存）
+pm-hibernate systemctl hibernate            系统休眠（保持系统状态到硬盘）
+</code></pre><p>操控远程主机systemctl工具支持远程控制，该功能依赖于SSH协议，</p>
+<p>格式：   systemctl -H user@hostname  command</p>
+<p>以下©著作权归作者所有：来自51CTO博客作者大Q小Q的原创作品，如需转载，请注明出处，否则将追究法律责任<br>一、RHEL7新特性对比之安装</p>
+<pre><code>2012，发布rhel7（主要是64位系统）
+
+1、RHEL7目前支持架构：
+
+①64-bit AMD    ②64-bit Intel    ③IBM POWER    ④IBM System z    ⑤不再支持x86 32bit
+2、RHEL7安装界面--&gt;grub2,systemd
+
+①全新的安装界面    ②一站式的安装配置    ③全新的kickstart结构    ④全新的分区工具
+
+⑤支持2TB以上硬盘作为系统引导盘    ⑥安装配置步骤较大变化
+
+3、RHEL7的分区
+
+/boot   ---启动分区200M
+
+swap    ---交换分区2048M
+
+/          ---根分区（自定义）
+
+4、安装类型：Server  with  GUI 。
+
+5、UID
+
+①rhel7的普通用户UID从1000开始；
+
+②rhel6的普通用户UID从500开始 。
+
+6、RHEL7启动引导工具
+
+①全新的Grub2引导工具
+
+②支持包括PowerPC在内的CPU架构
+
+③支持BIOS、EFI和OpenFireware的基础输入/输出系统架构
+
+④支持MBR方式的2TB以内容量硬盘和GPT方式2TB以上容量硬盘
+
+⑤支持从非Linux文件系统引导，例如HFS+和NTFS
+
+7、桌面
+
+
+ rhel7：①使用最新的Gnome 3为默认桌面环境    ②使用最新的KDE 4.10为备选桌面环境
+
+ rhel6：①使用Gnome 2为默认桌面环境               ②使用KDE 3 为备选桌面环境
+
+
+8、RHEL7存储子系统
+
+①内核支持iscsi、FCoE和iSER
+
+②使用内核LIO target subsystem替换了rhel6中的tgtd第三方服务
+
+③LVM升级支持RAID方式，替换了rhel6中的mdadm工具，软RAID功能由卷管理方式实现
+
+④更新更多的HBA卡支持
+
+9、RHEL7文件系统
+
+ ①系统主目录“/”文件系统默认为XFS（xfs的扩展性、容量、安全性都比ext4更强）
+
+ ②支持Btrfs文件系统作为前瞻技术预览，但不推荐不做商业支持
+
+ ③更好的支持SSD，普通硬盘默认调度算法为CFQ，SSD硬盘默认设置为Deadline
+</code></pre><p>二、RHEL7新特性对比之内核与虚拟化</p>
+<pre><code>1、RHEL7内核（查看内核的命令：uname -a）
+
+①内核版本为3.10
+
+②支持动态补丁机制kpatch作为技术预览
+
+③内核出错后导出core文件支持最大3TB
+
+④支持内核模块黑名单机制（modprode.blacklist=module）
+
+⑤支持嵌套虚拟化技术、虚拟CPU更顺畅
+
+⑥内核级支持资源的调优和分配
+</code></pre><p>2、RHEL7虚拟化支持</p>
+<pre><code>①更高性能的KVM内核虚拟化支持
+
+②虚拟机USB3.0接口支持
+
+③更方便更稳定的动态迁移支持
+
+④QCOW2格式文件型快照支持
+
+⑤嵌套虚拟化支持，可以在KVM中安装配置OpenStack
+
+⑥继续支持作为虚拟机的Xen技术，但不再支持作为寄主机的Xen技术
+
+⑦加强了对VMWARE的技术支持，自带open-vm-tools替换vm-tools
+</code></pre><p>3、RHEL7容器型虚拟化</p>
+<pre><code>①支持LXC容器型虚拟化
+
+②支持最热的技术Docker
+
+③提供最新rhel7的Docker p_w_picpath
+
+④支持自建Docker Register
+</code></pre><p>三、RHEL7新特性对比之启动工具</p>
+<pre><code>RHEL 7 系统及服务启动控制
+
+①全新的系统及服务启动管理器-Systemd
+
+②全新的系统及服务启动管理命令-systemctl
+
+
+rhel6 ---&gt;chkconfig --list
+
+rhel7 ---&gt;systemctl list-units
+
+chkconfig  ---&gt;  systemctl
+
+systemctl enable autofs  --&gt; chkconfig autofs on
+
+mask--&gt;被标记的服务状态不能被改变。
+
+umask--&gt;删除标记，状态被释放。
+</code></pre><p>四、RHEL7新特性对比之编译工具</p>
+<pre><code>1、RHEL 7编译器及工具
+
+①使用GCC4.8 作为默认编译工具（yum list gcc查看）
+
+②使用Glibc 2.17 作为标准库（yum list glibc查看）
+
+③使用GDB 7.6.1 作为编译调试工具（yum list gdb查看）
+
+④支持Ruby 2.0（yum list ruby查看）
+
+⑤支持Python 2.7.5（yum list python查看）
+
+⑥支持Java 7（yum list *java*查看）
+</code></pre><p>五、RHEL7新特性对比之网络配置</p>
+<pre><code>1、RHEL 7 网络配置
+
+①迁移原有的网络配置工具到全新的NetworkManager（ifconfig--&gt;systemctl status NetworkManager--&gt;nmcli connection show --&gt;nmtui--&gt;nm-connection-editor）
+
+②支持全新的网络聚合模式Team（Team和Bond是一样的功能，Team采用新的技术，Bond是旧技术）
+
+③使用Chrony服务替换原有的NTPd服务（rhel7的chronyd支持微妙级systemctl status chronyd；rhel6的ntpd支持毫秒级chkconfig --list ntpd）
+
+④全新的Firewalld防火墙工具
+
+（rhel7:iptables -L --&gt;systemctl status iptables --&gt; systemctl status firewalld--&gt;firewall-config防火墙配置的图形化界面）
+
+（rhel6:iptables -L --&gt;service iptables status）
+
+⑥支持网络名字空间方便容器型虚拟机管理
+</code></pre><p>六、RHEL7新特性对比之认证与跟新</p>
+<pre><code>2、RHEL 7服务版本更新
+
+①使用Apache 2.4替换之前的Apache2.2（yum list httpd查看）
+
+②使用MariaDB 5.5替换之前的MySQL5.1（yum list mysql*|mariadb*）
+</code></pre><p>七、RHEL7新特性对比总结</p>
+<pre><code>1、rhel7对于开发人员最大的变化是内核升级到3.10
+
+2、rhel7对于系统管理人员最大的变化是系统及服务管理程序修改为Systemd
+
+3、rhel7对于网络运维人员最大的变化是网络管理程序和服务修改为NetworkManager
+
+4、rhel7对于存储工程师最大的变化是iSCSI导出服务修改为LIO kernel Target Subsystem
+
+5、rhel7对于云计算工程师最大的喜讯是原生的支持KVM嵌套虚拟化和Docker容器虚拟化
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/06/15/rhel7-specific/" data-id="cjwwzxqgh00080zvqruwd5ooy" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-owncloud" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/05/28/owncloud/" class="article-date">
@@ -121,7 +380,7 @@ Query OK, 0 rows affected (0.00 sec)
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/28/owncloud/" data-id="cjw78h9p00005awvq6ylqyl05" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/05/28/owncloud/" data-id="cjwwzxqfu00050zvqdh8otsio" class="article-share-link">Share</a>
       
       
     </footer>
@@ -168,7 +427,7 @@ I think everything we do should use our hearts. Once you fully open the heart fo
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/03/Recruit-marriage/" data-id="cjw78h9o50001awvq6t9e0poi" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/05/03/Recruit-marriage/" data-id="cjwwzxqeg00010zvq1rhn0yed" class="article-share-link">Share</a>
       
       
     </footer>
@@ -213,7 +472,7 @@ I think everything we do should use our hearts. Once you fully open the heart fo
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/17/pdf-upload-test/" data-id="cjw78h9p90007awvqixvz6dtk" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/17/pdf-upload-test/" data-id="cjwwzxqfv00060zvq0k0qz797" class="article-share-link">Share</a>
       
       
     </footer>
@@ -288,7 +547,7 @@ I think everything we do should use our hearts. Once you fully open the heart fo
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/16/instructions-for-linux/" data-id="cjw78h9p40006awvqcdo766dw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/16/instructions-for-linux/" data-id="cjwwzxqfz00070zvq4t9jy6gb" class="article-share-link">Share</a>
       
       
     </footer>
@@ -359,7 +618,7 @@ I think everything we do should use our hearts. Once you fully open the heart fo
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/09/RHEL7题库/" data-id="cjw78h9nb0000awvqm2cn9bsg" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/09/RHEL7题库/" data-id="cjwwzxqdy00000zvqzh9c3t8i" class="article-share-link">Share</a>
       
       
     </footer>
@@ -402,7 +661,7 @@ endif
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/14/cp/" data-id="cjw78h9o80002awvqofsp1yzc" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/14/cp/" data-id="cjwwzxqf200020zvqnobw8u57" class="article-share-link">Share</a>
       
       
     </footer>
@@ -443,7 +702,7 @@ endif
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/13/newlinux/" data-id="cjw78h9oc0004awvqvv48z6xl" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/13/newlinux/" data-id="cjwwzxqf600040zvq9pb1s8fr" class="article-share-link">Share</a>
       
       
     </footer>
@@ -484,7 +743,7 @@ endif
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/11/linux/" data-id="cjw78h9oa0003awvqd7b4i8j2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/11/linux/" data-id="cjwwzxqf400030zvqgif8y7zv" class="article-share-link">Share</a>
       
       
     </footer>
@@ -512,7 +771,7 @@ endif
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li></ul>
     </div>
   </div>
 
@@ -523,6 +782,10 @@ endif
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/06/15/rhel7-specific/">rhel7_specific</a>
+          </li>
         
           <li>
             <a href="/2019/05/28/owncloud/">owncloud</a>
@@ -538,10 +801,6 @@ endif
         
           <li>
             <a href="/2019/03/16/instructions-for-linux/">instructions-for-linux</a>
-          </li>
-        
-          <li>
-            <a href="/2018/09/09/RHEL7题库/">RHEL7题库</a>
           </li>
         
       </ul>
