@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="小南同学的运维之路">
 <meta property="og:description" content="raid1 更换故障硬盘处理过程： 1.服务器两个硬盘/dev/sda 和/dev/sdb组成raid1,结构如下   /dev/sda1+/dev/sdb1=/dev/md0   /dev/sda2+/dev/sdb2=/dev/md1  现在通过cat /proc/mdstat发现/dev/sdb不正常，需要更换 2.先在系统移除/dev/sdb,操作时需要先移除/dev/sdb的每一个分区">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-13T09:26:41.732Z">
+<meta property="og:updated_time" content="2019-07-22T01:14:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="newlinux">
 <meta name="twitter:description" content="raid1 更换故障硬盘处理过程： 1.服务器两个硬盘/dev/sda 和/dev/sdb组成raid1,结构如下   /dev/sda1+/dev/sdb1=/dev/md0   /dev/sda2+/dev/sdb2=/dev/md1  现在通过cat /proc/mdstat发现/dev/sdb不正常，需要更换 2.先在系统移除/dev/sdb,操作时需要先移除/dev/sdb的每一个分区">
@@ -116,7 +116,7 @@ s这时可以看到只有/dev/sda 在工作。
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/13/newlinux/" data-id="cjwwzxqf600040zvq9pb1s8fr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/13/newlinux/" data-id="cjyfv0gja00052x991u1nsowg" class="article-share-link">Share</a>
       
       
     </footer>
@@ -161,7 +161,7 @@ s这时可以看到只有/dev/sda 在工作。
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li></ul>
     </div>
   </div>
 
@@ -172,6 +172,10 @@ s这时可以看到只有/dev/sda 在工作。
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/07/23/test/">test</a>
+          </li>
         
           <li>
             <a href="/2019/06/15/rhel7-specific/">rhel7_specific</a>
@@ -187,10 +191,6 @@ s这时可以看到只有/dev/sda 在工作。
         
           <li>
             <a href="/2019/03/17/pdf-upload-test/">pdf-upload-test</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/16/instructions-for-linux/">instructions-for-linux</a>
           </li>
         
       </ul>
