@@ -108,7 +108,7 @@
 
         
             <form id="search-form">
-            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
             <i class="fa fa-times" onclick="resetSearch()"></i>
             </form>
             <div id="local-search-result"></div>
@@ -363,6 +363,37 @@ I think everything we do should use our hearts. Once you fully open the heart fo
     </nav>
 
   
+  
+    <! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+       求鼓励，求支持！
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/img/zhifubao.jpg" alt="支付宝打赏"> 
+    支付宝<br>
+    <!-- 微信打赏图案 -->
+    <img src="/img/weixin.jpg" alt="微信打赏">  
+    微信<br>
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+  
+
+
 </article>
 
     <div id="toc" class="toc-article">
@@ -446,6 +477,7 @@ I think everything we do should use our hearts. Once you fully open the heart fo
     <script>
         
     </script>
+
 </div>
       <footer id="footer">
     <div class="outer">
