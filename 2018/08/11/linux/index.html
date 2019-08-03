@@ -23,7 +23,7 @@
 <meta property="og:site_name" content="小南同学的运维之路">
 <meta property="og:description" content="raid1 更换故障硬盘处理过程： 1.服务器两个硬盘/dev/sda 和/dev/sdb组成raid1,结构如下   /dev/sda1+/dev/sdb1=/dev/md0   /dev/sda2+/dev/sdb2=/dev/md1  现在通过cat /proc/mdstat发现/dev/sdb不正常，需要更换 2.先在系统移除/dev/sdb,操作时需要先移除/dev/sdb的每一个分区">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-30T14:37:02.942Z">
+<meta property="og:updated_time" content="2019-08-03T07:23:48.866Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux系统raid1更换故障硬盘处理过程">
 <meta name="twitter:description" content="raid1 更换故障硬盘处理过程： 1.服务器两个硬盘/dev/sda 和/dev/sdb组成raid1,结构如下   /dev/sda1+/dev/sdb1=/dev/md0   /dev/sda2+/dev/sdb2=/dev/md1  现在通过cat /proc/mdstat发现/dev/sdb不正常，需要更换 2.先在系统移除/dev/sdb,操作时需要先移除/dev/sdb的每一个分区">
@@ -79,7 +79,9 @@
 </script>
 
 
-    <script> yiliaConfig.jquery_ui = [false]; </script>
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
 
 
 
@@ -172,6 +174,8 @@
                         
                             <li><a href="/about/">关于我</a></li>
                         
+                            <li><a href="/favorite">后宫</a></li>
+                        
                         </ul>
                     </nav>
                     <nav class="header-nav">
@@ -179,9 +183,9 @@
                             
                                 <a class="fa Email" href="mailto:123@123.com" title="Email"></a>
                             
-                                <a class="fa GitHub" href="#" title="GitHub"></a>
-                            
                                 <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 知乎" href="/zhihu" title="知乎"></a>
                             
                                 <a class="fa 简书" href="/jianshu" title="简书"></a>
                             
@@ -249,6 +253,8 @@
                 
                     <li><a href="/about/">关于我</a></li>
                 
+                    <li><a href="/favorite">后宫</a></li>
+                
                 <div class="clearfix"></div>
                 </ul>
             </nav>
@@ -257,9 +263,9 @@
                             
                                 <a class="fa Email" target="_blank" href="mailto:123@123.com" title="Email"></a>
                             
-                                <a class="fa GitHub" target="_blank" href="#" title="GitHub"></a>
-                            
                                 <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 知乎" target="_blank" href="/zhihu" title="知乎"></a>
                             
                                 <a class="fa 简书" target="_blank" href="/jianshu" title="简书"></a>
                             
@@ -343,7 +349,7 @@ s这时可以看到只有/dev/sda 在工作。
         <p><span>本文标题:</span><a href="/2018/08/11/linux/">Linux系统raid1更换故障硬盘处理过程</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Xiaonan Chen</a></p>
         <p><span>发布时间:</span>2018-08-11, 10:06:14</p>
-        <p><span>最后更新:</span>2019-07-30, 22:37:02</p>
+        <p><span>最后更新:</span>2019-08-03, 15:23:48</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2018/08/11/linux/" title="Linux系统raid1更换故障硬盘处理过程">http://yoursite.com/2018/08/11/linux/</a>
             <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2018/08/11/linux/　　作者: Xiaonan Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -381,11 +387,10 @@ s这时可以看到只有/dev/sda 在工作。
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
     <!-- 支付宝打赏图案 -->
-    <img src="/img/zhifubao.jpg" alt="支付宝打赏"> 
-    支付宝<br>
-    <!-- 微信打赏图案 -->
-    <img src="/img/weixin.jpg" alt="微信打赏">  
-    微信<br>
+    <img src="/img/donate.png" alt="支付宝打赏"> 
+        <!-- 微信打赏图案 -->
+   <!-- <img src="/img/weixin.jpg" alt="微信打赏">  -->
+    
     </div>
   <script type="text/javascript">
     document.getElementById('btn_donate').onclick = function(){

@@ -23,7 +23,7 @@
 <meta property="og:site_name" content="小南同学的运维之路">
 <meta property="og:description" content="RHEL7新特性详解 1，  首先RHEL7仅可用在以下平台：  64bit AMD ,  64bit Intel,   IBM Power, IBM System z系统，新版本的RHEL不再支持32bit架构了。  2， GRUB2 比之前的GRUB更强大，支持BIOS，EFI和OpenFiremware ,支持MBR分区表和GPT分区表，还支持非Linux系统如NTFS等。  3， 传统的文">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-30T14:38:53.669Z">
+<meta property="og:updated_time" content="2019-08-03T07:23:38.215Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="rhel7_specific">
 <meta name="twitter:description" content="RHEL7新特性详解 1，  首先RHEL7仅可用在以下平台：  64bit AMD ,  64bit Intel,   IBM Power, IBM System z系统，新版本的RHEL不再支持32bit架构了。  2， GRUB2 比之前的GRUB更强大，支持BIOS，EFI和OpenFiremware ,支持MBR分区表和GPT分区表，还支持非Linux系统如NTFS等。  3， 传统的文">
@@ -79,7 +79,9 @@
 </script>
 
 
-    <script> yiliaConfig.jquery_ui = [false]; </script>
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
 
 
 
@@ -172,6 +174,8 @@
                         
                             <li><a href="/about/">关于我</a></li>
                         
+                            <li><a href="/favorite">后宫</a></li>
+                        
                         </ul>
                     </nav>
                     <nav class="header-nav">
@@ -179,9 +183,9 @@
                             
                                 <a class="fa Email" href="mailto:123@123.com" title="Email"></a>
                             
-                                <a class="fa GitHub" href="#" title="GitHub"></a>
-                            
                                 <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 知乎" href="/zhihu" title="知乎"></a>
                             
                                 <a class="fa 简书" href="/jianshu" title="简书"></a>
                             
@@ -249,6 +253,8 @@
                 
                     <li><a href="/about/">关于我</a></li>
                 
+                    <li><a href="/favorite">后宫</a></li>
+                
                 <div class="clearfix"></div>
                 </ul>
             </nav>
@@ -257,9 +263,9 @@
                             
                                 <a class="fa Email" target="_blank" href="mailto:123@123.com" title="Email"></a>
                             
-                                <a class="fa GitHub" target="_blank" href="#" title="GitHub"></a>
-                            
                                 <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 知乎" target="_blank" href="/zhihu" title="知乎"></a>
                             
                                 <a class="fa 简书" target="_blank" href="/jianshu" title="简书"></a>
                             
@@ -318,8 +324,8 @@
 3， 传统的文件系统是ext3, ext4,而RHEL7默认文件系统是XFS， 它支持在线调整大小。
 
 4， RHEL7支持多种安装方式，CDROM, ISO, PXE, USB
-
-一、systemd 服务管理和系统管理程序，提供了并行处理的能力。尽可能启动更少的进程，让进程并行启动，并实现按需启动。
+</code></pre><a id="more"></a> 
+<pre><code>一、systemd 服务管理和系统管理程序，提供了并行处理的能力。尽可能启动更少的进程，让进程并行启动，并实现按需启动。
 二、一个服务并认为是一个配置单元，可用的配置单元如下
 --service  #代表一个后台服务
 --socket   #代表一个套接字
@@ -544,7 +550,7 @@ umask--&gt;删除标记，状态被释放。
         <p><span>本文标题:</span><a href="/2019/06/15/rhel7-specific/">rhel7_specific</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Xiaonan Chen</a></p>
         <p><span>发布时间:</span>2019-06-15, 10:14:59</p>
-        <p><span>最后更新:</span>2019-07-30, 22:38:53</p>
+        <p><span>最后更新:</span>2019-08-03, 15:23:38</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2019/06/15/rhel7-specific/" title="rhel7_specific">http://yoursite.com/2019/06/15/rhel7-specific/</a>
             <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2019/06/15/rhel7-specific/　　作者: Xiaonan Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -588,11 +594,10 @@ umask--&gt;删除标记，状态被释放。
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
     <!-- 支付宝打赏图案 -->
-    <img src="/img/zhifubao.jpg" alt="支付宝打赏"> 
-    支付宝<br>
-    <!-- 微信打赏图案 -->
-    <img src="/img/weixin.jpg" alt="微信打赏">  
-    微信<br>
+    <img src="/img/donate.png" alt="支付宝打赏"> 
+        <!-- 微信打赏图案 -->
+   <!-- <img src="/img/weixin.jpg" alt="微信打赏">  -->
+    
     </div>
   <script type="text/javascript">
     document.getElementById('btn_donate').onclick = function(){

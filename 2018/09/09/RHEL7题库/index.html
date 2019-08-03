@@ -15,13 +15,13 @@
 
 
 
-<meta name="description" content="RHCSA题库答案    题目0 破解密码    A 重置虚拟机的Root 密码，设置为redhat。    B 设置 system1 的网络和主机名    你的虚拟机的网络应该按照以下要求配置：  *    Hostname:desktopX.example.com  *    IP address:172.25.x.10  *    Netmask:255.255.255.0  *    Ga">
+<meta name="description" content="RHCSA题库答案    题目0 破解密码    A 重置虚拟机的Root 密码，设置为redhat。    B 设置 system1 的网络和主机名    你的虚拟机的网络应该按照以下要求配置： *    Hostname:desktopX.example.com *    IP address:172.25.x.10 *    Netmask:255.255.255.0 *    Gatewa">
 <meta name="keywords" content="linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RHEL7题库">
 <meta property="og:url" content="http://yoursite.com/2018/09/09/RHEL7题库/index.html">
 <meta property="og:site_name" content="小南同学的运维之路">
-<meta property="og:description" content="RHCSA题库答案    题目0 破解密码    A 重置虚拟机的Root 密码，设置为redhat。    B 设置 system1 的网络和主机名    你的虚拟机的网络应该按照以下要求配置：  *    Hostname:desktopX.example.com  *    IP address:172.25.x.10  *    Netmask:255.255.255.0  *    Ga">
+<meta property="og:description" content="RHCSA题库答案    题目0 破解密码    A 重置虚拟机的Root 密码，设置为redhat。    B 设置 system1 的网络和主机名    你的虚拟机的网络应该按照以下要求配置： *    Hostname:desktopX.example.com *    IP address:172.25.x.10 *    Netmask:255.255.255.0 *    Gatewa">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2018/09/09/RHEL7题库/1.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/09/09/RHEL7题库/2.jpg">
@@ -29,10 +29,10 @@
 <meta property="og:image" content="http://yoursite.com/2018/09/09/RHEL7题库/4.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/09/09/RHEL7题库/5.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/09/09/RHEL7题库/6.jpg">
-<meta property="og:updated_time" content="2019-07-30T14:36:10.542Z">
+<meta property="og:updated_time" content="2019-08-03T07:23:36.367Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RHEL7题库">
-<meta name="twitter:description" content="RHCSA题库答案    题目0 破解密码    A 重置虚拟机的Root 密码，设置为redhat。    B 设置 system1 的网络和主机名    你的虚拟机的网络应该按照以下要求配置：  *    Hostname:desktopX.example.com  *    IP address:172.25.x.10  *    Netmask:255.255.255.0  *    Ga">
+<meta name="twitter:description" content="RHCSA题库答案    题目0 破解密码    A 重置虚拟机的Root 密码，设置为redhat。    B 设置 system1 的网络和主机名    你的虚拟机的网络应该按照以下要求配置： *    Hostname:desktopX.example.com *    IP address:172.25.x.10 *    Netmask:255.255.255.0 *    Gatewa">
 <meta name="twitter:image" content="http://yoursite.com/2018/09/09/RHEL7题库/1.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
@@ -86,7 +86,9 @@
 </script>
 
 
-    <script> yiliaConfig.jquery_ui = [false]; </script>
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
 
 
 
@@ -179,6 +181,8 @@
                         
                             <li><a href="/about/">关于我</a></li>
                         
+                            <li><a href="/favorite">后宫</a></li>
+                        
                         </ul>
                     </nav>
                     <nav class="header-nav">
@@ -186,9 +190,9 @@
                             
                                 <a class="fa Email" href="mailto:123@123.com" title="Email"></a>
                             
-                                <a class="fa GitHub" href="#" title="GitHub"></a>
-                            
                                 <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 知乎" href="/zhihu" title="知乎"></a>
                             
                                 <a class="fa 简书" href="/jianshu" title="简书"></a>
                             
@@ -256,6 +260,8 @@
                 
                     <li><a href="/about/">关于我</a></li>
                 
+                    <li><a href="/favorite">后宫</a></li>
+                
                 <div class="clearfix"></div>
                 </ul>
             </nav>
@@ -264,9 +270,9 @@
                             
                                 <a class="fa Email" target="_blank" href="mailto:123@123.com" title="Email"></a>
                             
-                                <a class="fa GitHub" target="_blank" href="#" title="GitHub"></a>
-                            
                                 <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 知乎" target="_blank" href="/zhihu" title="知乎"></a>
                             
                                 <a class="fa 简书" target="_blank" href="/jianshu" title="简书"></a>
                             
@@ -318,12 +324,13 @@
       
           
         <p>RHCSA题库答案<br>    题目0 破解密码<br>    A 重置虚拟机的Root 密码，设置为redhat。<br>    B 设置 system1 的网络和主机名<br>    你的虚拟机的网络应该按照以下要求配置：</p>
-<pre><code> *    Hostname:desktopX.example.com
- *    IP address:172.25.x.10
- *    Netmask:255.255.255.0
- *    Gateway:172.25.x.254
- *     Name server:172.25.254.254
-参考步骤
+<pre><code>*    Hostname:desktopX.example.com
+*    IP address:172.25.x.10
+*    Netmask:255.255.255.0
+*    Gateway:172.25.x.254
+*     Name server:172.25.254.254
+</code></pre><a id="more"></a>
+<pre><code>参考步骤
 破解密码：
 (1)开机，快速的按上下键，选择第一个
 (2)按下字母e
@@ -363,7 +370,7 @@
         <p><span>本文标题:</span><a href="/2018/09/09/RHEL7题库/">RHEL7题库</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Xiaonan Chen</a></p>
         <p><span>发布时间:</span>2018-09-09, 19:53:35</p>
-        <p><span>最后更新:</span>2019-07-30, 22:36:10</p>
+        <p><span>最后更新:</span>2019-08-03, 15:23:36</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2018/09/09/RHEL7题库/" title="RHEL7题库">http://yoursite.com/2018/09/09/RHEL7题库/</a>
             <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2018/09/09/RHEL7题库/　　作者: Xiaonan Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -407,11 +414,10 @@
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
     <!-- 支付宝打赏图案 -->
-    <img src="/img/zhifubao.jpg" alt="支付宝打赏"> 
-    支付宝<br>
-    <!-- 微信打赏图案 -->
-    <img src="/img/weixin.jpg" alt="微信打赏">  
-    微信<br>
+    <img src="/img/donate.png" alt="支付宝打赏"> 
+        <!-- 微信打赏图案 -->
+   <!-- <img src="/img/weixin.jpg" alt="微信打赏">  -->
+    
     </div>
   <script type="text/javascript">
     document.getElementById('btn_donate').onclick = function(){
