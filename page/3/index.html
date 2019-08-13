@@ -14,10 +14,13 @@
 <meta name="author" content="Xiaonan Chen" />
 
 
+    
+    
+
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="小南同学的笔记">
-<meta property="og:url" content="http://yoursite.com/tags/生活/index.html">
+<meta property="og:url" content="http://yoursite.com/page/3/index.html">
 <meta property="og:site_name" content="小南同学的笔记">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
@@ -49,11 +52,13 @@
 <link rel="stylesheet" href="/css/style.css">
 
 
+    <style> .article { opacity: 0;} </style>
+
 
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>Tag: 生活 | 小南同学的笔记</title>
+<title>小南同学的笔记</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -62,10 +67,10 @@
     var yiliaConfig = {
         fancybox: true,
         animate: true,
-        isHome: false,
+        isHome: true,
         isPost: false,
         isArchive: false,
-        isTag: true,
+        isTag: false,
         isCategory: false,
         fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
         scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
@@ -269,87 +274,80 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-linux" class="article article-type-post" itemscope itemprop="blogPost">
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-          <div class="article-meta">
-              <a href="/2019/07/31/birthday/" class="archive-article-date">
-      <time datetime="2019-07-31T01:29:37.000Z" itemprop="datePublished">07-31</time>
+    <div class="article-meta">
+      <a href="/2018/08/11/linux/" class="article-date">
+      <time datetime="2018-08-11T02:06:14.000Z" itemprop="datePublished">2018-08-11</time>
 </a>
 
 
-        </div>
-         
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
   
     <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/07/31/birthday/">birthday</a>
+      <a class="article-title" href="/2018/08/11/linux/">Linux系统raid1更换故障硬盘处理过程</a>
     </h1>
   
 
-        <div class="article-info info-on-archive">
+        
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
           
+              <p>raid1 更换故障硬盘处理过程：<br> 1.服务器两个硬盘/dev/sda 和/dev/sdb组成raid1,结构如下<br>   /dev/sda1+/dev/sdb1=/dev/md0<br>   /dev/sda2+/dev/sdb2=/dev/md1<br>  现在通过cat /proc/mdstat发现/dev/sdb不正常，需要更换<br> 2.先在系统移除/dev/sdb,操作时需要先移除/dev/sdb的每一个分区<br>   a.移除/dev/sdb1<br>     先标记/dev/sdb1为fail<br>         [root@servera~]#mdadm –manage /dev/md0 –fail /dev/sdb1<br>     这时输入cat /proc/mdstat 应该可以看到以下信息<br>          Personalities:[linear][multipath][raid0][raid1][raid5][raid4][[raid6][raid10]<br>          md0:active raid1 sda1[0] sdb1<a href="F">2</a><br>              24418688 block [2/][U_]<br>          md1:active raid1 sda2[0] sdb2[1]<br>              24418688 blocks [2/2][UU]<br>          unused devices:<none><br></none></p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
 
-          
+      
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/生活/">生活</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
     </div>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-          <div class="article-meta">
-              <a href="/2019/05/03/Recruit-marriage/" class="archive-article-date">
-      <time datetime="2019-05-03T14:49:24.000Z" itemprop="datePublished">05-03</time>
-</a>
-
-
-        </div>
-         
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/05/03/Recruit-marriage/">Recruit marriage</a>
-    </h1>
-  
-
-        <div class="article-info info-on-archive">
-          
-
-          
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/生活/">生活</a></li></ul>
+      
+        <p class="article-more-link">
+          <a href="/2018/08/11/linux/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
     </div>
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
     
+  </div>
+  
+  
 
+
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+    </nav>
+  
 </div>
       <footer id="footer">
     <div class="outer">
