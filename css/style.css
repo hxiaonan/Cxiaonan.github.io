@@ -1301,11 +1301,14 @@ body .ui-tooltip {
   margin-bottom: 126px;
   overflow: hidden;
 }
+article {
+ border-radius:17px
+}
 .article {
   margin: 30px;
   margin-bottom: 5px;
   position: relative;
-  background: rgba(35,47,35,0.65);
+  background: rgba(0,0,0,0.65);
   -webkit-transition: all 0.2s ease-in;
 }
 .article.show {
