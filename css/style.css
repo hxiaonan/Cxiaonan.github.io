@@ -613,7 +613,7 @@ a {
 #header .profilepic {
   text-align: center;
   display: block;
-  border: 5px solid #d7f4d9;
+  border: 3px solid #d7f4d9;
   border-radius: 50%;
   width: 128px;
   height: 128px;
@@ -1305,7 +1305,7 @@ body .ui-tooltip {
   margin: 30px;
   margin-bottom: 5px;
   position: relative;
-  background: rgba(35,47,35,0.65);
+  background: rgba(45, 55, 45, 0.29);
   -webkit-transition: all 0.2s ease-in;
 }
 .article.show {
@@ -1374,6 +1374,7 @@ body .ui-tooltip {
 }
 .article-title {
   color: #fff;
+  text-align: center;
   margin-left: 0px;
   font-weight: 400;
   line-height: 1.3;
