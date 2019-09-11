@@ -15,17 +15,18 @@
 
 
 
-<meta name="description" content="网易云音乐 千千音乐111音乐">
-<meta property="og:type" content="website">
-<meta property="og:title" content="music">
-<meta property="og:url" content="https://suixin.ltd/music/index.html">
+<meta name="description" content="CentOS7下安装ElasticSearch6.2.4 在centos7下安装es二进制包1、安装JDK tar -zxvf jdk-8u181-linux-x64.tar.gz mv jdk1.8.0_181 /usr/local cd /usr/local/ ln -s jdk1.8.0_181 java  vim /etc/profile export JAVA_HOME=/usr/lo">
+<meta name="keywords" content="ElasticSearch,linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Install ElasticSearch">
+<meta property="og:url" content="https://suixin.ltd/2019/09/11/ElasticSearch/index.html">
 <meta property="og:site_name" content="小南同学的笔记">
-<meta property="og:description" content="网易云音乐 千千音乐111音乐">
+<meta property="og:description" content="CentOS7下安装ElasticSearch6.2.4 在centos7下安装es二进制包1、安装JDK tar -zxvf jdk-8u181-linux-x64.tar.gz mv jdk1.8.0_181 /usr/local cd /usr/local/ ln -s jdk1.8.0_181 java  vim /etc/profile export JAVA_HOME=/usr/lo">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-24T08:28:11.667Z">
+<meta property="og:updated_time" content="2019-09-11T15:29:24.522Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="music">
-<meta name="twitter:description" content="网易云音乐 千千音乐111音乐">
+<meta name="twitter:title" content="Install ElasticSearch">
+<meta name="twitter:description" content="CentOS7下安装ElasticSearch6.2.4 在centos7下安装es二进制包1、安装JDK tar -zxvf jdk-8u181-linux-x64.tar.gz mv jdk1.8.0_181 /usr/local cd /usr/local/ ln -s jdk1.8.0_181 java  vim /etc/profile export JAVA_HOME=/usr/lo">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -57,7 +58,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>music | 小南同学的笔记</title>
+<title>Install ElasticSearch | 小南同学的笔记</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -67,7 +68,7 @@
         fancybox: true,
         animate: true,
         isHome: false,
-        isPost: false,
+        isPost: true,
         isArchive: false,
         isTag: false,
         isCategory: false,
@@ -271,11 +272,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-ElasticSearch" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/music/index.html" class="article-date">
-      <time datetime="2019-08-12T12:07:23.000Z" itemprop="datePublished">2019-08-12</time>
+      <a href="/2019/09/11/ElasticSearch/" class="article-date">
+      <time datetime="2019-09-11T15:30:49.000Z" itemprop="datePublished">2019-09-11</time>
 </a>
 
 
@@ -290,7 +291,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      music
+      Install ElasticSearch
     </h1>
   
 
@@ -299,8 +300,16 @@
       
       <div class="article-info article-info-post">
         
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/linux学习/">linux学习</a>
+    </div>
+
 
         
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+    </div>
+
         <div class="clearfix"></div>
       </div>
       
@@ -308,34 +317,89 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <style>
-    .article-meta { display: none; }
-    #container .article .article-title { padding-right: 0; }
-    .article-header {
-        padding: 0;
-        padding-top: 26px;
-        border-left: none;
-        text-align: center;
-    }
-    .article-header:hover { border-left: none; }
-    .article-title { font-size: 1.6em }
-    .article-entry hr { margin: 0;}
-    .article-meta,
-    #container .article-info-post.article-info { display: none;}
-    #container .article .article-title { padding: 0; }
-</style>
+        <hr>
+<p></p><h1>CentOS7下安装ElasticSearch6.2.4</h1><p></p>
+<p></p><h3>在centos7下安装es二进制包</h3><br>1、安装JDK<p></p>
+<pre><code>tar -zxvf jdk-8u181-linux-x64.tar.gz
+mv jdk1.8.0_181 /usr/local
+cd /usr/local/
+ln -s jdk1.8.0_181 java
 
+vim /etc/profile
+export JAVA_HOME=/usr/local/java
+export JRE_HOME=/usr/local/java/jre
+export CLASSPATH=.:$CLASSPATH:$JAVA_HOME/lib:$JRE_HOME/lib
+export PATH=$JAVA_HOME/bin:$JAVA_HOME/jre/bin:$PATH
 
-          
-        <p></p><h2>网易云音乐</h2><p></p>
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="900" height="450" src="//music.163.com/outchain/player?type=0&id=2933623990&auto=0&loop=1&height=430"></iframe><br><h2>千千音乐</h2><br><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="950" height="500" src="http://play.taihe.com/?fr=ibaidu"></iframe><br><h2>111音乐</h2><br><iframe style="margin:5px" height="30" marginheight="0" autostart="0" src="http://www.333ttt.com/fmp/index.html" frameborder="0" width="950" name="bg" marginwidth="0" scrolling="no"></iframe>
+source /etc/profile
+</code></pre><p>2、下载elasticsearch 并安装<br>历史版本下载地址 <a href="https://www.elastic.co/downloads/past-releases" target="_blank" rel="noopener">https://www.elastic.co/downloads/past-releases</a></p>
+<pre><code>tar -zxvf elasticsearch-6.2.4.tar.gz -C /usr/local
+cd /usr/local
+ln -s elasticsearch-6.2.4 elasticsearch
+</code></pre><p>3、创建一个专门的用户组来运行elasticsearch</p>
+<pre><code>groupadd esgroup
+useradd esuser -g esgroup -p espassword
+chown -R esuser:esgroup /usr/local/elasticsearch
+</code></pre><p>4、修改文件最大打开数</p>
+<pre><code>vim /etc/security/limits.conf
+esuser soft nofile 65536
+esuser hard nofile 65536
+esuser soft nproc 4096
+esuer hard nproc 4096
+
+vim /etc/security/limits.d/20-nproc.conf
+esuser soft nproc 4096
+</code></pre><p>5、修改内核参数<br>    vim /etc/sysctl.conf<br>    vm.max_map_count = 655360</p>
+<pre><code>sysctl -p
+</code></pre><p>6、调整JVM的内存大小</p>
+<pre><code>vim /usr/local/elasticsearch/bin/elasticsearch
+ES_JAVA_OPTS=&quot;-Xms512m -Xmx512m&quot;
+</code></pre><p>7、切换用户并运行</p>
+<pre><code>su esuser
+bin/elasticsearch
+#后台运行
+bin/elasticsearch -d
+#测试
+curl 127.0.0.1:9200
+</code></pre><p>8、实现远程访问</p>
+<pre><code>vim config/elasticsearch.yml
+network.host 192.168.1.1
+</code></pre><p>9、开机自动启动</p>
+<pre><code>sudo -u esuser /usr/local/elasticsearch/bin/elasticsearch -d
+</code></pre>
       
     </div>
     
   </div>
   
     
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2019/09/11/ElasticSearch/">Install ElasticSearch</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Xiaonan Chen</a></p>
+        <p><span>发布时间:</span>2019-09-11, 23:30:49</p>
+        <p><span>最后更新:</span>2019-09-11, 23:29:24</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2019/09/11/ElasticSearch/" title="Install ElasticSearch">https://suixin.ltd/2019/09/11/ElasticSearch/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://suixin.ltd/2019/09/11/ElasticSearch/　　作者: Xiaonan Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
 
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2019/09/11/rhel8_specific/">
+                    RHEL8.0_specific
+                </a>
+            </div>
+        
+    </nav>
 
   
   
@@ -370,6 +434,29 @@
 
 </article>
 
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text">CentOS7下安装ElasticSearch6.2.4</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-number">1.0.1.</span> <span class="toc-text">在centos7下安装es二进制包</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
 
 
     
@@ -386,7 +473,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"music　| 小南同学的笔记　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"Install ElasticSearch　| 小南同学的笔记　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -422,6 +509,24 @@
       
     
 
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2019/09/11/rhel8_specific/" title="下一篇: RHEL8.0_specific">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/ElasticSearch/">Install ElasticSearch</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/rhel8_specific/">RHEL8.0_specific</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/05/Naked Weapon/">Naked Weapon</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/鬼干部/">鬼干部</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/灵幻至尊/">灵幻至尊</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/音乐僵尸/">音乐僵尸</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/一眉道人/">一眉道人</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/僵尸先生/">僵尸先生</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/僵尸家族/">僵尸家族</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/天地玄门/">天地玄门</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/二代宗师/">二代宗师</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/钵兰街大少/">钵兰街大少</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/脱单好难/">脱单好难</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/一代枭雄之三支旗/">一代枭雄之三支旗</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/恐怖故事2/">恐怖故事2</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/陈翔六点半之重楼别/">陈翔六点半之重楼别</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/逃学英雄传/">逃学英雄传</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/使徒行者2：谍影行动/">使徒行者2：谍影行动</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/猛鬼屠房/">猛鬼屠房</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/06/zhenhunjie/">zhenhunjie</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/04/baisheyuanqi/">baisheyuanqi</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/31/birthday/">birthday</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/23/test/">test</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/15/rhel7-specific/">rhel7_specific</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/28/owncloud/">owncloud</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/03/Recruit-marriage/">Recruit marriage</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/17/pdf-upload-test/">pdf-upload-test</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/16/instructions-for-linux/">instructions-for-linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/09/RHEL7题库/">RHEL7题库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/14/cp/">cp</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/13/newlinux/">newlinux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/11/linux/">Linux系统raid1更换故障硬盘处理过程</a></li></ul>
 
 
 

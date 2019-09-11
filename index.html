@@ -195,7 +195,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-specific/">linux-specific</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something-wrong/">something wrong</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生活/">生活</a></li></ul>
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-specific/">linux-specific</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something-wrong/">something wrong</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生活/">生活</a></li></ul>
                     </div>
                 </section>
                 
@@ -273,6 +273,123 @@
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-ElasticSearch" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2019/09/11/ElasticSearch/" class="article-date">
+      <time datetime="2019-09-11T15:30:49.000Z" itemprop="datePublished">2019-09-11</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/11/ElasticSearch/">Install ElasticSearch</a>
+    </h1>
+  
+
+        
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <hr>
+<p></p><h1>CentOS7下安装ElasticSearch6.2.4</h1><p></p>
+<p></p><h3>在centos7下安装es二进制包</h3><br>1、安装JDK<p></p>
+<pre><code>tar -zxvf jdk-8u181-linux-x64.tar.gz
+mv jdk1.8.0_181 /usr/local
+cd /usr/local/
+ln -s jdk1.8.0_181 java
+
+vim /etc/profile
+export JAVA_HOME=/usr/local/java
+export JRE_HOME=/usr/local/java/jre
+export CLASSPATH=.:$CLASSPATH:$JAVA_HOME/lib:$JRE_HOME/lib
+export PATH=$JAVA_HOME/bin:$JAVA_HOME/jre/bin:$PATH
+
+source /etc/profile
+</code></pre><p>2、下载elasticsearch 并安装<br>历史版本下载地址 <a href="https://www.elastic.co/downloads/past-releases" target="_blank" rel="noopener">https://www.elastic.co/downloads/past-releases</a></p>
+<pre><code>tar -zxvf elasticsearch-6.2.4.tar.gz -C /usr/local
+cd /usr/local
+ln -s elasticsearch-6.2.4 elasticsearch
+</code></pre><p>3、创建一个专门的用户组来运行elasticsearch</p>
+<pre><code>groupadd esgroup
+useradd esuser -g esgroup -p espassword
+chown -R esuser:esgroup /usr/local/elasticsearch
+</code></pre><p>4、修改文件最大打开数</p>
+<pre><code>vim /etc/security/limits.conf
+esuser soft nofile 65536
+esuser hard nofile 65536
+esuser soft nproc 4096
+esuer hard nproc 4096
+
+vim /etc/security/limits.d/20-nproc.conf
+esuser soft nproc 4096
+</code></pre><p>5、修改内核参数<br>    vim /etc/sysctl.conf<br>    vm.max_map_count = 655360</p>
+<pre><code>sysctl -p
+</code></pre><p>6、调整JVM的内存大小</p>
+<pre><code>vim /usr/local/elasticsearch/bin/elasticsearch
+ES_JAVA_OPTS=&quot;-Xms512m -Xmx512m&quot;
+</code></pre><p>7、切换用户并运行</p>
+<pre><code>su esuser
+bin/elasticsearch
+#后台运行
+bin/elasticsearch -d
+#测试
+curl 127.0.0.1:9200
+</code></pre><p>8、实现远程访问</p>
+<pre><code>vim config/elasticsearch.yml
+network.host 192.168.1.1
+</code></pre><p>9、开机自动启动</p>
+<pre><code>sudo -u esuser /usr/local/elasticsearch/bin/elasticsearch -d
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/linux学习/">linux学习</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+  
+
+
+</article>
+
+
+
+
+
+
+
+
+
+
   
     <article id="post-rhel8_specific" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -854,71 +971,6 @@
       
         <p class="article-more-link">
           <a href="/2019/08/24/天地玄门/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-  
-
-
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-一代枭雄之三支旗" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2019/08/13/一代枭雄之三支旗/" class="article-date">
-      <time datetime="2019-08-13T14:30:12.000Z" itemprop="datePublished">2019-08-13</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/13/一代枭雄之三支旗/">一代枭雄之三支旗</a>
-    </h1>
-  
-
-        
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <p></p><h1>简介</h1><br>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-      
-        <p class="article-more-link">
-          <a href="/2019/08/13/一代枭雄之三支旗/#more">阅读全文 >></a>
         </p>
       
       <div class="clearfix"></div>
