@@ -4,11 +4,38 @@
   
     
     <entry>
+      <title>Linux计划任务</title>
+      <link href="/2019/09/13/at-and-cron/"/>
+      <url>/2019/09/13/at-and-cron/</url>
+      
+        <content type="html"><![CDATA[<h1>centos7—计划任务（at、cron）</h1><p>计划任务：让计算机在指定的时间执行指定的事情<br><a id="more"></a></p><h1 id="1、分类：一次性计划任务：at（临时的计划任务）、周期性计划任务：cron"><a href="#1、分类：一次性计划任务：at（临时的计划任务）、周期性计划任务：cron" class="headerlink" title="1、分类：一次性计划任务：at（临时的计划任务）、周期性计划任务：cron"></a>1、分类：一次性计划任务：at（临时的计划任务）、周期性计划任务：cron</h1><h1 id="2、计划任务管理：查atq、创建at、删除atrm"><a href="#2、计划任务管理：查atq、创建at、删除atrm" class="headerlink" title="2、计划任务管理：查atq、创建at、删除atrm"></a>2、计划任务管理：查atq、创建at、删除atrm</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">注：服务器重启一般都是晚上   凌晨2点</span><br><span class="line">at 时间</span><br><span class="line">atq   或  at  -l    查计划列表</span><br><span class="line">    eg.  at 20:00</span><br><span class="line">          at&gt; poweroff      关机</span><br><span class="line">          at&gt; ctrl+d</span><br></pre></td></tr></table></figure><p>3、时间的写法</p><pre><code>HH:MM   //18:30midnight   //0点 (午夜)noon   //12点 (中午)  teatime //16点(下午4点)AM  或   PM后缀指定一天的上午或下午。  //at  2:00 pmMMDDYY  、  MM/DD/YY 或 DD.MM.YYnow + 计数  时间单位(minutes  、hours  、  days 或 weeks)    eg. at now + 3 hours(从现在开始起三个小时后)    eg. at 4pm  + 3 days   //三天以后的下午4点执行一个任务         at 2am + tomorrom  //明天上午2点         at 10am Jul 31   //7月31日上午10点</code></pre><h1 id="案例一：凌晨2点备份-etc目录-到-tmp格式为-etc-tar-xz"><a href="#案例一：凌晨2点备份-etc目录-到-tmp格式为-etc-tar-xz" class="headerlink" title="案例一：凌晨2点备份/etc目录 到 /tmp格式为 etc.tar.xz"></a>案例一：凌晨2点备份/etc目录 到 /tmp格式为 etc.tar.xz</h1><pre><code>at 02:00at&gt; tar cvJf /tmp/etc.tar.xz /etcat&gt; ctrl+d</code></pre><p>4、查看所有用户的计划任务</p><pre><code>atqat -l</code></pre><p>5、查看某个计划任务的详细内容</p><pre><code>at -c 工作号</code></pre><p>6、删除计划任务</p><pre><code>atrm 工作号 ...at -d 工作号 ...</code></pre><h1 id="案例二：脚本方式创建at计划任务"><a href="#案例二：脚本方式创建at计划任务" class="headerlink" title="案例二：脚本方式创建at计划任务."></a>案例二：脚本方式创建at计划任务.</h1><pre><code>echo  &apos;ls;date;pwd&apos;  | at  3:00      #用管道符将任务传给at命令</code></pre><h1 id="案例三：用at将指定文件-f-文件名-中的命令设为计划任务"><a href="#案例三：用at将指定文件-f-文件名-中的命令设为计划任务" class="headerlink" title="案例三：用at将指定文件(-f  文件名)中的命令设为计划任务."></a>案例三：用at将指定文件(-f  文件名)中的命令设为计划任务.</h1><pre><code>#首先,创建命令文件vim /opt/aplan      #添加如下内容    ls    date    pwd    tar -czvf /tmp/etc.tar.gz /etc</code></pre><h1 id="各例子展示："><a href="#各例子展示：" class="headerlink" title="各例子展示："></a>各例子展示：</h1><pre><code># at 5pm+3 days    #三天后的下午5点,执行 /bin/lsat&gt; /bin/lsat&gt; job 7 at 2019-09-13 17:00# at 17:20 tomorrow    #明天17点钟，输出时间到指定文件内at&gt; date &gt;/root/date.log         at&gt; job 8 at 2019-09-13 17:20# atq      #查看任务8       2019-09-13 17:20 a root7       2019-09-13 17:00 a root# atrm 7     #删除任务# atq 8       2019-09-13 17:20 a root# 指定在今天下午5:30执行某命令。以下命令格式，结果都一样：# at 5:30pm # at 17:30 # at 17:30 today # at now + 5 hours # at now + 300 minutes # at 17:30 24.2.99 # at 17:30 2/24/99 # at 17:30 Feb 24 # at -f /home/test/work 4pm + 3 days     #在三天后下午4点执行文档work中的作业</code></pre><h1 id="7、at权限管理、安全"><a href="#7、at权限管理、安全" class="headerlink" title="7、at权限管理、安全"></a>7、at权限管理、安全</h1><pre><code>/etc/at.allow      白名单：只允许在此名单内的用户使用at（此文件本身不存在）/etc/at.deny      黑名单：在此名单内的用户不可以使用at注：当两个文件都不存在，只有root用户可以使用at      当两个文件都存在，allow优先执行</code></pre><hr><h1 id="at服务管理："><a href="#at服务管理：" class="headerlink" title="at服务管理："></a>at服务管理：</h1><pre><code>查at软件是否已安装：pm -q at  查at的文件列表：rpm -ql at查at的定时列表：at -l查看单个at任务内容：at -c 工作号查at的配置文件列表：rpm -qc at查at服务状态：systemctl status atd   或   service atd status重启at服务：systemctl restart atd   或   service atd restart关闭at服务：systemctl stop atd   或   service atd stop开机不启动at服务：systemctl disable atd   或   chkconfig atd off开机启动at服务：systemctl enable atd   或   chkconfig atd on</code></pre><h1 id="at的其他文件"><a href="#at的其他文件" class="headerlink" title="at的其他文件:"></a>at的其他文件:</h1><pre><code>计划文件清单:ls   /var/spool/at/*    用cat可以看这些文件</code></pre><hr><h1 id="cron：周期性计划任务、循环性计划任务，主要用于备份数据。"><a href="#cron：周期性计划任务、循环性计划任务，主要用于备份数据。" class="headerlink" title="cron：周期性计划任务、循环性计划任务，主要用于备份数据。"></a>cron：周期性计划任务、循环性计划任务，主要用于备份数据。</h1><pre><code>crontab  usage:crontab [-u user] [ -e | -l | -r ]-u &lt;user&gt;  define user      #指定用户-e      edit user&apos;s crontab      #编辑计划任务-l      list user&apos;s crontab      #查看计划任务-r      delete user&apos;s crontab      #删除计划任务1、crontab -e      编辑周期性计划任务的内容2、查看配置:cat   /etc/crontab</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">时间</span><br><span class="line">min     hour   day  month  week    command</span><br><span class="line">分钟     小时      日      月         周      动作(任务命令)    </span><br><span class="line">0-59     0-23    1-31   1-12   0-7    命令或脚本(写绝对路径)</span><br><span class="line">30         2         1      *       *      rm -rf /tmp/*   //每月1号的2：30分删除/tmp目录下的所有文件</span><br><span class="line">5           *          *       6      3    rm -rf /tmp/*   //每年6月的每周三每小时的5分钟删除/tmp目录下的所有文件</span><br><span class="line">6           6         *       6     6    rm -rf /tmp/*    //每年6月的周六的6点6分钟删除/tmp目录下的所有文件</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">*  任何时刻</span><br><span class="line">-   一段时间  //  8-11 *  *  *  *   rm -rf /tmp/*    //每小时的8分钟 9分钟 10分钟 11分钟 删除/tmp目录下所有文件     </span><br><span class="line">,  分隔(不连续的时间)       //  1,2,5,9   *  *  *  *   rm -rf /tmp/*  //每小时的1分钟 2分钟 5分钟 9分钟 删除/tmp目录下所有文件     </span><br><span class="line">0-4,8-12    //</span><br><span class="line">0-23/2  时间间隔  //1  0-23/2   *  *   *  rm -rf /tmp/*    // &quot;0,2,4,6,8,10,12,14,16,18,20,22&quot;).</span><br><span class="line">*/2    每隔2小时     //1    */2   *  *   *  rm -rf /tmp/*     每隔2小时执行rm命令</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">*  0-23  *  *  *  rm -rf /tmp/*   </span><br><span class="line">*   */1   *  *  *  rm -rf /tmp/*</span><br></pre></td></tr></table></figure><p>3、时间的写法<br>The time and date fields are:</p><pre><code>field          allowed values-----          --------------minute         0-59hour           0-23day of month   1-31month          1-12  (or  names,see below)day  of  week    0-7  (0 or 7 isSun, or use names)</code></pre><h1 id="案例一：每个星期三的下午10：00备份-etc-目录到-tmp目录叫2019-09-13-etc-tar-gz备份文件包含当天日期"><a href="#案例一：每个星期三的下午10：00备份-etc-目录到-tmp目录叫2019-09-13-etc-tar-gz备份文件包含当天日期" class="headerlink" title="案例一：每个星期三的下午10：00备份/etc/目录到/tmp目录叫2019-09-13_etc.tar.gz备份文件包含当天日期"></a>案例一：每个星期三的下午10：00备份/etc/目录到/tmp目录叫2019-09-13_etc.tar.gz备份文件包含当天日期</h1><pre><code> crontab -e * 22 * * 3 /usr/bin/tar cvzf /tmp/`/usr/bin/date +%F`_etc.tar.gz /etc （注:`命令`中的``为命令替换功能,系统会先执行``(反撇，反引号)中的命令．也可以将``写成$()）</code></pre><h1 id="案例二：只保留最近1个月的日志文件"><a href="#案例二：只保留最近1个月的日志文件" class="headerlink" title="案例二：只保留最近1个月的日志文件"></a>案例二：只保留最近1个月的日志文件</h1><pre><code>crontab -e1 * * * *  find /var/log -mtime +30 |xarge -i rm -rf {}</code></pre><h1 id="案例三：每月1号的凌晨2点半清空临时盘"><a href="#案例三：每月1号的凌晨2点半清空临时盘" class="headerlink" title="案例三：每月1号的凌晨2点半清空临时盘"></a>案例三：每月1号的凌晨2点半清空临时盘</h1><pre><code>crontab -e30  2  1  *  *  /usr/bin/rm -rf /tmp/* </code></pre><h1 id="案例四：每周每天的晚上8：10关闭电脑，除了星期六，星期五-星期日的17：10关闭电脑"><a href="#案例四：每周每天的晚上8：10关闭电脑，除了星期六，星期五-星期日的17：10关闭电脑" class="headerlink" title="案例四：每周每天的晚上8：10关闭电脑，除了星期六，星期五,星期日的17：10关闭电脑"></a>案例四：每周每天的晚上8：10关闭电脑，除了星期六，星期五,星期日的17：10关闭电脑</h1><pre><code>crontab -e10 20 * * 1-4  /usr/sbin/poweroff10 17 * * 5,7  /usr/sbin/poweroff</code></pre><h1 id="案例五：max用户每天在家目录创建一个以日期命名的目录20190913"><a href="#案例五：max用户每天在家目录创建一个以日期命名的目录20190913" class="headerlink" title="案例五：max用户每天在家目录创建一个以日期命名的目录20190913"></a>案例五：max用户每天在家目录创建一个以日期命名的目录20190913</h1><pre><code>crontab -u max -e1  0  *  *  *  /bin/mkdir  /home/max/`date +%Y%m%d`</code></pre><p>4、查询周期性计划任务的内容</p><pre><code>crontab -l      #查看当前用户定时运行的程序crontab -u jim -      #查看指定用户</code></pre><p>5、删除某用户的所有周期性计划任务(删除某个计划任务crontab -e 进入文本删除)</p><pre><code>crontab -r      #当前用户crontab -u jim -r      #指定用户</code></pre><p>系统定义的计划任务(默认)</p><pre><code>  更新whatis数据库  更新updatedb数据库  日志定期轮滚(日志切割)  清理/tmp /var/tmp  收集系统的状态信息vim /etc/crontab  配置文件        # For details see man 4 crontabs# Example of job definition:# .---------------- minute (0 - 59)# |  .------------- hour (0 - 23)# |  |  .---------- day of month (1 - 31)# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat# |  |  |  |  |# *  *  *  *  * user-name command to be executed  */5 * * * *   root  命令   //每隔5分钟以root身份去执行命令</code></pre><h1 id="以下目录内可以存在脚本-该脚本就会按照时间去执行"><a href="#以下目录内可以存在脚本-该脚本就会按照时间去执行" class="headerlink" title="以下目录内可以存在脚本  该脚本就会按照时间去执行"></a>以下目录内可以存在脚本  该脚本就会按照时间去执行</h1><pre><code>cd /etccron.hourly/      #每小时cron.weekly/      #每周cron.daily/      #每天cron.monthly/      #每月</code></pre><h1 id="6、删除超过一个月不使用的文件"><a href="#6、删除超过一个月不使用的文件" class="headerlink" title="6、删除超过一个月不使用的文件"></a>6、删除超过一个月不使用的文件</h1><pre><code>cat /etc/cron.daily/tmpwatch</code></pre><h1 id="7、crontab服务管理："><a href="#7、crontab服务管理：" class="headerlink" title="7、crontab服务管理："></a>7、crontab服务管理：</h1><pre><code>查软件是否已安装：rpm  -q  crontabs查软件的文件列表：rpm  -ql  crontabs查软件的配置文件列表：rpm -qc crontabs服务状态：systemctl   status   crond       注：d是daemon守护进程重启at服务: systemctl   restart   crond   或  service   crond  restart关闭at服务: systemctl   stop   crond   或  service   crond  stop开机不启动at服务: systemctl   disable  crond 或 chkconfig   crond  off开机启动at服务:  systemctl   enable   crond  或 chkconfig   crond  on</code></pre><h1 id="8、cron权限管理"><a href="#8、cron权限管理" class="headerlink" title="8、cron权限管理"></a>8、cron权限管理</h1><pre><code>/etc/cron.allow      白名单：只允许在此名单内的用户使用crontab（此文件本身不存在）/etc/cron.deny      黑名单：在此名单内的用户不可以使用crontab      注：两个文件都不存在，只有root用户可以使用crontab             两个文件都存在，allow优先执行</code></pre><p>本博客参照编写☞博客：<a href="https://blog.csdn.net/qq_34889607/article/details/78635141" target="_blank" rel="noopener">https://blog.csdn.net/qq_34889607/article/details/78635141</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> linux学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+            <tag> crontab </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Install mysql5.7</title>
       <link href="/2019/09/12/mysql5.7/"/>
       <url>/2019/09/12/mysql5.7/</url>
       
-        <content type="html"><![CDATA[<h1>CentOS7 yum方式安装MySQL5.7</h1><p>在CentOS中默认安装有MariaDB，这个是MySQL的分支，但为了需要，还是要在系统中安装MySQL，而且安装完成之后可以直接覆盖掉MariaDB。<br>1 下载并安装MySQL官方的 Yum Repository<br><a id="more"></a><br>    [root@localhost ~]# wget -i -c <a href="http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm" target="_blank" rel="noopener">http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm</a><br>  使用上面的命令就直接下载了安装用的Yum Repository，大概25KB的样子，然后就可以直接yum安装了。</p><pre><code>[root@localhost ~]# yum -y install mysql57-community-release-el7-10.noarch.rpm     </code></pre><p>  之后就开始安装MySQL服务器。</p><pre><code>[root@localhost ~]# yum -y install mysql-community-server</code></pre><p>这步可能会花些时间，安装完成后就会覆盖掉之前的mariadb。</p><pre><code>已安装：      mysql-community-libs.x86_64 0:5.7.19-1.el7      mysql-community-libs-compat.x86_64 0:5.7.19-1.el7      mysql-community-server.x86_64 0:5.7.19-1.el7  作为依赖被安装：        mysql-community-client.x86_64 0:5.7.19-1.el7        mysql-community-common.x86_64 0:5.7.19-1.el7  替代：        mariadb-libs.x86_64 1:5.5.52-1.el7  完毕！至此MySQL就安装完成了，然后是对MySQL的一些设置。</code></pre><p>2 MySQL数据库设置</p><p>  首先启动MySQL<br>    <code>root@localhost ~]# systemctl start  mysqld.service</code><br>  查看MySQL运行状态，如果为running状态就是ySQL已经开始正常运行<br>    <code>[root@localhost ~]# systemctl status mysqld.service</code><br>  不过要想进入MySQL还得先找出此时root用户的密码，通过如下命令可以在日志文件中找出密码：<br>    <code>[root@localhost ~]# grep &quot;password&quot; /var/log/mysqld.log</code><br>  如下命令输入账号密码进入数据库：<br>    <code>[root@localhost ~]# mysql -uroot -p</code><br>  输入初始密码，此时不能做任何事情，因为MySQL默认必须修改密码之后才能操作数据库：<br>    <code>mysql&gt; ALTER USER &#39;root&#39;@&#39;localhost&#39; IDENTIFIED BY &#39;new password&#39;;</code><br>  这里有个问题，新密码设置的时候如果设置的过于简单会报错：<br>  <code>ERROR 1819(HY000):Your password does not satisfy the current policy_requirements</code><br>  原因是因为MySQL有密码设置的规范，具体是与validate_password_policy的值有关：<br> <img src="https://images2017.cnblogs.com/blog/1079354/201707/1079354-20170726203904812-1008115240.png" alt=""><br>  MySQL完整的初始密码规则可以通过如下命令查看：</p><pre><code>mysql&gt; SHOW VARIABLES LIKE &apos;validate_password%&apos;;+--------------------------------------+-------+| Variable_name                        | Value |+--------------------------------------+-------+| validate_password_check_user_name    | OFF   || validate_password_dictionary_file    |       || validate_password_length             | 4     || validate_password_mixed_case_count   | 1     || validate_password_number_count       | 1     || validate_password_policy             | LOW   || validate_password_special_char_count | 1     |+--------------------------------------+-------+7 rows in set (0.01 sec)</code></pre><p> 密码的长度是由validate_password_length决定的，而validate_password_length的计算公式是：</p><p><code>validate_password_length = validate_password_number_count + validate_password_special_char_count + (2 *   validate_password_mixed_case_count)</code></p><p> 我的是已经修改过的，初始情况下第一个的值是ON，validate_password_length是8。可以通过如下命令修改：</p><pre><code>mysql&gt; set global validate_password_policy=0;mysql&gt; set global validate_password_length=1;</code></pre><p> 设置之后就是我上面查出来的那几个值了，此时密码就可以设置的很简单，例如1234之类的。到此数据库的密码设置就完成了。<br> 但此时还有一个问题，就是因为安装了Yum Repository，以后每次yum操作都会自动更新，需要把这个卸载掉：<br>  <code>[root@localhost ~]# yum -y remove mysql57-community-release-el7-10.noarch</code><br>  此时才算真的完成了。<br> 本博客参照☞博客：<a href="https://www.cnblogs.com/bigbrotherer/p/7241845.html" target="_blank" rel="noopener">https://www.cnblogs.com/bigbrotherer/p/7241845.html</a></p>]]></content>
+        <content type="html"><![CDATA[<h1>CentOS7 yum方式安装MySQL5.7</h1><p>在CentOS中默认安装有MariaDB，这个是MySQL的分支，但为了需要，还是要在系统中安装MySQL，而且安装完成之后可以直接覆盖掉MariaDB。<br><a id="more"></a><br>1 下载并安装MySQL官方的 Yum Repository</p><pre><code>[root@localhost ~]# wget -i -c http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm</code></pre><p>  使用上面的命令就直接下载了安装用的Yum Repository，大概25KB的样子，然后就可以直接yum安装了。</p><pre><code>[root@localhost ~]# yum -y install mysql57-community-release-el7-10.noarch.rpm     </code></pre><p>  之后就开始安装MySQL服务器。</p><pre><code>[root@localhost ~]# yum -y install mysql-community-server</code></pre><p>这步可能会花些时间，安装完成后就会覆盖掉之前的mariadb。</p><pre><code>已安装：      mysql-community-libs.x86_64 0:5.7.19-1.el7      mysql-community-libs-compat.x86_64 0:5.7.19-1.el7      mysql-community-server.x86_64 0:5.7.19-1.el7  作为依赖被安装：        mysql-community-client.x86_64 0:5.7.19-1.el7        mysql-community-common.x86_64 0:5.7.19-1.el7  替代：        mariadb-libs.x86_64 1:5.5.52-1.el7  完毕！至此MySQL就安装完成了，然后是对MySQL的一些设置。</code></pre><p>2 MySQL数据库设置</p><p>  首先启动MySQL<br>    <code>root@localhost ~]# systemctl start  mysqld.service</code><br>  查看MySQL运行状态，如果为running状态就是ySQL已经开始正常运行<br>    <code>[root@localhost ~]# systemctl status mysqld.service</code><br>  不过要想进入MySQL还得先找出此时root用户的密码，通过如下命令可以在日志文件中找出密码：<br>    <code>[root@localhost ~]# grep &quot;password&quot; /var/log/mysqld.log</code><br>  如下命令输入账号密码进入数据库：<br>    <code>[root@localhost ~]# mysql -uroot -p</code><br>  输入初始密码，此时不能做任何事情，因为MySQL默认必须修改密码之后才能操作数据库：<br>    <code>mysql&gt; ALTER USER &#39;root&#39;@&#39;localhost&#39; IDENTIFIED BY &#39;new password&#39;;</code><br>  这里有个问题，新密码设置的时候如果设置的过于简单会报错：<br>  <code>ERROR 1819(HY000):Your password does not satisfy the current policy_requirements</code><br>  原因是因为MySQL有密码设置的规范，具体是与validate_password_policy的值有关：<br> <img src="/2019/09/12/mysql5.7/policy.png" alt=""><br>  MySQL完整的初始密码规则可以通过如下命令查看：</p><pre><code>mysql&gt; SHOW VARIABLES LIKE &apos;validate_password%&apos;;+--------------------------------------+-------+| Variable_name                        | Value |+--------------------------------------+-------+| validate_password_check_user_name    | OFF   || validate_password_dictionary_file    |       || validate_password_length             | 4     || validate_password_mixed_case_count   | 1     || validate_password_number_count       | 1     || validate_password_policy             | LOW   || validate_password_special_char_count | 1     |+--------------------------------------+-------+7 rows in set (0.01 sec)</code></pre><p> 密码的长度是由validate_password_length决定的，而validate_password_length的计算公式是：</p><p><code>validate_password_length = validate_password_number_count + validate_password_special_char_count + (2 *   validate_password_mixed_case_count)</code></p><p> 我的是已经修改过的，初始情况下第一个的值是ON，validate_password_length是8。可以通过如下命令修改：</p><pre><code>mysql&gt; set global validate_password_policy=0;mysql&gt; set global validate_password_length=1;</code></pre><p> 设置之后就是我上面查出来的那几个值了，此时密码就可以设置的很简单，例如1234之类的。到此数据库的密码设置就完成了。<br> 但此时还有一个问题，就是因为安装了Yum Repository，以后每次yum操作都会自动更新，需要把这个卸载掉：<br>  <code>[root@localhost ~]# yum -y remove mysql57-community-release-el7-10.noarch</code><br>  此时才算真的完成了。<br> 本博客参照☞博客：<a href="https://www.cnblogs.com/bigbrotherer/p/7241845.html" target="_blank" rel="noopener">https://www.cnblogs.com/bigbrotherer/p/7241845.html</a></p>]]></content>
       
       
       <categories>
@@ -93,6 +120,12 @@
       
       
       
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
     </entry>
     
     
@@ -105,6 +138,12 @@
         <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   影片中的剧情大概剧情是，五千年来，因血魔作祟，附于有权势之人身上，历代暴君，置人民于水深火热中，血流成河，无名英雄引血魔为伏羲针所镇，此举必需牺牲自己生命。文化大革命爆发，破四旧运动令本来深埋黑洞里的血魔逃出，自小有心脏病的梁国栋（红卫兵）与林刚（赤脚医生），因“运动”而对立，但在生离死别、家破人亡之后，两人误会冰释，联手与血魔对抗。血魔附于革委副主任雷复鸣身上，雷性情大变。其女雷珊，与栋及刚又有微妙三角关系，三人一起与血魔展开决战，林刚目睹文革毒害，不但丧失一代文化精英，且举国人魔不分，尸横遍野，终看破红尘，斩断情缘，成全手足 。<p></p><p></p><h2>正片 鬼干部</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer17" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer17"),"video":{"url":"https://youku.com-l-youku.com/20181218/4273_40719655/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
       
     </entry>
     
@@ -119,6 +158,12 @@
       
       
       
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
     </entry>
     
     
@@ -131,6 +176,12 @@
         <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   茅山道士麻麻地（冯淬帆 饰）与同行不和，带着两个徒弟阿豪（李家声 饰）和阿强（熊欣欣 饰）另起炉灶，在江南一带赶事为业。两个徒弟顽劣非常，经常操纵僵尸互相对打。阿豪自认法术修成，请求师傅让其独立赶尸。得到师傅应允，阿豪赶着一只大地主任天棠的僵尸独自上路。路遇从旧金山归国的时尚女孩珠珠（李丽珍 饰），玩心骤起，将珠珠戏耍了一番。然而半夜阿豪遭到一群人袭击，僵尸被抢。幕后指示者原来是一个外国科学家，他希望研究僵尸获得诺贝尔奖。但在注射一种药物之后僵尸复活，大开杀戒，似乎只有珠珠怀表中的音乐能让他安静下来……<p></p><p></p><h2>正片 音乐僵尸</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer16" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer16"),"video":{"url":"https://youku.cdn-tudou.com/20180531/6206_9d68fc4d/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
       
     </entry>
     
@@ -145,6 +196,12 @@
       
       
       
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
     </entry>
     
     
@@ -157,6 +214,12 @@
         <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   富贵乡绅任发（黄虾 饰）先父当年威逼利诱求得一块风水宝地，经风水先生指点，其父下葬二十年后起坟迁葬，以利子孙。然九叔（林正英 饰）察看墓穴得知，当年风水先生与任家私怨在身，在墓穴中做下手脚，二十年后任老太爷尸体已生恶变。九叔提议就地火化，在任老爷请求下才将尸骨移往义庄。虽经小心看护，但任老太爷仍化作僵尸，将其子任发杀害。九叔断定任老太爷和任发的僵尸将再次出现，于是命令徒弟秋生（钱小豪 饰）和文才（许冠英 饰）小心应付……<p></p><p></p><h2>正片 僵尸先生(1985)</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer6" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer6"),"video":{"url":"https://vip.okokbo.com/20171213/fTGJqOpC/800kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
       
     </entry>
     
@@ -171,6 +234,12 @@
       
       
       
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
     </entry>
     
     
@@ -184,44 +253,11 @@
       
       
       
-    </entry>
-    
-    
-    
-    <entry>
-      <title>一代枭雄之三支旗</title>
-      <link href="/2019/08/13/%E4%B8%80%E4%BB%A3%E6%9E%AD%E9%9B%84%E4%B9%8B%E4%B8%89%E6%94%AF%E6%97%97/"/>
-      <url>/2019/08/13/%E4%B8%80%E4%BB%A3%E6%9E%AD%E9%9B%84%E4%B9%8B%E4%B8%89%E6%94%AF%E6%97%97/</url>
-      
-        <content type="html"><![CDATA[<p></p><h1>简介</h1><br><a id="more"></a><br>    《一代枭雄之三支旗》是由黄泰来执导，吕良伟、吴毅将、叶玉卿等领衔主演的喜剧片。影片讲述了学警陈志超经过奋斗升为新部门“三支旗”的总舵主的故事。<p></p><p></p><h2>正片 一代枭雄之三支旗</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer2" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer2"),"video":{"url":"https://56.com-t-56.com/20190520/21526_31f0e53f/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>钵兰街大少</title>
-      <link href="/2019/08/13/%E9%92%B5%E5%85%B0%E8%A1%97%E5%A4%A7%E5%B0%91/"/>
-      <url>/2019/08/13/%E9%92%B5%E5%85%B0%E8%A1%97%E5%A4%A7%E5%B0%91/</url>
-      
-        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    《钵兰街大少》是张乾文1993年执导的电影，由张卫健、任达华等主演。讲述了亚豹与大兜两人自小在砵兰街长大，一起揾食及媾女，过着沙保兄弟的生活而后来发生种种变故的故事。<br><a id="more"></a><p></p><p></p><h2>正片 钵兰街大少</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer14" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer14"),"video":{"url":"https://youku.com-t-youku.com/20190516/20901_f10582df/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>恐怖故事2</title>
-      <link href="/2019/08/13/%E6%81%90%E6%80%96%E6%95%85%E4%BA%8B2/"/>
-      <url>/2019/08/13/%E6%81%90%E6%80%96%E6%95%85%E4%BA%8B2/</url>
-      
-        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    《恐怖故事2》是由Soofilm公司制作，乐天娱乐出品的恐怖故事系列电影，是《恐怖故事》（2012年）的续篇。<p></p><p></p><h2>正片 恐怖故事2</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer9" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer9"),"video":{"url":"https://hot.jingpin88.com/ppvod/7B4D880799F1E27A8B502A744A9D0B0A.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
-      
-      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
       
     </entry>
     
@@ -236,6 +272,31 @@
       
       
       
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>钵兰街大少</title>
+      <link href="/2019/08/13/%E9%92%B5%E5%85%B0%E8%A1%97%E5%A4%A7%E5%B0%91/"/>
+      <url>/2019/08/13/%E9%92%B5%E5%85%B0%E8%A1%97%E5%A4%A7%E5%B0%91/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    《钵兰街大少》是张乾文1993年执导的电影，由张卫健、任达华等主演。讲述了亚豹与大兜两人自小在砵兰街长大，一起揾食及媾女，过着沙保兄弟的生活而后来发生种种变故的故事。<br><a id="more"></a><p></p><p></p><h2>正片 钵兰街大少</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer14" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer14"),"video":{"url":"https://youku.com-t-youku.com/20190516/20901_f10582df/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
     </entry>
     
     
@@ -249,18 +310,49 @@
       
       
       
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
     </entry>
     
     
     
     <entry>
-      <title>逃学英雄传</title>
-      <link href="/2019/08/13/%E9%80%83%E5%AD%A6%E8%8B%B1%E9%9B%84%E4%BC%A0/"/>
-      <url>/2019/08/13/%E9%80%83%E5%AD%A6%E8%8B%B1%E9%9B%84%E4%BC%A0/</url>
+      <title>一代枭雄之三支旗</title>
+      <link href="/2019/08/13/%E4%B8%80%E4%BB%A3%E6%9E%AD%E9%9B%84%E4%B9%8B%E4%B8%89%E6%94%AF%E6%97%97/"/>
+      <url>/2019/08/13/%E4%B8%80%E4%BB%A3%E6%9E%AD%E9%9B%84%E4%B9%8B%E4%B8%89%E6%94%AF%E6%97%97/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>  《逃学英雄传》是由王晶执导， 郭富城、邱淑贞、张坚庭、张敏、吴孟达、黄一山主演的喜剧片。<br>   影片讲述了圣育强中学的顽劣学生、卧底老师之间的搞笑故事。<br> <a id="more"></a><p></p><p></p><h2>正片 逃学英雄传</h2><br><div id="dplayer13" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer13"),"video":{"url":"https://sina.com-h-sina.com/20190126/28914_0c231c0c/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script><p></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br><a id="more"></a><br>    《一代枭雄之三支旗》是由黄泰来执导，吕良伟、吴毅将、叶玉卿等领衔主演的喜剧片。影片讲述了学警陈志超经过奋斗升为新部门“三支旗”的总舵主的故事。<p></p><p></p><h2>正片 一代枭雄之三支旗</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer2" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer2"),"video":{"url":"https://56.com-t-56.com/20190520/21526_31f0e53f/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>恐怖故事2</title>
+      <link href="/2019/08/13/%E6%81%90%E6%80%96%E6%95%85%E4%BA%8B2/"/>
+      <url>/2019/08/13/%E6%81%90%E6%80%96%E6%95%85%E4%BA%8B2/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    《恐怖故事2》是由Soofilm公司制作，乐天娱乐出品的恐怖故事系列电影，是《恐怖故事》（2012年）的续篇。<p></p><p></p><h2>正片 恐怖故事2</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer9" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer9"),"video":{"url":"https://hot.jingpin88.com/ppvod/7B4D880799F1E27A8B502A744A9D0B0A.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
       
     </entry>
     
@@ -275,6 +367,12 @@
       
       
       
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
     </entry>
     
     
@@ -288,6 +386,31 @@
       
       
       
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>逃学英雄传</title>
+      <link href="/2019/08/13/%E9%80%83%E5%AD%A6%E8%8B%B1%E9%9B%84%E4%BC%A0/"/>
+      <url>/2019/08/13/%E9%80%83%E5%AD%A6%E8%8B%B1%E9%9B%84%E4%BC%A0/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>  《逃学英雄传》是由王晶执导， 郭富城、邱淑贞、张坚庭、张敏、吴孟达、黄一山主演的喜剧片。<br>   影片讲述了圣育强中学的顽劣学生、卧底老师之间的搞笑故事。<br> <a id="more"></a><p></p><p></p><h2>正片 逃学英雄传</h2><br><div id="dplayer13" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer13"),"video":{"url":"https://sina.com-h-sina.com/20190126/28914_0c231c0c/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script><p></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
     </entry>
     
     
@@ -300,6 +423,12 @@
         <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    故事讲述的是Eric、Pat、JoJo、龙、Bill、Ken、岚七人本去前往离岛露营，但怎料碰上狂风暴雨，七人遂来到一间空屋暂避。可是没想到意外却发生了，就在当天晚上，古怪的事情接二连三发生。JoJo 联同Bill 及Ken 捉弄龙，令龙无地自容，结果龙更被魔力扯进镜内……<br>    翌日，众人商议再停留多玩乐一天，怎料Ken 竟失踪，Bill、JoJo 先后被杀，令Eric 不寒而栗……<br><a id="more"></a><p></p><p></p><h2>正片 猛鬼屠房</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer11" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer11"),"video":{"url":"https://cdn.kuyunbo.club/20190422/19588_3ed61841/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
       
     </entry>
     

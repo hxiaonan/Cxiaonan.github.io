@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Xiaonan Chen" />
+
+
+
+<meta name="description" content="centos7—计划任务（at、cron）  计划任务：让计算机在指定的时间执行指定的事情">
+<meta name="keywords" content="linux,crontab">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux计划任务">
+<meta property="og:url" content="https://suixin.ltd/2019/09/13/at-and-cron/index.html">
+<meta property="og:site_name" content="小南同学的笔记">
+<meta property="og:description" content="centos7—计划任务（at、cron）  计划任务：让计算机在指定的时间执行指定的事情">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-09-13T08:23:26.578Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux计划任务">
+<meta name="twitter:description" content="centos7—计划任务（at、cron）  计划任务：让计算机在指定的时间执行指定的事情">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="小南同学的笔记" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Linux计划任务 | 小南同学的笔记</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/cat.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Xiaonan Chen</a></h1>
+          <p><a>那个女孩对我说</a></p>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="搜索了解我吧(*^__^*)" class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">工具箱</a></li>
+                        
+                            <li><a href="/favorite/">电影</a></li>
+                        
+                            <li><a href="/music/">音乐</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:3076337595@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/crontab/">crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-specific/">linux-specific</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something-wrong/">something wrong</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生活/">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/电影收藏/">电影收藏</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">我就是我，不一样的烟火</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Xiaonan Chen</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/cat.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Xiaonan Chen</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">工具箱</a></li>
+                
+                    <li><a href="/favorite/">电影</a></li>
+                
+                    <li><a href="/music/">音乐</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:3076337595@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-at-and-cron" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2019/09/13/at-and-cron/" class="article-date">
+      <time datetime="2019-09-13T07:35:45.000Z" itemprop="datePublished">2019-09-13</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Linux计划任务
+    </h1>
+  
+
+        
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/linux学习/">linux学习</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/crontab/">crontab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1>centos7—计划任务（at、cron）</h1>
+
+<p>计划任务：让计算机在指定的时间执行指定的事情<br><a id="more"></a></p>
+<h1 id="1、分类：一次性计划任务：at（临时的计划任务）、周期性计划任务：cron"><a href="#1、分类：一次性计划任务：at（临时的计划任务）、周期性计划任务：cron" class="headerlink" title="1、分类：一次性计划任务：at（临时的计划任务）、周期性计划任务：cron"></a>1、分类：一次性计划任务：at（临时的计划任务）、周期性计划任务：cron</h1><h1 id="2、计划任务管理：查atq、创建at、删除atrm"><a href="#2、计划任务管理：查atq、创建at、删除atrm" class="headerlink" title="2、计划任务管理：查atq、创建at、删除atrm"></a>2、计划任务管理：查atq、创建at、删除atrm</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">注：服务器重启一般都是晚上   凌晨2点</span><br><span class="line">at 时间</span><br><span class="line">atq   或  at  -l    查计划列表</span><br><span class="line">    eg.  at 20:00</span><br><span class="line">          at&gt; poweroff      关机</span><br><span class="line">          at&gt; ctrl+d</span><br></pre></td></tr></table></figure>
+<p>3、时间的写法</p>
+<pre><code>HH:MM   //18:30
+midnight   //0点 (午夜)
+noon   //12点 (中午)  
+teatime //16点(下午4点)
+AM  或   PM后缀指定一天的上午或下午。  //at  2:00 pm
+MMDDYY  、  MM/DD/YY 或 DD.MM.YY
+now + 计数  时间单位(minutes  、hours  、  days 或 weeks)
+    eg. at now + 3 hours(从现在开始起三个小时后)
+    eg. at 4pm  + 3 days   //三天以后的下午4点执行一个任务
+         at 2am + tomorrom  //明天上午2点
+         at 10am Jul 31   //7月31日上午10点
+</code></pre><h1 id="案例一：凌晨2点备份-etc目录-到-tmp格式为-etc-tar-xz"><a href="#案例一：凌晨2点备份-etc目录-到-tmp格式为-etc-tar-xz" class="headerlink" title="案例一：凌晨2点备份/etc目录 到 /tmp格式为 etc.tar.xz"></a>案例一：凌晨2点备份/etc目录 到 /tmp格式为 etc.tar.xz</h1><pre><code>at 02:00
+at&gt; tar cvJf /tmp/etc.tar.xz /etc
+at&gt; ctrl+d
+</code></pre><p>4、查看所有用户的计划任务</p>
+<pre><code>atq
+at -l
+</code></pre><p>5、查看某个计划任务的详细内容</p>
+<pre><code>at -c 工作号
+</code></pre><p>6、删除计划任务</p>
+<pre><code>atrm 工作号 ...
+at -d 工作号 ...
+</code></pre><h1 id="案例二：脚本方式创建at计划任务"><a href="#案例二：脚本方式创建at计划任务" class="headerlink" title="案例二：脚本方式创建at计划任务."></a>案例二：脚本方式创建at计划任务.</h1><pre><code>echo  &apos;ls;date;pwd&apos;  | at  3:00      #用管道符将任务传给at命令
+</code></pre><h1 id="案例三：用at将指定文件-f-文件名-中的命令设为计划任务"><a href="#案例三：用at将指定文件-f-文件名-中的命令设为计划任务" class="headerlink" title="案例三：用at将指定文件(-f  文件名)中的命令设为计划任务."></a>案例三：用at将指定文件(-f  文件名)中的命令设为计划任务.</h1><pre><code>#首先,创建命令文件
+vim /opt/aplan      #添加如下内容
+    ls
+    date
+    pwd
+    tar -czvf /tmp/etc.tar.gz /etc
+</code></pre><h1 id="各例子展示："><a href="#各例子展示：" class="headerlink" title="各例子展示："></a>各例子展示：</h1><pre><code># at 5pm+3 days    #三天后的下午5点,执行 /bin/ls
+at&gt; /bin/ls
+at&gt; 
+job 7 at 2019-09-13 17:00
+
+# at 17:20 tomorrow    #明天17点钟，输出时间到指定文件内
+at&gt; date &gt;/root/date.log         
+at&gt; 
+job 8 at 2019-09-13 17:20
+
+
+# atq      #查看任务
+8       2019-09-13 17:20 a root
+7       2019-09-13 17:00 a root
+
+# atrm 7     #删除任务
+
+# atq 
+8       2019-09-13 17:20 a root
+
+# 指定在今天下午5:30执行某命令。以下命令格式，结果都一样：
+
+# at 5:30pm 
+
+# at 17:30 
+
+# at 17:30 today 
+
+# at now + 5 hours 
+
+# at now + 300 minutes 
+
+# at 17:30 24.2.99 
+
+# at 17:30 2/24/99 
+
+# at 17:30 Feb 24 
+
+# at -f /home/test/work 4pm + 3 days     #在三天后下午4点执行文档work中的作业
+</code></pre><h1 id="7、at权限管理、安全"><a href="#7、at权限管理、安全" class="headerlink" title="7、at权限管理、安全"></a>7、at权限管理、安全</h1><pre><code>/etc/at.allow      白名单：只允许在此名单内的用户使用at（此文件本身不存在）
+/etc/at.deny      黑名单：在此名单内的用户不可以使用at
+注：当两个文件都不存在，只有root用户可以使用at
+      当两个文件都存在，allow优先执行
+</code></pre><hr>
+<h1 id="at服务管理："><a href="#at服务管理：" class="headerlink" title="at服务管理："></a>at服务管理：</h1><pre><code>查at软件是否已安装：pm -q at  
+查at的文件列表：rpm -ql at
+查at的定时列表：at -l
+查看单个at任务内容：at -c 工作号
+查at的配置文件列表：rpm -qc at
+查at服务状态：systemctl status atd   或   service atd status
+重启at服务：systemctl restart atd   或   service atd restart
+关闭at服务：systemctl stop atd   或   service atd stop
+开机不启动at服务：systemctl disable atd   或   chkconfig atd off
+开机启动at服务：systemctl enable atd   或   chkconfig atd on
+</code></pre><h1 id="at的其他文件"><a href="#at的其他文件" class="headerlink" title="at的其他文件:"></a>at的其他文件:</h1><pre><code>计划文件清单:ls   /var/spool/at/*    用cat可以看这些文件
+</code></pre><hr>
+<h1 id="cron：周期性计划任务、循环性计划任务，主要用于备份数据。"><a href="#cron：周期性计划任务、循环性计划任务，主要用于备份数据。" class="headerlink" title="cron：周期性计划任务、循环性计划任务，主要用于备份数据。"></a>cron：周期性计划任务、循环性计划任务，主要用于备份数据。</h1><pre><code>crontab  
+usage:crontab [-u user] [ -e | -l | -r ]
+-u &lt;user&gt;  define user      #指定用户
+-e      edit user&apos;s crontab      #编辑计划任务
+-l      list user&apos;s crontab      #查看计划任务
+-r      delete user&apos;s crontab      #删除计划任务
+1、crontab -e      编辑周期性计划任务的内容
+2、查看配置:cat   /etc/crontab
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">时间</span><br><span class="line">min     hour   day  month  week    command</span><br><span class="line">分钟     小时      日      月         周      动作(任务命令)    </span><br><span class="line">0-59     0-23    1-31   1-12   0-7    命令或脚本(写绝对路径)</span><br><span class="line">30         2         1      *       *      rm -rf /tmp/*   //每月1号的2：30分删除/tmp目录下的所有文件</span><br><span class="line">5           *          *       6      3    rm -rf /tmp/*   //每年6月的每周三每小时的5分钟删除/tmp目录下的所有文件</span><br><span class="line">6           6         *       6     6    rm -rf /tmp/*    //每年6月的周六的6点6分钟删除/tmp目录下的所有文件</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">*  任何时刻</span><br><span class="line">-   一段时间  //  8-11 *  *  *  *   rm -rf /tmp/*    //每小时的8分钟 9分钟 10分钟 11分钟 删除/tmp目录下所有文件     </span><br><span class="line">,  分隔(不连续的时间)       //  1,2,5,9   *  *  *  *   rm -rf /tmp/*  //每小时的1分钟 2分钟 5分钟 9分钟 删除/tmp目录下所有文件     </span><br><span class="line">0-4,8-12    //</span><br><span class="line">0-23/2  时间间隔  //1  0-23/2   *  *   *  rm -rf /tmp/*    // &quot;0,2,4,6,8,10,12,14,16,18,20,22&quot;).</span><br><span class="line">*/2    每隔2小时     //1    */2   *  *   *  rm -rf /tmp/*     每隔2小时执行rm命令</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">*  0-23  *  *  *  rm -rf /tmp/*   </span><br><span class="line">*   */1   *  *  *  rm -rf /tmp/*</span><br></pre></td></tr></table></figure>
+<p>3、时间的写法<br>The time and date fields are:</p>
+<pre><code>field          allowed values
+-----          --------------
+minute         0-59
+hour           0-23
+day of month   1-31
+month          1-12  (or  names,
+see below)
+day  of  week    0-7  (0 or 7 is
+Sun, or use names)
+</code></pre><h1 id="案例一：每个星期三的下午10：00备份-etc-目录到-tmp目录叫2019-09-13-etc-tar-gz备份文件包含当天日期"><a href="#案例一：每个星期三的下午10：00备份-etc-目录到-tmp目录叫2019-09-13-etc-tar-gz备份文件包含当天日期" class="headerlink" title="案例一：每个星期三的下午10：00备份/etc/目录到/tmp目录叫2019-09-13_etc.tar.gz备份文件包含当天日期"></a>案例一：每个星期三的下午10：00备份/etc/目录到/tmp目录叫2019-09-13_etc.tar.gz备份文件包含当天日期</h1><pre><code> crontab -e
+ * 22 * * 3 /usr/bin/tar cvzf /tmp/`/usr/bin/date +%F`_etc.tar.gz /etc 
+（注:`命令`中的``为命令替换功能,系统会先执行``(反撇，反引号)中的命令．也可以将``写成$()）
+</code></pre><h1 id="案例二：只保留最近1个月的日志文件"><a href="#案例二：只保留最近1个月的日志文件" class="headerlink" title="案例二：只保留最近1个月的日志文件"></a>案例二：只保留最近1个月的日志文件</h1><pre><code>crontab -e
+1 * * * *  find /var/log -mtime +30 |xarge -i rm -rf {}
+</code></pre><h1 id="案例三：每月1号的凌晨2点半清空临时盘"><a href="#案例三：每月1号的凌晨2点半清空临时盘" class="headerlink" title="案例三：每月1号的凌晨2点半清空临时盘"></a>案例三：每月1号的凌晨2点半清空临时盘</h1><pre><code>crontab -e
+30  2  1  *  *  /usr/bin/rm -rf /tmp/* 
+</code></pre><h1 id="案例四：每周每天的晚上8：10关闭电脑，除了星期六，星期五-星期日的17：10关闭电脑"><a href="#案例四：每周每天的晚上8：10关闭电脑，除了星期六，星期五-星期日的17：10关闭电脑" class="headerlink" title="案例四：每周每天的晚上8：10关闭电脑，除了星期六，星期五,星期日的17：10关闭电脑"></a>案例四：每周每天的晚上8：10关闭电脑，除了星期六，星期五,星期日的17：10关闭电脑</h1><pre><code>crontab -e
+10 20 * * 1-4  /usr/sbin/poweroff
+10 17 * * 5,7  /usr/sbin/poweroff
+</code></pre><h1 id="案例五：max用户每天在家目录创建一个以日期命名的目录20190913"><a href="#案例五：max用户每天在家目录创建一个以日期命名的目录20190913" class="headerlink" title="案例五：max用户每天在家目录创建一个以日期命名的目录20190913"></a>案例五：max用户每天在家目录创建一个以日期命名的目录20190913</h1><pre><code>crontab -u max -e
+1  0  *  *  *  /bin/mkdir  /home/max/`date +%Y%m%d`
+</code></pre><p>4、查询周期性计划任务的内容</p>
+<pre><code>crontab -l      #查看当前用户定时运行的程序
+crontab -u jim -      #查看指定用户
+</code></pre><p>5、删除某用户的所有周期性计划任务(删除某个计划任务crontab -e 进入文本删除)</p>
+<pre><code>crontab -r      #当前用户
+crontab -u jim -r      #指定用户
+</code></pre><p>系统定义的计划任务(默认)</p>
+<pre><code>  更新whatis数据库
+  更新updatedb数据库
+  日志定期轮滚(日志切割)
+  清理/tmp /var/tmp
+  收集系统的状态信息
+
+
+vim /etc/crontab  配置文件        
+# For details see man 4 crontabs
+
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name command to be executed  
+*/5 * * * *   root  命令   //每隔5分钟以root身份去执行命令
+</code></pre><h1 id="以下目录内可以存在脚本-该脚本就会按照时间去执行"><a href="#以下目录内可以存在脚本-该脚本就会按照时间去执行" class="headerlink" title="以下目录内可以存在脚本  该脚本就会按照时间去执行"></a>以下目录内可以存在脚本  该脚本就会按照时间去执行</h1><pre><code>cd /etc
+cron.hourly/      #每小时
+cron.weekly/      #每周
+cron.daily/      #每天
+cron.monthly/      #每月
+</code></pre><h1 id="6、删除超过一个月不使用的文件"><a href="#6、删除超过一个月不使用的文件" class="headerlink" title="6、删除超过一个月不使用的文件"></a>6、删除超过一个月不使用的文件</h1><pre><code>cat /etc/cron.daily/tmpwatch
+</code></pre><h1 id="7、crontab服务管理："><a href="#7、crontab服务管理：" class="headerlink" title="7、crontab服务管理："></a>7、crontab服务管理：</h1><pre><code>查软件是否已安装：rpm  -q  crontabs
+查软件的文件列表：rpm  -ql  crontabs
+查软件的配置文件列表：rpm -qc crontabs
+服务状态：systemctl   status   crond       注：d是daemon守护进程
+重启at服务: systemctl   restart   crond   或  service   crond  restart
+关闭at服务: systemctl   stop   crond   或  service   crond  stop
+开机不启动at服务: systemctl   disable  crond 或 chkconfig   crond  off
+开机启动at服务:  systemctl   enable   crond  或 chkconfig   crond  on
+</code></pre><h1 id="8、cron权限管理"><a href="#8、cron权限管理" class="headerlink" title="8、cron权限管理"></a>8、cron权限管理</h1><pre><code>/etc/cron.allow      白名单：只允许在此名单内的用户使用crontab（此文件本身不存在）
+/etc/cron.deny      黑名单：在此名单内的用户不可以使用crontab
+      注：两个文件都不存在，只有root用户可以使用crontab
+             两个文件都存在，allow优先执行
+</code></pre><p>本博客参照编写☞博客：<a href="https://blog.csdn.net/qq_34889607/article/details/78635141" target="_blank" rel="noopener">https://blog.csdn.net/qq_34889607/article/details/78635141</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2019/09/13/at-and-cron/">Linux计划任务</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Xiaonan Chen</a></p>
+        <p><span>发布时间:</span>2019-09-13, 15:35:45</p>
+        <p><span>最后更新:</span>2019-09-13, 16:23:26</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2019/09/13/at-and-cron/" title="Linux计划任务">https://suixin.ltd/2019/09/13/at-and-cron/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://suixin.ltd/2019/09/13/at-and-cron/　　作者: Xiaonan Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2019/09/12/mysql5.7/">
+                    Install mysql5.7
+                </a>
+            </div>
+        
+    </nav>
+
+  
+  
+    <! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+       搬运工需要安慰，需要支持！（￥1.0）
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/img/donate.png" alt="支付宝打赏"> 
+        <!-- 微信打赏图案 -->
+   <!-- <img src="/img/weixin.jpg" alt="微信打赏">  -->
+    
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+  
+
+
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text">centos7—计划任务（at、cron）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1、分类：一次性计划任务：at（临时的计划任务）、周期性计划任务：cron"><span class="toc-number">2.</span> <span class="toc-text">1、分类：一次性计划任务：at（临时的计划任务）、周期性计划任务：cron</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2、计划任务管理：查atq、创建at、删除atrm"><span class="toc-number">3.</span> <span class="toc-text">2、计划任务管理：查atq、创建at、删除atrm</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#案例一：凌晨2点备份-etc目录-到-tmp格式为-etc-tar-xz"><span class="toc-number">4.</span> <span class="toc-text">案例一：凌晨2点备份/etc目录 到 /tmp格式为 etc.tar.xz</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#案例二：脚本方式创建at计划任务"><span class="toc-number">5.</span> <span class="toc-text">案例二：脚本方式创建at计划任务.</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#案例三：用at将指定文件-f-文件名-中的命令设为计划任务"><span class="toc-number">6.</span> <span class="toc-text">案例三：用at将指定文件(-f  文件名)中的命令设为计划任务.</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#各例子展示："><span class="toc-number">7.</span> <span class="toc-text">各例子展示：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7、at权限管理、安全"><span class="toc-number">8.</span> <span class="toc-text">7、at权限管理、安全</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#at服务管理："><span class="toc-number">9.</span> <span class="toc-text">at服务管理：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#at的其他文件"><span class="toc-number">10.</span> <span class="toc-text">at的其他文件:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cron：周期性计划任务、循环性计划任务，主要用于备份数据。"><span class="toc-number">11.</span> <span class="toc-text">cron：周期性计划任务、循环性计划任务，主要用于备份数据。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#案例一：每个星期三的下午10：00备份-etc-目录到-tmp目录叫2019-09-13-etc-tar-gz备份文件包含当天日期"><span class="toc-number">12.</span> <span class="toc-text">案例一：每个星期三的下午10：00备份/etc/目录到/tmp目录叫2019-09-13_etc.tar.gz备份文件包含当天日期</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#案例二：只保留最近1个月的日志文件"><span class="toc-number">13.</span> <span class="toc-text">案例二：只保留最近1个月的日志文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#案例三：每月1号的凌晨2点半清空临时盘"><span class="toc-number">14.</span> <span class="toc-text">案例三：每月1号的凌晨2点半清空临时盘</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#案例四：每周每天的晚上8：10关闭电脑，除了星期六，星期五-星期日的17：10关闭电脑"><span class="toc-number">15.</span> <span class="toc-text">案例四：每周每天的晚上8：10关闭电脑，除了星期六，星期五,星期日的17：10关闭电脑</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#案例五：max用户每天在家目录创建一个以日期命名的目录20190913"><span class="toc-number">16.</span> <span class="toc-text">案例五：max用户每天在家目录创建一个以日期命名的目录20190913</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#以下目录内可以存在脚本-该脚本就会按照时间去执行"><span class="toc-number">17.</span> <span class="toc-text">以下目录内可以存在脚本  该脚本就会按照时间去执行</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6、删除超过一个月不使用的文件"><span class="toc-number">18.</span> <span class="toc-text">6、删除超过一个月不使用的文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7、crontab服务管理："><span class="toc-number">19.</span> <span class="toc-text">7、crontab服务管理：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8、cron权限管理"><span class="toc-number">20.</span> <span class="toc-text">8、cron权限管理</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Linux计划任务　| 小南同学的笔记　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC80NTY5Ny8yMjIwOA==">
+	<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+	</script>
+<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+      
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2019/09/12/mysql5.7/" title="下一篇: Install mysql5.7">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/09/13/at-and-cron/">Linux计划任务</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/12/mysql5.7/">Install mysql5.7</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/ElasticSearch/">Install ElasticSearch</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/rhel8_specific/">RHEL8.0_specific</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/05/Naked Weapon/">Naked Weapon</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/鬼干部/">鬼干部</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/灵幻至尊/">灵幻至尊</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/音乐僵尸/">音乐僵尸</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/一眉道人/">一眉道人</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/僵尸先生/">僵尸先生</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/僵尸家族/">僵尸家族</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/天地玄门/">天地玄门</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/二代宗师/">二代宗师</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/钵兰街大少/">钵兰街大少</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/脱单好难/">脱单好难</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/一代枭雄之三支旗/">一代枭雄之三支旗</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/恐怖故事2/">恐怖故事2</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/陈翔六点半之重楼别/">陈翔六点半之重楼别</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/使徒行者2：谍影行动/">使徒行者2：谍影行动</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/逃学英雄传/">逃学英雄传</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/猛鬼屠房/">猛鬼屠房</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/06/zhenhunjie/">zhenhunjie</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/04/baisheyuanqi/">baisheyuanqi</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/31/birthday/">birthday</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/23/test/">test</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/15/rhel7-specific/">rhel7_specific</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/28/owncloud/">owncloud</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/03/Recruit-marriage/">Recruit marriage</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/17/pdf-upload-test/">pdf-upload-test</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/16/instructions-for-linux/">instructions-for-linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/09/RHEL7题库/">RHEL7题库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/14/cp/">cp</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/13/newlinux/">newlinux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/11/linux/">Linux系统raid1更换故障硬盘处理过程</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2018-2019 Xiaonan Chen
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo Coding</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+            <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-5.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
