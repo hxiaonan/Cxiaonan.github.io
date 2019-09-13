@@ -15,17 +15,20 @@
 
 
 
-<meta name="description" content="剧情简介   富贵乡绅任发（黄虾 饰）先父当年威逼利诱求得一块风水宝地，经风水先生指点，其父下葬二十年后起坟迁葬，以利子孙。然九叔（林正英 饰）察看墓穴得知，当年风水先生与任家私怨在身，在墓穴中做下手脚，二十年后任老太爷尸体已生恶变。九叔提议就地火化，在任老爷请求下才将尸骨移往义庄。虽经小心看护，但任老太爷仍化作僵尸，将其子任发杀害。九叔断定任老太爷和任发的僵尸将再次出现，于是命令徒弟秋生（钱小豪">
+<meta name="description" content="CentOS7 yum方式安装MySQL5.7在CentOS中默认安装有MariaDB，这个是MySQL的分支，但为了需要，还是要在系统中安装MySQL，而且安装完成之后可以直接覆盖掉MariaDB。1 下载并安装MySQL官方的 Yum Repository">
+<meta name="keywords" content="linux,MySQL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="僵尸先生">
-<meta property="og:url" content="https://suixin.ltd/2019/08/24/僵尸先生/index.html">
+<meta property="og:title" content="Install mysql5.7">
+<meta property="og:url" content="https://suixin.ltd/2019/09/12/mysql5.7/index.html">
 <meta property="og:site_name" content="小南同学的笔记">
-<meta property="og:description" content="剧情简介   富贵乡绅任发（黄虾 饰）先父当年威逼利诱求得一块风水宝地，经风水先生指点，其父下葬二十年后起坟迁葬，以利子孙。然九叔（林正英 饰）察看墓穴得知，当年风水先生与任家私怨在身，在墓穴中做下手脚，二十年后任老太爷尸体已生恶变。九叔提议就地火化，在任老爷请求下才将尸骨移往义庄。虽经小心看护，但任老太爷仍化作僵尸，将其子任发杀害。九叔断定任老太爷和任发的僵尸将再次出现，于是命令徒弟秋生（钱小豪">
+<meta property="og:description" content="CentOS7 yum方式安装MySQL5.7在CentOS中默认安装有MariaDB，这个是MySQL的分支，但为了需要，还是要在系统中安装MySQL，而且安装完成之后可以直接覆盖掉MariaDB。1 下载并安装MySQL官方的 Yum Repository">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-24T13:29:06.483Z">
+<meta property="og:image" content="https://images2017.cnblogs.com/blog/1079354/201707/1079354-20170726203904812-1008115240.png">
+<meta property="og:updated_time" content="2019-09-13T05:56:51.221Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="僵尸先生">
-<meta name="twitter:description" content="剧情简介   富贵乡绅任发（黄虾 饰）先父当年威逼利诱求得一块风水宝地，经风水先生指点，其父下葬二十年后起坟迁葬，以利子孙。然九叔（林正英 饰）察看墓穴得知，当年风水先生与任家私怨在身，在墓穴中做下手脚，二十年后任老太爷尸体已生恶变。九叔提议就地火化，在任老爷请求下才将尸骨移往义庄。虽经小心看护，但任老太爷仍化作僵尸，将其子任发杀害。九叔断定任老太爷和任发的僵尸将再次出现，于是命令徒弟秋生（钱小豪">
+<meta name="twitter:title" content="Install mysql5.7">
+<meta name="twitter:description" content="CentOS7 yum方式安装MySQL5.7在CentOS中默认安装有MariaDB，这个是MySQL的分支，但为了需要，还是要在系统中安装MySQL，而且安装完成之后可以直接覆盖掉MariaDB。1 下载并安装MySQL官方的 Yum Repository">
+<meta name="twitter:image" content="https://images2017.cnblogs.com/blog/1079354/201707/1079354-20170726203904812-1008115240.png">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -57,7 +60,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>僵尸先生 | 小南同学的笔记</title>
+<title>Install mysql5.7 | 小南同学的笔记</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -91,7 +94,7 @@
 
 
 
-<link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"></script></head>
+</head>
 <body>
   <div id="container">
     <div class="left-col">
@@ -271,11 +274,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-僵尸先生" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-mysql5.7" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2019/08/24/僵尸先生/" class="article-date">
-      <time datetime="2019-08-24T13:40:12.000Z" itemprop="datePublished">2019-08-24</time>
+      <a href="/2019/09/12/mysql5.7/" class="article-date">
+      <time datetime="2019-09-12T13:35:45.000Z" itemprop="datePublished">2019-09-12</time>
 </a>
 
 
@@ -290,7 +293,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      僵尸先生
+      Install mysql5.7
     </h1>
   
 
@@ -299,8 +302,16 @@
       
       <div class="article-info article-info-post">
         
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/linux学习/">linux学习</a>
+    </div>
+
 
         
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+    </div>
+
         <div class="clearfix"></div>
       </div>
       
@@ -308,9 +319,44 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p></p><h1>剧情简介</h1><br>   富贵乡绅任发（黄虾 饰）先父当年威逼利诱求得一块风水宝地，经风水先生指点，其父下葬二十年后起坟迁葬，以利子孙。然九叔（林正英 饰）察看墓穴得知，当年风水先生与任家私怨在身，在墓穴中做下手脚，二十年后任老太爷尸体已生恶变。九叔提议就地火化，在任老爷请求下才将尸骨移往义庄。虽经小心看护，但任老太爷仍化作僵尸，将其子任发杀害。九叔断定任老太爷和任发的僵尸将再次出现，于是命令徒弟秋生（钱小豪 饰）和文才（许冠英 饰）小心应付……<p></p>
-<p></p><h2>正片 僵尸先生(1985)</h2><br><a id="more"></a><p></p>
-<p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer17" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer17"),"video":{"url":"https://vip.okokbo.com/20171213/fTGJqOpC/800kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>
+        <p></p><h1>CentOS7 yum方式安装MySQL5.7</h1>在CentOS中默认安装有MariaDB，这个是MySQL的分支，但为了需要，还是要在系统中安装MySQL，而且安装完成之后可以直接覆盖掉MariaDB。<br>1 下载并安装MySQL官方的 Yum Repository<br><a id="more"></a><br>    [root@localhost ~]# wget -i -c <a href="http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm" target="_blank" rel="noopener">http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm</a><br>  使用上面的命令就直接下载了安装用的Yum Repository，大概25KB的样子，然后就可以直接yum安装了。<p></p>
+<pre><code>[root@localhost ~]# yum -y install mysql57-community-release-el7-10.noarch.rpm     
+</code></pre><p>  之后就开始安装MySQL服务器。</p>
+<pre><code>[root@localhost ~]# yum -y install mysql-community-server
+</code></pre><p>这步可能会花些时间，安装完成后就会覆盖掉之前的mariadb。</p>
+<pre><code>已安装：
+      mysql-community-libs.x86_64 0:5.7.19-1.el7
+      mysql-community-libs-compat.x86_64 0:5.7.19-1.el7
+      mysql-community-server.x86_64 0:5.7.19-1.el7
+  作为依赖被安装：
+        mysql-community-client.x86_64 0:5.7.19-1.el7
+        mysql-community-common.x86_64 0:5.7.19-1.el7
+  替代：
+        mariadb-libs.x86_64 1:5.5.52-1.el7
+  完毕！
+至此MySQL就安装完成了，然后是对MySQL的一些设置。
+</code></pre><p>2 MySQL数据库设置</p>
+<p>  首先启动MySQL<br>    <code>root@localhost ~]# systemctl start  mysqld.service</code><br>  查看MySQL运行状态，如果为running状态就是ySQL已经开始正常运行<br>    <code>[root@localhost ~]# systemctl status mysqld.service</code><br>  不过要想进入MySQL还得先找出此时root用户的密码，通过如下命令可以在日志文件中找出密码：<br>    <code>[root@localhost ~]# grep &quot;password&quot; /var/log/mysqld.log</code><br>  如下命令输入账号密码进入数据库：<br>    <code>[root@localhost ~]# mysql -uroot -p</code><br>  输入初始密码，此时不能做任何事情，因为MySQL默认必须修改密码之后才能操作数据库：<br>    <code>mysql&gt; ALTER USER &#39;root&#39;@&#39;localhost&#39; IDENTIFIED BY &#39;new password&#39;;</code><br>  这里有个问题，新密码设置的时候如果设置的过于简单会报错：<br>  <code>ERROR 1819(HY000):Your password does not satisfy the current policy_requirements</code><br>  原因是因为MySQL有密码设置的规范，具体是与validate_password_policy的值有关：<br> <img src="https://images2017.cnblogs.com/blog/1079354/201707/1079354-20170726203904812-1008115240.png" alt=""><br>  MySQL完整的初始密码规则可以通过如下命令查看：</p>
+<pre><code>mysql&gt; SHOW VARIABLES LIKE &apos;validate_password%&apos;;
++--------------------------------------+-------+
+| Variable_name                        | Value |
++--------------------------------------+-------+
+| validate_password_check_user_name    | OFF   |
+| validate_password_dictionary_file    |       |
+| validate_password_length             | 4     |
+| validate_password_mixed_case_count   | 1     |
+| validate_password_number_count       | 1     |
+| validate_password_policy             | LOW   |
+| validate_password_special_char_count | 1     |
++--------------------------------------+-------+
+7 rows in set (0.01 sec)
+</code></pre><p> 密码的长度是由validate_password_length决定的，而validate_password_length的计算公式是：</p>
+<p><code>validate_password_length = validate_password_number_count + validate_password_special_char_count + (2 * 
+  validate_password_mixed_case_count)</code></p>
+<p> 我的是已经修改过的，初始情况下第一个的值是ON，validate_password_length是8。可以通过如下命令修改：</p>
+<pre><code>mysql&gt; set global validate_password_policy=0;
+mysql&gt; set global validate_password_length=1;
+</code></pre><p> 设置之后就是我上面查出来的那几个值了，此时密码就可以设置的很简单，例如1234之类的。到此数据库的密码设置就完成了。<br> 但此时还有一个问题，就是因为安装了Yum Repository，以后每次yum操作都会自动更新，需要把这个卸载掉：<br>  <code>[root@localhost ~]# yum -y remove mysql57-community-release-el7-10.noarch</code><br>  此时才算真的完成了。<br> 本博客参照☞博客：<a href="https://www.cnblogs.com/bigbrotherer/p/7241845.html" target="_blank" rel="noopener">https://www.cnblogs.com/bigbrotherer/p/7241845.html</a></p>
 
       
     </div>
@@ -319,13 +365,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2019/08/24/僵尸先生/">僵尸先生</a></p>
+        <p><span>本文标题:</span><a href="/2019/09/12/mysql5.7/">Install mysql5.7</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Xiaonan Chen</a></p>
-        <p><span>发布时间:</span>2019-08-24, 21:40:12</p>
-        <p><span>最后更新:</span>2019-08-24, 21:29:06</p>
+        <p><span>发布时间:</span>2019-09-12, 21:35:45</p>
+        <p><span>最后更新:</span>2019-09-13, 13:56:51</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2019/08/24/僵尸先生/" title="僵尸先生">https://suixin.ltd/2019/08/24/僵尸先生/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://suixin.ltd/2019/08/24/僵尸先生/　　作者: Xiaonan Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2019/09/12/mysql5.7/" title="Install mysql5.7">https://suixin.ltd/2019/09/12/mysql5.7/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://suixin.ltd/2019/09/12/mysql5.7/　　作者: Xiaonan Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -337,16 +383,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2019/08/24/一眉道人/">
-                    一眉道人
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2019/08/24/僵尸家族/">
-                    僵尸家族
+                <a href="/2019/09/11/ElasticSearch/">
+                    Install ElasticSearch
                 </a>
             </div>
         
@@ -388,7 +428,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text">剧情简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.1.</span> <span class="toc-text">正片 僵尸先生(1985)</span></a></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text">CentOS7 yum方式安装MySQL5.7</span></a></li></ol>
         
     </div>
     <style>
@@ -424,7 +464,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"僵尸先生　| 小南同学的笔记　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"Install mysql5.7　| 小南同学的笔记　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -465,15 +505,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2019/08/24/一眉道人/" title="上一篇: 一眉道人">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2019/08/24/僵尸家族/" title="下一篇: 僵尸家族">
+            <a href="/2019/09/11/ElasticSearch/" title="下一篇: Install ElasticSearch">
                 <i class="fa fa-angle-right"></i>
             </a>
         
