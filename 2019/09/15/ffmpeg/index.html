@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Xiaonan Chen" />
+
+
+
+<meta name="description" content="大概所有的因果都是从入坑开始的吧  今天心血来潮就到油管上面下些视频素材在火狐浏览器附加组件中搜索YouTube 视频一键下载器 / YouTube HD Download进行添加后科学上网https://www.youtube.com/（也就是传说中的油管）选择你喜欢的MV如下图分别下在所需清晰度下载VIDEO AND AUDIO就是这样我踏上了入坑的道路。。。。。">
+<meta name="keywords" content="ffmpeg,youtube视频">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ffmpeg and youtube">
+<meta property="og:url" content="https://suixin.ltd/2019/09/15/ffmpeg/index.html">
+<meta property="og:site_name" content="小南同学的笔记">
+<meta property="og:description" content="大概所有的因果都是从入坑开始的吧  今天心血来潮就到油管上面下些视频素材在火狐浏览器附加组件中搜索YouTube 视频一键下载器 / YouTube HD Download进行添加后科学上网https://www.youtube.com/（也就是传说中的油管）选择你喜欢的MV如下图分别下在所需清晰度下载VIDEO AND AUDIO就是这样我踏上了入坑的道路。。。。。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://suixin.ltd/2019/09/15/ffmpeg/ffmpeg.png">
+<meta property="og:updated_time" content="2019-09-15T13:32:01.879Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ffmpeg and youtube">
+<meta name="twitter:description" content="大概所有的因果都是从入坑开始的吧  今天心血来潮就到油管上面下些视频素材在火狐浏览器附加组件中搜索YouTube 视频一键下载器 / YouTube HD Download进行添加后科学上网https://www.youtube.com/（也就是传说中的油管）选择你喜欢的MV如下图分别下在所需清晰度下载VIDEO AND AUDIO就是这样我踏上了入坑的道路。。。。。">
+<meta name="twitter:image" content="https://suixin.ltd/2019/09/15/ffmpeg/ffmpeg.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="小南同学的笔记" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>ffmpeg and youtube | 小南同学的笔记</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/cat.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Xiaonan Chen</a></h1>
+          <p><a>那个女孩对我说</a></p>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="搜索了解我吧(*^__^*)" class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">工具箱</a></li>
+                        
+                            <li><a href="/favorite/">电影</a></li>
+                        
+                            <li><a href="/music/">音乐</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:3076337595@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Operation/">Operation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/crontab/">crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-specific/">linux-specific</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something-wrong/">something wrong</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/youtube视频/">youtube视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生活/">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/电影收藏/">电影收藏</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">我就是我，不一样的烟火</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Xiaonan Chen</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/cat.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Xiaonan Chen</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">工具箱</a></li>
+                
+                    <li><a href="/favorite/">电影</a></li>
+                
+                    <li><a href="/music/">音乐</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:3076337595@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-ffmpeg" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2019/09/15/ffmpeg/" class="article-date">
+      <time datetime="2019-09-15T13:25:45.000Z" itemprop="datePublished">2019-09-15</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ffmpeg and youtube
+    </h1>
+  
+
+        
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/生活娱乐/">生活娱乐</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ffmpeg/">ffmpeg</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/youtube视频/">youtube视频</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1>大概所有的因果都是从入坑开始的吧</h1>
+
+<h1 id="今天心血来潮就到油管上面下些视频素材"><a href="#今天心血来潮就到油管上面下些视频素材" class="headerlink" title="今天心血来潮就到油管上面下些视频素材"></a>今天心血来潮就到油管上面下些视频素材</h1><p>在火狐浏览器附加组件中搜索<code>YouTube 视频一键下载器 / YouTube HD Download</code>进行添加后<br>科学上网<code>https://www.youtube.com/</code>（也就是传说中的油管）选择你喜欢的MV如下图分别下在所需清晰度下载VIDEO AND AUDIO<br><img src="/2019/09/15/ffmpeg/ffmpeg.png" alt=""><br>就是这样我踏上了入坑的道路。。。。。<br><a id="more"></a><br>  第一坑：<br>  因为是第一次使用这个插件下载视频，好不容易下载好了视频，点开播放。发现居然没有声音的。一脸懵逼中？？？？？<br>  回头看看插件，旁边还有个AUDIO按钮也有下载链接，开始我以为是根据你需求下载音频还是视频来的。现在明白了，一起下下来。<br>  第二坑：<br>  其中视频格式有webm ，mp4两种可供下载，音频有opus,aac两种格式可供下载，为什么会特别介绍这几个格式呢？<br>  因为我在使用opus和mp4合并时报了如下错误：</p>
+<pre><code>max@Max:~/下载$ ffmpeg -i TT.opus -i TT.mp4 -c copy outTT.mp4
+</code></pre><p><code>.......
+ [mp4 @ 0x564189666ce0] track 1: codec frame size is not set
+ [mp4 @ 0x564189666ce0] opus in MP4 support is experimental, add &#39;-strict -2&#39; if you want to use it.
+ Could not write header for output file #0 (incorrect codec parameters ?): Experimental feature</code><br>  大概意思就是opus不支持MP4编码吧。为了验证，我就把MP4格式转成WEBM格式再试一下。</p>
+<pre><code>max@Max:~/下载$ ffmpeg -i TT.mp4 TT.webm   （MP4格式转成WEBM格式，这个过程有点久！）
+max@Max:~/下载$ ffmpeg -i TT.opus -i TT.webm -c copy outTT.webm
+</code></pre><p>  好小子，可以正常合并了，就是画质有点跌眼镜。只能默默的再去下载aac格式的音频再次合并。</p>
+<pre><code>max@Max:~/下载$ ffmpeg -i TT.aac  -i TT.mp4 -c copy outTT.mp4
+</code></pre><p>  所有视频都完美合并，接下来就是愉快得欣赏了！</p>
+<h1 id="都说一朝入坑深似海，这不，我对ffmpeg这个软件有了很大的兴趣！"><a href="#都说一朝入坑深似海，这不，我对ffmpeg这个软件有了很大的兴趣！" class="headerlink" title="都说一朝入坑深似海，这不，我对ffmpeg这个软件有了很大的兴趣！"></a>都说一朝入坑深似海，这不，我对ffmpeg这个软件有了很大的兴趣！</h1><p>FFmpeg是一套可以用来记录、转换数字音频、视频，并能将其转化为流的开源计算机程序。采用LGPL或GPL许可证。它提供了录制、转换以及流化音视频的完整解决方案。它包含了非常先进的音频/视频编解码库libavcodec，为了保证高可移植性和编解码质量，libavcodec里很多code都是从头开发的。</p>
+<h1 id="功能：视频采集功能、视频格式转换、视频抓图、给视频加水印等"><a href="#功能：视频采集功能、视频格式转换、视频抓图、给视频加水印等" class="headerlink" title="功能：视频采集功能、视频格式转换、视频抓图、给视频加水印等"></a>功能：视频采集功能、视频格式转换、视频抓图、给视频加水印等</h1><h1 id="视频采集功能"><a href="#视频采集功能" class="headerlink" title="视频采集功能"></a>视频采集功能</h1><pre><code>ffmpeg视频采集功能非常强大，不仅可以采集视频采集卡或USB摄像头的图像，还可以进行屏幕录制，
+同时还支持以RTP方式将视频流传送给支持RTSP的流媒体服务器，支持直播应用。
+</code></pre><h1 id="ffmpeg在Linux下的视频采集"><a href="#ffmpeg在Linux下的视频采集" class="headerlink" title="ffmpeg在Linux下的视频采集"></a>ffmpeg在Linux下的视频采集</h1><p>ffmpeg对V4L2的视频设备提供了很好的支持，如：</p>
+<pre><code>./ffmpeg -t 10 -f video4linux2 -s 176*144 -r 8 -i /dev/video0 -vcodec h263 -f rtp rtp://192.168.1.105:5060 &gt; /tmp/ffmpeg.sdp
+</code></pre><p><code>以上命令表示：采集10秒钟视频，对video4linux2视频设备进行采集，采集QCIF(176*144)的视频，没秒8帧，视频设备为/dev/video0,视频编码为H236,
+输出格式为RTP，后面定义了IP地址及端口，将该码流所对应的SDP文件重定向到/tmp/ffmpeg.sdp中，将此SDP文件上传到流媒体服务器就可以实现直播了。</code></p>
+<h1 id="ffmpeg在windows下的视频采集"><a href="#ffmpeg在windows下的视频采集" class="headerlink" title="ffmpeg在windows下的视频采集"></a>ffmpeg在windows下的视频采集</h1><p>在windows下关于ffmpeg视频采集的资料非常少，但是ffmpeg还是支持windows下视频采集的。ffmpeg支持windows下video for windows(VFW)设备的视频采集，不过VFW设备已经过时，正在被WDM的视频设备所取代，但是ffmpeg还没有支持WDM的计划，不过好像有将WDM转为VFW的工具，因此ffmpeg还是可以在windows下进行视频采集的。</p>
+<h1 id="视频格式转换功能"><a href="#视频格式转换功能" class="headerlink" title="视频格式转换功能"></a>视频格式转换功能</h1><pre><code>ffmpeg视频转换功能。视频格式转换，比如可以将多种视频格式转换为flv格式，可不是视频信号转换 。
+ffmpeg可以轻易地实现多种视频格式之间的相互转换(wma,rm,avi,mod等)，例如可以将摄录下的视频avi等转成视频网站所采用的flv格式。
+</code></pre><h1 id="视频截图功能"><a href="#视频截图功能" class="headerlink" title="视频截图功能"></a>视频截图功能</h1><pre><code>对于选定的视频，截取指定时间的缩略图。视频抓图，获取静态图和动态图，不提倡抓gif文件;因为抓出的gif文件大而播放不流畅。
+</code></pre><h1 id="给视频加水印功能"><a href="#给视频加水印功能" class="headerlink" title="给视频加水印功能"></a>给视频加水印功能</h1><pre><code>使用ffmpeg 视频添加水印(logo)。
+</code></pre><h1 id="ffmpeg-命令集举例"><a href="#ffmpeg-命令集举例" class="headerlink" title="ffmpeg 命令集举例"></a>ffmpeg 命令集举例</h1><p>1.获取视频的信息</p>
+<pre><code>ffmpeg -i video.avi
+</code></pre><p>2.将图片序列合成视频</p>
+<pre><code>ffmpeg -f image2 -i image%d.jpg video.mpg
+</code></pre><p>上面的命令会把当前目录下的图片（名字如：image1.jpg. image2.jpg. 等…）合并成video.mpg<br>3.将视频分解成图片序列</p>
+<pre><code>ffmpeg -i video.mpg image%d.jpg
+</code></pre><p>上面的命令会生成image1.jpg. image2.jpg. …<br>支持的图片格式有：PGM. PPM. PAM. PGMYUV. JPEG. GIF. PNG. TIFF. SGI<br>4.为视频重新编码以适合在iPod/iPhone上播放</p>
+<pre><code>ffmpeg -i source_video.avi input -acodec aac -ab 128kb -vcodec mpeg4 -b 1200kb -mbd 2 -flags +4mv+trell -aic 2 -cmp 2 -subcmp 2 -s 320x180 -title X final_video.mp4
+</code></pre><p>说明：<br> 源视频：source_video.avi<br> 音频编码：aac<br> 音频位率：128kb/s<br> 视频编码：mpeg4<br> 视频位率：1200kb/s<br> 视频尺寸：320 X 180<br> 生成的视频：final_video.mp4<br>5.为视频重新编码以适合在PSP上播放</p>
+<pre><code>ffmpeg -i source_video.avi -b 300 -s 320x240 -vcodec xvid -ab 32 -ar 24000 -acodec aac final_video.mp4
+</code></pre><p>说明：<br> 源视频：source_video.avi<br> 音频编码：aac<br> 音频位率：32kb/s<br> 视频编码：xvid<br> 视频位率：1200kb/s<br> 视频尺寸：320 X 180<br> 生成的视频：final_video.mp4<br>6.从视频抽出声音.并存为Mp3</p>
+<pre><code>ffmpeg -i source_video.avi -vn -ar 44100 -ac 2 -ab 192 -f mp3 sound.mp3
+</code></pre><p>说明：<br> 源视频：source_video.avi<br> 音频位率：192kb/s<br> 输出格式：mp3<br> 生成的声音：sound.mp3<br>7.将wav文件转成Mp3</p>
+<pre><code>ffmpeg -i son_origine.avi -vn -ar 44100 -ac 2 -ab 192 -f mp3 son_final.mp3
+</code></pre><p>8.将.avi视频转成.mpg</p>
+<pre><code>ffmpeg -i video_origine.avi video_finale.mpg
+</code></pre><p>9.将.mpg转成.avi</p>
+<pre><code>ffmpeg -i video_origine.mpg video_finale.avi
+</code></pre><p>10.将.avi转成gif动画（未压缩）</p>
+<pre><code>ffmpeg -i video_origine.avi gif_anime.gif
+</code></pre><p>11.合成视频和音频</p>
+<pre><code>ffmpeg -i son.wav -i video_origine.avi video_finale.mpg
+</code></pre><p>12.将.avi转成.flv</p>
+<pre><code>ffmpeg -i video_origine.avi -ab 56 -ar 44100 -b 200 -r 15 -s 320x240 -f flv video_finale.flv
+</code></pre><p>13.将.avi转成dv</p>
+<pre><code>ffmpeg -i video_origine.avi -s pal -r pal -aspect 4:3 -ar 48000 -ac 2 video_finale.dv
+</code></pre><p>或者：</p>
+<pre><code>ffmpeg -i video_origine.avi -target pal-dv video_finale.dv
+</code></pre><p>14.将.avi压缩成divx</p>
+<pre><code>ffmpeg -i video_origine.avi -s 320x240 -vcodec msmpeg4v2 video_finale.avi
+</code></pre><p>15.将Ogg Theora压缩成Mpeg dvd</p>
+<pre><code>ffmpeg -i film_sortie_cinelerra.ogm -s 720x576 -vcodec mpeg2video -acodec mp3 film_terminate.mpg
+</code></pre><p>16.将.avi压缩成SVCD mpeg2<br>NTSC格式：</p>
+<pre><code>ffmpeg -i video_origine.avi -target ntsc-svcd video_finale.mpg
+</code></pre><p>PAL格式：</p>
+<pre><code>ffmpeg -i video_origine.avi -target pal-svcd video_finale.mpg
+</code></pre><p>17.将.avi压缩成VCD mpeg2<br>NTSC格式：</p>
+<pre><code>ffmpeg -i video_origine.avi -target ntsc-vcd video_finale.mpg
+</code></pre><p>PAL格式：</p>
+<pre><code>ffmpeg -i video_origine.avi -target pal-vcd video_finale.mpg
+</code></pre><p>18.多通道编码</p>
+<pre><code>ffmpeg -i fichierentree -pass 2 -passlogfile ffmpeg2pass fichiersortie-2
+</code></pre><p>19.从flv提取mp3</p>
+<pre><code>ffmpeg -i source.flv -ab 128k dest.mp3
+</code></pre><p>20.剪切音频:</p>
+<pre><code>ffmpeg -ss 0:0:30 -t 0:0:5 -i input.mp3 -c copy out.mp3
+</code></pre><p>其中-ss 后接起始时间  -t后接剪切多长时间</p>
+<h1 id="支持的编码"><a href="#支持的编码" class="headerlink" title="支持的编码"></a>支持的编码</h1><p>源自FFmpeg项目组的两个视频编码：<code>Snow、FFV1</code><br>支持的格式：<br><code>ASF、AVI、BFI[7]、IFF[8]、RL2[9]、FLV、
+MXF, Material eXchange Format, SMPTE 377M
+Matroska、Maxis XA[10]、MSN Webcam stream[11]、MPEG transport stream、TXD[6]、OMA[12]
+GXF, General eXchange Format, SMPTE 360M
+mov,mp4,m4a,3gp,</code></p>
+<p>现在一些视频网站的视频一般都是分段的，比如腾讯，爱奇艺等这些，那我们怎么把这些分段的合并起来并无损呢？</p>
+<h1 id="ffmpeg无损合并视频的几种方法"><a href="#ffmpeg无损合并视频的几种方法" class="headerlink" title="ffmpeg无损合并视频的几种方法"></a>ffmpeg无损合并视频的几种方法</h1><h1 id="方法一：ffmpeg-concat协议"><a href="#方法一：ffmpeg-concat协议" class="headerlink" title="方法一：ffmpeg concat协议"></a>方法一：ffmpeg concat协议</h1><p>对于 MPEG 格式的视频，可以直接连接：</p>
+<pre><code>ffmpeg -i &quot;concat:input1.mpg|input2.mpg|input3.mpg&quot; -c copy output.mpg
+</code></pre><p>对于非 MPEG 格式容器，但是是 MPEG 编码器（H.264、DivX、XviD、MPEG4、MPEG2、AAC、MP2、MP3 等），可以包装进 TS 格式的容器再合并。在新浪视频，有很多视频使用 H.264 编码器，可以采用这个方法</p>
+<pre><code>ffmpeg -i input1.flv -c copy -bsf:v h264_mp4toannexb -f mpegts input1.ts
+ffmpeg -i input2.flv -c copy -bsf:v h264_mp4toannexb -f mpegts input2.ts
+ffmpeg -i input3.flv -c copy -bsf:v h264_mp4toannexb -f mpegts input3.ts
+ffmpeg -i &quot;concat:input1.ts|input2.ts|input3.ts&quot; -c copy -bsf:a aac_adtstoasc -movflags +faststart output.mp4
+</code></pre><p>保存 QuickTime/MP4 格式容器的时候，建议加上 -movflags +faststart。这样分享文件给别人的时候可以边下边看。</p>
+<h1 id="方法二：FFmpeg-concat-分离器"><a href="#方法二：FFmpeg-concat-分离器" class="headerlink" title="方法二：FFmpeg concat 分离器"></a>方法二：FFmpeg concat 分离器</h1><p>这种方法成功率很高，也是最好的，但是需要 FFmpeg 1.1 以上版本。先创建一个文本文件filelist.txt：</p>
+<pre><code>file &apos;input1.mkv&apos;
+file &apos;input2.mkv&apos;
+file &apos;input3.mkv&apos;
+</code></pre><p>然后：</p>
+<pre><code>ffmpeg -f concat -i filelist.txt -c copy output.mkv
+</code></pre><p>注意：使用 FFmpeg concat 分离器时，如果文件名有奇怪的字符，要在 filelist.txt中转义。</p>
+<h1 id="方法三：Mencoder-连接文件并重建索引"><a href="#方法三：Mencoder-连接文件并重建索引" class="headerlink" title="方法三：Mencoder 连接文件并重建索引"></a>方法三：Mencoder 连接文件并重建索引</h1><p>这种方法只对很少的视频格式生效。幸运的是，新浪视频使用的 FLV 格式是可以这样连接的。对于没有使用 MPEG 编码器的视频（如 FLV1 编码器），可以尝试这种方法，或许能够成功。</p>
+<pre><code>mencoder -forceidx -of lavf -oac copy -ovc copy -o output.flv input1.flv input2.flv input3.flv
+</code></pre><h1 id="方法四：使用-FFmpeg-concat-过滤器重新编码（有损）"><a href="#方法四：使用-FFmpeg-concat-过滤器重新编码（有损）" class="headerlink" title="方法四：使用 FFmpeg concat 过滤器重新编码（有损）"></a>方法四：使用 FFmpeg concat 过滤器重新编码（有损）</h1><p>语法有点复杂，但是其实不难。这个方法可以合并不同编码器的视频片段，也可以作为其他方法失效的后备措施。</p>
+<pre><code>ffmpeg -i input1.mp4 -i input2.webm -i input3.avi -filter_complex &apos;[0:0] [0:1] [1:0] [1:1] [2:0] [2:1] concat=n=3:v=1:a=1 [v] [a]&apos; -map &apos;[v]&apos; -map &apos;[a]&apos; &lt;编码器选项&gt; output.mkv
+</code></pre><p>如你所见，上面的命令合并了三种不同格式的文件，FFmpeg concat 过滤器会重新编码它们。注意这是有损压缩。</p>
+<p>[0:0] [0:1] [1:0] [1:1] [2:0] <a href="https://trac.ffmpeg.org/ticket/1552" title="1552 (Packed B-frames cannot be remuxed into mkv) – FFmpeg" target="_blank" rel="noopener">2:1分别表示第一个输入文件的视频、音频、第二个输入文件的视频、音频、第三个输入文件的视频、音频。concat=n=3:v=1:a=1表示有三个输入文件，输出一条视频流和一条音频流。[v] [a] 就是得到的视频流和音频流的名字，注意在 bash 等 shell 中需要用引号，防止通配符扩展。<br>提示<br>       1、以上三种方法，在可能的情况下，最好使用第二种。第一种次之，第三种更次。第四种是后备方案，尽量避免。<br>    2、规格不同的视频合并后可能会有无法预测的结果。<br>    3、有些媒体需要先分离视频和音频，合并完成后再封装回去。<br>    4、对于 Packed B-Frames 的视频，如果封装成 MKV 格式的时候提示 -fflags +genpts</a></p>
+<ul>
+<li>一朝入坑深似海，几度流月静时春。</li>
+<li>同途偶遇是良人，从岁月，艳时光</li>
+<li>千山以外，沧海自由，劝卿切莫回头</li>
+<li>愿余生不悲欢，岁月无波澜</li>
+<li>他日不幸陷迷途，落水中，也还记得来时的路</li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2019/09/15/ffmpeg/">ffmpeg and youtube</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Xiaonan Chen</a></p>
+        <p><span>发布时间:</span>2019-09-15, 21:25:45</p>
+        <p><span>最后更新:</span>2019-09-15, 21:32:01</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2019/09/15/ffmpeg/" title="ffmpeg and youtube">https://suixin.ltd/2019/09/15/ffmpeg/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://suixin.ltd/2019/09/15/ffmpeg/　　作者: Xiaonan Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2019/09/13/Linux Operation/">
+                    Linux Operation and Maintenance interview
+                </a>
+            </div>
+        
+    </nav>
+
+  
+  
+    <! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+       搬运工需要安慰，需要支持！（￥1.0）
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/img/donate.png" alt="支付宝打赏"> 
+        <!-- 微信打赏图案 -->
+   <!-- <img src="/img/weixin.jpg" alt="微信打赏">  -->
+    
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+  
+
+
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text">大概所有的因果都是从入坑开始的吧</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#今天心血来潮就到油管上面下些视频素材"><span class="toc-number">2.</span> <span class="toc-text">今天心血来潮就到油管上面下些视频素材</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#都说一朝入坑深似海，这不，我对ffmpeg这个软件有了很大的兴趣！"><span class="toc-number">3.</span> <span class="toc-text">都说一朝入坑深似海，这不，我对ffmpeg这个软件有了很大的兴趣！</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#功能：视频采集功能、视频格式转换、视频抓图、给视频加水印等"><span class="toc-number">4.</span> <span class="toc-text">功能：视频采集功能、视频格式转换、视频抓图、给视频加水印等</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#视频采集功能"><span class="toc-number">5.</span> <span class="toc-text">视频采集功能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ffmpeg在Linux下的视频采集"><span class="toc-number">6.</span> <span class="toc-text">ffmpeg在Linux下的视频采集</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ffmpeg在windows下的视频采集"><span class="toc-number">7.</span> <span class="toc-text">ffmpeg在windows下的视频采集</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#视频格式转换功能"><span class="toc-number">8.</span> <span class="toc-text">视频格式转换功能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#视频截图功能"><span class="toc-number">9.</span> <span class="toc-text">视频截图功能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#给视频加水印功能"><span class="toc-number">10.</span> <span class="toc-text">给视频加水印功能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ffmpeg-命令集举例"><span class="toc-number">11.</span> <span class="toc-text">ffmpeg 命令集举例</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#支持的编码"><span class="toc-number">12.</span> <span class="toc-text">支持的编码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ffmpeg无损合并视频的几种方法"><span class="toc-number">13.</span> <span class="toc-text">ffmpeg无损合并视频的几种方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#方法一：ffmpeg-concat协议"><span class="toc-number">14.</span> <span class="toc-text">方法一：ffmpeg concat协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#方法二：FFmpeg-concat-分离器"><span class="toc-number">15.</span> <span class="toc-text">方法二：FFmpeg concat 分离器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#方法三：Mencoder-连接文件并重建索引"><span class="toc-number">16.</span> <span class="toc-text">方法三：Mencoder 连接文件并重建索引</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#方法四：使用-FFmpeg-concat-过滤器重新编码（有损）"><span class="toc-number">17.</span> <span class="toc-text">方法四：使用 FFmpeg concat 过滤器重新编码（有损）</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"ffmpeg and youtube　| 小南同学的笔记　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC80NTY5Ny8yMjIwOA==">
+	<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+	</script>
+<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+      
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2019/09/13/Linux Operation/" title="下一篇: Linux Operation and Maintenance interview">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/09/15/ffmpeg/">ffmpeg and youtube</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/13/Linux Operation/">Linux Operation and Maintenance interview</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/13/at-and-cron/">Linux计划任务</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/12/mysql5.7/">Install mysql5.7</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/ElasticSearch/">Install ElasticSearch</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/rhel8_specific/">RHEL8.0_specific</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/05/Naked Weapon/">Naked Weapon</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/鬼干部/">鬼干部</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/灵幻至尊/">灵幻至尊</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/音乐僵尸/">音乐僵尸</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/一眉道人/">一眉道人</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/僵尸先生/">僵尸先生</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/僵尸家族/">僵尸家族</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/天地玄门/">天地玄门</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/二代宗师/">二代宗师</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/脱单好难/">脱单好难</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/一代枭雄之三支旗/">一代枭雄之三支旗</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/钵兰街大少/">钵兰街大少</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/恐怖故事2/">恐怖故事2</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/陈翔六点半之重楼别/">陈翔六点半之重楼别</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/逃学英雄传/">逃学英雄传</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/使徒行者2：谍影行动/">使徒行者2：谍影行动</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/猛鬼屠房/">猛鬼屠房</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/06/zhenhunjie/">zhenhunjie</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/04/baisheyuanqi/">baisheyuanqi</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/31/birthday/">birthday</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/23/test/">test</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/15/rhel7-specific/">rhel7_specific</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/28/owncloud/">owncloud</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/03/Recruit-marriage/">Recruit marriage</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/17/pdf-upload-test/">pdf-upload-test</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/16/instructions-for-linux/">instructions-for-linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/09/RHEL7题库/">RHEL7题库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/14/cp/">cp</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/13/newlinux/">newlinux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/11/linux/">Linux系统raid1更换故障硬盘处理过程</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2018-2019 Xiaonan Chen
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo Coding</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+            <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-5.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
