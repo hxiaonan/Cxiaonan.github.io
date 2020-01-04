@@ -8,7 +8,7 @@
       <link href="/2020/01/04/pxe_server/"/>
       <url>/2020/01/04/pxe_server/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>PXE批量安装CentOS7操作系统</h1><br>批量部署前首先应该拥有一台部署完成的系统，也就是Server端。<br>PXE_Server部署DHCP、TFTP、Xinetd、Kickstart、(HTTP/FTP/NFS任选其一，本次部署采用FTP)，用来提供安装所需要的系统文件以及所要安装的软件。<br>关闭Firewalld/SElinux(为实验方便，减少麻烦，生产环境不推荐)<br>PXE批量部署原理：<p></p><ol><li>PXE Client 从自己的PXE网卡启动，向本网络中的DHCP服务器请求IP；</li><li>DHCP 服务器返回分配给客户机的IP 以及PXE文件的放置位置<br>(该文件一般是放在一台TFTP服务器上)；</li><li>PXE Client 向本网络中的TFTP服务器索取pxelinux.0 文件<br>(在 PXE Client 的 ROM 中，已经存在 TFTP Client)；</li><li>PXE Client 取得pxelinux.0 文件后之执行该文件；</li><li>根据pxelinux.0 的执行结果，通过TFTP服务器加载内核和文件系统 ；</li><li>进入安装画面, 此时可以通过选择HTTP、FTP、NFS 方式之一进行安装；</li></ol><p>1、DHCP服务器：为 PXE-client 分配 IP ，获得安装程序文件位置<br>2、TFTP服务器：传输安装文件、内核、菜单文件等给 PXE-client<br>3、Xinetd: TFTP服务超级守护进程, 用于唤醒TFTP服务;<br>4、Kickstart：生成的ks.cfg配置文件 本文没有介绍Kickstart 安装<br>5、HTTP/NFS/FTP 服务中的任意一种，用于传送安装源文件给 PXE-client<br>;:<br><a id="more"></a><br>安装DHCP服务</p><pre><code>yum install dhcp -y</code></pre><p>修改配置文件</p><pre><code>#vim /etc/dhcp/dhcpd.conf</code></pre><p>#———可用最简配置——————-</p><h1 id="网络和子网掩码-根据自己实际情况编写"><a href="#网络和子网掩码-根据自己实际情况编写" class="headerlink" title="网络和子网掩码(根据自己实际情况编写)"></a>网络和子网掩码(根据自己实际情况编写)</h1><pre><code>subnet 192.168.2.0 netmask 255.255.255.0 {   option routers 192.168.2.11;       range 192.168.2.3 192.168.2.25;   # 指定DHCP地址池  next-server 192.168.2.11; # 指定tftp服务器地址  filename &quot;pxelinux.0&quot;; #指定pxelinux.0文件}</code></pre><p>如果是在多网卡的情况下需要指定某块网卡启动DHCP服务，复制文件，修改配置文件，重新注册服务</p><pre><code>cp /usr/lib/systemd/system/dhcpd.service /etc/systemd/system/vi /etc/systemd/system/dhcpd.serviceExecStart=/usr/sbin/dhcpd -f -cf /etc/dhcp/dhcpd.conf -user dhcpd -group dhcpd --no-pid &lt;your_interface_name(s)&gt;(我要使用的网卡是ens192)systemctl --system daemon-reload</code></pre><p>启动服务</p><pre><code>systemctl start dhcpd.servicesystemctl enable dhcpd.service</code></pre><p>安装TFTP服务(无需认证，小文件传输)<br>安装xinetd、tftp-server和syslinux服务</p><p>#syslinux 会在 /usr/share/syslinux/pxelinux.0 生成pxelinux.0文件 ，需要手动复制到/var/lib/tftpboot/ 目录中，后面详细介绍。<br>syslinux文件解析</p><pre><code>        isolinux.bin       注：光盘镜像引导文件           isolinux.cfg       注：启动菜单的配置文件;自编辑           memdisk          注：引导IMG镜像的文件           vesamenu.c32(或menu.c32)  注：官方提供的二种窗口模块           chain.c32         注：指定分区启动  如：chain.c32 hd0,1 (或chain.c32 hd0,2)           reboot.c32       注：重新启动计算机的文件           m16-640x640-syslinux.jpg(或syslinux_splash.jpg)  注：自己可以定义新的图片作为背景，图图片格式 640*480  jpg/png）yum install xinetd -yyum install tftp-server syslinux -y</code></pre><p>配置xinetd，由xinetd管理tftp</p><pre><code>service tftp{        socket_type             = dgram        protocol                = udp        wait                    = yes        user                    = root        server                  = /usr/sbin/in.tftpd        server_args             = -s /var/lib/tftpboot                disable                 = no  #默认disable是yes的，把它改为no即可        per_source              = 11        cps                     = 100 2        flags                   = IPv4}</code></pre><p>启动服务</p><pre><code>systemctl enable tftpsystemctl enable xinetdsystemctl start tftpsystemctl start xinetd</code></pre><p>安装FTP服务</p><pre><code>yum install vsftp -y</code></pre><p>启动服务</p><pre><code>systemctl enable vsftpd.service &amp;&amp; systemctl start vsftpd.service</code></pre><p>复制内核文件<br>内核文件、虚拟根文件以及菜单文件，我们都是通过tftp服务来提供的，由于系统及版本的不同，对于一个比较复制机群来说，我们需要准备不同系统，不同版本的内核文件，initrd.img文件。菜单文件只需要一份即可。</p><p>挂载光驱</p><pre><code>mount /dev/cdrom /mnt  #挂载# cp /mnt/images/pxeboot/vmlinuz     /var/lib/tftpboot/     #vmlinuz文件，在镜像文件images/pxeboot/目录中，vmlinuz是可引导的、压缩的内核文件，vmlinuz是vmlinux的压缩文件。是可执行的Linux内核# cp /mnt/images/pxeboot/initrd.img  /var/lib/tftpboot/     #initrd.img文件，在镜像文件images/pxeboot/目录中，initrd是“initial ram disk”的简写。initrd用来临时的引导硬件到实际内核vmlinuz能够接管并继续引导的状态</code></pre><p>复制pxelinux.0文件到tftp目录下</p><pre><code># cp /usr/share/syslinux/pxelinux.0 /var/lib/tftpboot/</code></pre><p>复制一个菜单功能文件到/var/lib/tftpboot/</p><pre><code>#cp /usr/share/syslinux/vesamenu.c32 /var/lib/tftpboot/</code></pre><p>创建pxelinux.cfg/default 文件</p><pre><code>mkdir -p /var/lib/tftpboot/pxelinux.cfg/default</code></pre><p>编写default文件</p><pre><code>default vesamenu.c32menu tabmsg XiaoNan NIUBImenu title XiaoNan auto-install systemtimeout 300label install Centos7        kernel vmlinuz        append initrd=initrd.img inst.repo=ftp://192.168.2.11/centos7</code></pre><p>启动客户端进行安装<br><img src="/2020/01/04/pxe_server/pxe/1.jpg" alt=""><br><img src="/2020/01/04/pxe_server/pxe/4.jpg" alt=""><br>大功告成!</p><p>当然这还需要人工点击开始安装并配置才能安装，如想实现无人值守安装参照小白都能玩转的COBBLER无人值守安装<a href="https://blog.csdn.net/qq_37242520/article/details/100545758" target="_blank" rel="noopener">https://blog.csdn.net/qq_37242520/article/details/100545758</a><br>或者搜索kickstart实现无人值守安装！</p><p></p><h1>PXE批量安装windows操作系统</h1><br>在之前的环境下我们需要samba来共享windows安装文件<br>安装samba相关包<p></p><pre><code>#yum install samba samba-client cifs-utils -y</code></pre><p>创建共享的文件夹</p><pre><code>mkdir /smbshare/windows10useradd xiaonansmbpasswd -a xiaonanchown xiaonan:xiaonan /smbshare/</code></pre><p>修改samba配置文件,修改以下内容<br>vim /etc/samba/smb.conf</p><pre><code>[global]        workgroup = SAMBA        security = user        netbios name = pxe        passdb backend = tdbsam        printing = cups        printcap name = cups        load printers = yes        cups options = raw[install]         comment = Installation Media         path = /smbshare         public = yes         writable = no         printable = no         browseable = yes</code></pre><p>启动samba服务</p><pre><code>systemctl start smb nmb &amp;&amp; systemctl enable smb nmb</code></pre><p>复制WIN10镜像文件到samba共享目录</p><pre><code>cp -rf win10.iso /smbshare/windows10/</code></pre><p>创建windows10PE<br>我们需要windows ADK去制作自己的winpe,访问微软官方网站<a href="https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install下载并安装" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install下载并安装</a><br>我这里下载的是下面两个软件，安装过程下一步就好。</p><pre><code>Download the Windows ADK for Windows 10, version 1903Download the Windows PE add-on for the ADK</code></pre><p>安装完成之后以管理员身份运行Deployment and Imaging Tools Environment</p><pre><code>copype amd64 c:\winpe</code></pre><p>挂载Boot.wim到临时目录</p><pre><code>Dism /Mount-Image /ImageFile:&quot;c:\winpe\media\sources\boot.wim&quot; /index:1 /MountDir:&quot;c:\winpe\mount&quot;</code></pre><p>修改启动脚本</p><pre><code>notepad c:\winpe\mount\Windows\System32\Startnet.cmd</code></pre><p>添加以下内容,注意字符之间的空格</p><pre><code>wpeinit net use z: \\pxe\install\windows10 /user:xiaonan xiaonanz:\setup.exe</code></pre><p>卸载并保存boot.vim</p><pre><code>Dism /Unmount-Image /MountDir:&quot;c:\winpe\mount&quot; /commit</code></pre><p>生成win10pe.iso</p><pre><code>MakeWinPEMedia /ISO c:\winpe c:\win10pe.iso</code></pre><p>把生成的win10pe.iso复制到/var/lib/tftpboot/winpe/下<br>添加win10选项到PXE启动菜单</p><p>#vim default</p><pre><code>label Install MS Windows 10menu label Install MS Windows 10        kernel memdisk        initrd /winpe/win10pe.isoappend iso raw</code></pre><p>大功告成！启动客户端!!!!<br><img src="/2020/01/04/pxe_server/pxe/1.jpg" alt=""><br><img src="/2020/01/04/pxe_server/pxe/3.jpg" alt=""><br><img src="/2020/01/04/pxe_server/pxe/2.jpg" alt=""><br>如果想让WINDOWS系统无人值守安装可以创建无人值守自动应答文件AutoUnattend.xml<br>详情可参考<a href="https://blog.csdn.net/zuoliang365/article/details/86592025" target="_blank" rel="noopener">https://blog.csdn.net/zuoliang365/article/details/86592025</a></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>PXE批量安装CentOS7操作系统</h1><br>批量部署前首先应该拥有一台部署完成的系统，也就是Server端。<br>PXE_Server部署DHCP、TFTP、Xinetd、Kickstart、(HTTP/FTP/NFS任选其一，本次部署采用FTP)，用来提供安装所需要的系统文件以及所要安装的软件。<br>关闭Firewalld/SElinux(为实验方便，减少麻烦，生产环境不推荐)<br>PXE批量部署原理：<p></p><ol><li>PXE Client 从自己的PXE网卡启动，向本网络中的DHCP服务器请求IP；</li><li>DHCP 服务器返回分配给客户机的IP 以及PXE文件的放置位置<br>(该文件一般是放在一台TFTP服务器上)；</li><li>PXE Client 向本网络中的TFTP服务器索取pxelinux.0 文件<br>(在 PXE Client 的 ROM 中，已经存在 TFTP Client)；</li><li>PXE Client 取得pxelinux.0 文件后之执行该文件；</li><li>根据pxelinux.0 的执行结果，通过TFTP服务器加载内核和文件系统 ；</li><li>进入安装画面, 此时可以通过选择HTTP、FTP、NFS 方式之一进行安装；</li></ol><p>1、DHCP服务器：为 PXE-client 分配 IP ，获得安装程序文件位置<br>2、TFTP服务器：传输安装文件、内核、菜单文件等给 PXE-client<br>3、Xinetd: TFTP服务超级守护进程, 用于唤醒TFTP服务;<br>4、Kickstart：生成的ks.cfg配置文件 本文没有介绍Kickstart 安装<br>5、HTTP/NFS/FTP 服务中的任意一种，用于传送安装源文件给 PXE-client<br>;:<br><a id="more"></a><br>安装DHCP服务</p><pre><code>yum install dhcp -y</code></pre><p>修改配置文件</p><pre><code>#vim /etc/dhcp/dhcpd.conf</code></pre><p>#———可用最简配置——————-</p><h1 id="网络和子网掩码-根据自己实际情况编写"><a href="#网络和子网掩码-根据自己实际情况编写" class="headerlink" title="网络和子网掩码(根据自己实际情况编写)"></a>网络和子网掩码(根据自己实际情况编写)</h1><pre><code>subnet 192.168.2.0 netmask 255.255.255.0 {   option routers 192.168.2.11;       range 192.168.2.3 192.168.2.25;   # 指定DHCP地址池  next-server 192.168.2.11; # 指定tftp服务器地址  filename &quot;pxelinux.0&quot;; #指定pxelinux.0文件}</code></pre><p>如果是在多网卡的情况下需要指定某块网卡启动DHCP服务，复制文件，修改配置文件，重新注册服务</p><pre><code>cp /usr/lib/systemd/system/dhcpd.service /etc/systemd/system/vi /etc/systemd/system/dhcpd.serviceExecStart=/usr/sbin/dhcpd -f -cf /etc/dhcp/dhcpd.conf -user dhcpd -group dhcpd --no-pid &lt;your_interface_name(s)&gt;(我要使用的网卡是ens192)systemctl --system daemon-reload</code></pre><p>启动服务</p><pre><code>systemctl start dhcpd.servicesystemctl enable dhcpd.service</code></pre><p>安装TFTP服务(无需认证，小文件传输)<br>安装xinetd、tftp-server和syslinux服务</p><p>#syslinux 会在 /usr/share/syslinux/pxelinux.0 生成pxelinux.0文件 ，需要手动复制到/var/lib/tftpboot/ 目录中，后面详细介绍。<br>syslinux文件解析</p><pre><code>        isolinux.bin       注：光盘镜像引导文件           isolinux.cfg       注：启动菜单的配置文件;自编辑           memdisk          注：引导IMG镜像的文件           vesamenu.c32(或menu.c32)  注：官方提供的二种窗口模块           chain.c32         注：指定分区启动  如：chain.c32 hd0,1 (或chain.c32 hd0,2)           reboot.c32       注：重新启动计算机的文件           m16-640x640-syslinux.jpg(或syslinux_splash.jpg)  注：自己可以定义新的图片作为背景，图图片格式 640*480  jpg/png）yum install xinetd -yyum install tftp-server syslinux -y</code></pre><p>配置xinetd，由xinetd管理tftp</p><pre><code>service tftp{        socket_type             = dgram        protocol                = udp        wait                    = yes        user                    = root        server                  = /usr/sbin/in.tftpd        server_args             = -s /var/lib/tftpboot                disable                 = no  #默认disable是yes的，把它改为no即可        per_source              = 11        cps                     = 100 2        flags                   = IPv4}</code></pre><p>启动服务</p><pre><code>systemctl enable tftpsystemctl enable xinetdsystemctl start tftpsystemctl start xinetd</code></pre><p>安装FTP服务</p><pre><code>yum install vsftp -y</code></pre><p>启动服务</p><pre><code>systemctl enable vsftpd.service &amp;&amp; systemctl start vsftpd.service</code></pre><p>复制内核文件<br>内核文件、虚拟根文件以及菜单文件，我们都是通过tftp服务来提供的，由于系统及版本的不同，对于一个比较复制机群来说，我们需要准备不同系统，不同版本的内核文件，initrd.img文件。菜单文件只需要一份即可。</p><p>挂载光驱</p><pre><code>mount /dev/cdrom /mnt  #挂载# cp /mnt/images/pxeboot/vmlinuz     /var/lib/tftpboot/     #vmlinuz文件，在镜像文件images/pxeboot/目录中，vmlinuz是可引导的、压缩的内核文件，vmlinuz是vmlinux的压缩文件。是可执行的Linux内核# cp /mnt/images/pxeboot/initrd.img  /var/lib/tftpboot/     #initrd.img文件，在镜像文件images/pxeboot/目录中，initrd是“initial ram disk”的简写。initrd用来临时的引导硬件到实际内核vmlinuz能够接管并继续引导的状态</code></pre><p>复制pxelinux.0文件到tftp目录下</p><pre><code># cp /usr/share/syslinux/pxelinux.0 /var/lib/tftpboot/</code></pre><p>复制一个菜单功能文件到/var/lib/tftpboot/</p><pre><code>#cp /usr/share/syslinux/vesamenu.c32 /var/lib/tftpboot/</code></pre><p>创建pxelinux.cfg/default 文件</p><pre><code>mkdir -p /var/lib/tftpboot/pxelinux.cfg/default</code></pre><p>编写default文件</p><pre><code>default vesamenu.c32menu tabmsg XiaoNan NIUBImenu title XiaoNan auto-install systemtimeout 300label install Centos7        kernel vmlinuz        append initrd=initrd.img inst.repo=ftp://192.168.2.11/centos7</code></pre><p>启动客户端进行安装<br><img src="/2020/01/04/pxe_server/1.jpg" alt=""><br><img src="/2020/01/04/pxe_server/4.jpg" alt=""><br>大功告成!</p><p>当然这还需要人工点击开始安装并配置才能安装，如想实现无人值守安装参照小白都能玩转的COBBLER无人值守安装<a href="https://blog.csdn.net/qq_37242520/article/details/100545758" target="_blank" rel="noopener">https://blog.csdn.net/qq_37242520/article/details/100545758</a><br>或者搜索kickstart实现无人值守安装！</p><p></p><h1>PXE批量安装windows操作系统</h1><br>在之前的环境下我们需要samba来共享windows安装文件<br>安装samba相关包<p></p><pre><code>#yum install samba samba-client cifs-utils -y</code></pre><p>创建共享的文件夹</p><pre><code>mkdir /smbshare/windows10useradd xiaonansmbpasswd -a xiaonanchown xiaonan:xiaonan /smbshare/</code></pre><p>修改samba配置文件,修改以下内容<br>vim /etc/samba/smb.conf</p><pre><code>[global]        workgroup = SAMBA        security = user        netbios name = pxe        passdb backend = tdbsam        printing = cups        printcap name = cups        load printers = yes        cups options = raw[install]         comment = Installation Media         path = /smbshare         public = yes         writable = no         printable = no         browseable = yes</code></pre><p>启动samba服务</p><pre><code>systemctl start smb nmb &amp;&amp; systemctl enable smb nmb</code></pre><p>复制WIN10镜像文件到samba共享目录</p><pre><code>cp -rf win10.iso /smbshare/windows10/</code></pre><p>创建windows10PE<br>我们需要windows ADK去制作自己的winpe,访问微软官方网站<a href="https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install下载并安装" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install下载并安装</a><br>我这里下载的是下面两个软件，安装过程下一步就好。</p><pre><code>Download the Windows ADK for Windows 10, version 1903Download the Windows PE add-on for the ADK</code></pre><p>安装完成之后以管理员身份运行Deployment and Imaging Tools Environment</p><pre><code>copype amd64 c:\winpe</code></pre><p>挂载Boot.wim到临时目录</p><pre><code>Dism /Mount-Image /ImageFile:&quot;c:\winpe\media\sources\boot.wim&quot; /index:1 /MountDir:&quot;c:\winpe\mount&quot;</code></pre><p>修改启动脚本</p><pre><code>notepad c:\winpe\mount\Windows\System32\Startnet.cmd</code></pre><p>添加以下内容,注意字符之间的空格</p><pre><code>wpeinit net use z: \\pxe\install\windows10 /user:xiaonan xiaonanz:\setup.exe</code></pre><p>卸载并保存boot.vim</p><pre><code>Dism /Unmount-Image /MountDir:&quot;c:\winpe\mount&quot; /commit</code></pre><p>生成win10pe.iso</p><pre><code>MakeWinPEMedia /ISO c:\winpe c:\win10pe.iso</code></pre><p>把生成的win10pe.iso复制到/var/lib/tftpboot/winpe/下<br>添加win10选项到PXE启动菜单</p><p>#vim default</p><pre><code>label Install MS Windows 10menu label Install MS Windows 10        kernel memdisk        initrd /winpe/win10pe.isoappend iso raw</code></pre><p>大功告成！启动客户端!!!!<br><img src="/2020/01/04/pxe_server/1.jpg" alt=""><br><img src="/2020/01/04/pxe_server/3.jpg" alt=""><br><img src="/2020/01/04/pxe_server/2.jpg" alt=""><br>如果想让WINDOWS系统无人值守安装可以创建无人值守自动应答文件AutoUnattend.xml<br>详情可参考<a href="https://blog.csdn.net/zuoliang365/article/details/86592025" target="_blank" rel="noopener">https://blog.csdn.net/zuoliang365/article/details/86592025</a></p>]]></content>
       
       
       
@@ -258,7 +258,7 @@
       <link href="/2019/08/24/%E7%81%B5%E5%B9%BB%E8%87%B3%E5%B0%8A/"/>
       <url>/2019/08/24/%E7%81%B5%E5%B9%BB%E8%87%B3%E5%B0%8A/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   茅山弟子傲天龙（林正英 饰）与大黄（郑则士 饰）同时爱上了师傅的掌上明珠梦梦，师傅临终前设局考验二人谁更真心，大黄用计赢得了师傅的信任。虽然梦梦倾心天龙，无奈父命难为，天龙于是愤然出走。一晃十八年过去了，大黄和梦梦的儿子连高（金少龙 饰）已经长成英俊少年，而天龙的女儿凝红（黎姿 饰）也成年。天龙父女俩这天回家乡探亲，半途上遇到红袍火鬼为祸人间。天龙费尽九牛二虎之力将其收伏，关在鬼笼内。回到家乡，大黄和天龙两师兄弟心里还是有隔阂，互相敌视。连高无意中放出了火鬼，此时的火鬼法力大增，天龙和大黄都已无法独力应付。为了对付火鬼，二人终于抛开成见，再次合作。<p></p><p></p><h2>正片 灵幻至尊(1991）</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer15" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer15"),"video":{"url":"https://v-acfun.com/20180908/19128_7347a396/800k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   茅山弟子傲天龙（林正英 饰）与大黄（郑则士 饰）同时爱上了师傅的掌上明珠梦梦，师傅临终前设局考验二人谁更真心，大黄用计赢得了师傅的信任。虽然梦梦倾心天龙，无奈父命难为，天龙于是愤然出走。一晃十八年过去了，大黄和梦梦的儿子连高（金少龙 饰）已经长成英俊少年，而天龙的女儿凝红（黎姿 饰）也成年。天龙父女俩这天回家乡探亲，半途上遇到红袍火鬼为祸人间。天龙费尽九牛二虎之力将其收伏，关在鬼笼内。回到家乡，大黄和天龙两师兄弟心里还是有隔阂，互相敌视。连高无意中放出了火鬼，此时的火鬼法力大增，天龙和大黄都已无法独力应付。为了对付火鬼，二人终于抛开成见，再次合作。<p></p><p></p><h2>正片 灵幻至尊(1991）</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer10" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer10"),"video":{"url":"https://v-acfun.com/20180908/19128_7347a396/800k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
       
@@ -296,7 +296,7 @@
       <link href="/2019/08/24/%E4%B8%80%E7%9C%89%E9%81%93%E4%BA%BA/"/>
       <url>/2019/08/24/%E4%B8%80%E7%9C%89%E9%81%93%E4%BA%BA/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   一眉道人修为高强，擅长茅山道术，和徒弟阿豪住在一个小镇上，他养了一只清朝的小僵尸，小僵尸经常帮他和阿豪办事。一天，一眉道人被邻镇的人邀请去捉鬼，因为邻镇瘟疫蔓延，不时有僵尸出没。邻镇乡公所的所长意外令西洋僵尸复活了，一场精彩的中国法术对付西洋僵尸的好戏上演了。<p></p><p></p><h2>正片 一眉道人(1989)</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer2" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer2"),"video":{"url":"https://vip.okokbo.com/20171221/XduVSyRI/800kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   一眉道人修为高强，擅长茅山道术，和徒弟阿豪住在一个小镇上，他养了一只清朝的小僵尸，小僵尸经常帮他和阿豪办事。一天，一眉道人被邻镇的人邀请去捉鬼，因为邻镇瘟疫蔓延，不时有僵尸出没。邻镇乡公所的所长意外令西洋僵尸复活了，一场精彩的中国法术对付西洋僵尸的好戏上演了。<p></p><p></p><h2>正片 一眉道人(1989)</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer3" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer3"),"video":{"url":"https://vip.okokbo.com/20171221/XduVSyRI/800kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
       
@@ -315,7 +315,7 @@
       <link href="/2019/08/24/%E5%83%B5%E5%B0%B8%E5%85%88%E7%94%9F/"/>
       <url>/2019/08/24/%E5%83%B5%E5%B0%B8%E5%85%88%E7%94%9F/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   富贵乡绅任发（黄虾 饰）先父当年威逼利诱求得一块风水宝地，经风水先生指点，其父下葬二十年后起坟迁葬，以利子孙。然九叔（林正英 饰）察看墓穴得知，当年风水先生与任家私怨在身，在墓穴中做下手脚，二十年后任老太爷尸体已生恶变。九叔提议就地火化，在任老爷请求下才将尸骨移往义庄。虽经小心看护，但任老太爷仍化作僵尸，将其子任发杀害。九叔断定任老太爷和任发的僵尸将再次出现，于是命令徒弟秋生（钱小豪 饰）和文才（许冠英 饰）小心应付……<p></p><p></p><h2>正片 僵尸先生(1985)</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer5" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer5"),"video":{"url":"https://vip.okokbo.com/20171213/fTGJqOpC/800kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   富贵乡绅任发（黄虾 饰）先父当年威逼利诱求得一块风水宝地，经风水先生指点，其父下葬二十年后起坟迁葬，以利子孙。然九叔（林正英 饰）察看墓穴得知，当年风水先生与任家私怨在身，在墓穴中做下手脚，二十年后任老太爷尸体已生恶变。九叔提议就地火化，在任老爷请求下才将尸骨移往义庄。虽经小心看护，但任老太爷仍化作僵尸，将其子任发杀害。九叔断定任老太爷和任发的僵尸将再次出现，于是命令徒弟秋生（钱小豪 饰）和文才（许冠英 饰）小心应付……<p></p><p></p><h2>正片 僵尸先生(1985)</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer6" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer6"),"video":{"url":"https://vip.okokbo.com/20171213/fTGJqOpC/800kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
       
@@ -353,7 +353,83 @@
       <link href="/2019/08/24/%E5%A4%A9%E5%9C%B0%E7%8E%84%E9%97%A8/"/>
       <url>/2019/08/24/%E5%A4%A9%E5%9C%B0%E7%8E%84%E9%97%A8/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>    明代孝宗年间，施家镇出现扶桑鬼王（左颂升 饰）危害人间，并霸占美女施施（王祖贤 饰）为爱姬。鬼王伤害性命无数，惹得天怒人怨，皇上任命正直武官马尚峰（成奎安 饰）捉拿鬼王。正当愁眉不展之际，师爷向马举荐身怀绝技的草芦居士（林正英 饰）帮忙，却得知为除鬼王需牺牲自己的性命。马愤愤返回，草芦居士设计令马尚峰假死，使其化为金甲武士与徒弟（黄一山 饰）担任自己的左右护卫。师徒三人与鬼王展开艰苦鏖战，却由此导致天地玄门大开，正邪双方穿越时空，来至现代。在这里，师徒三人各自遭遇不同的蹊跷趣事。偶然机会，草芦居士发现酷似施施的女医生Gigi。绵延数百年的正邪大战将再次展开……<p></p><p></p><h2>正片 天地玄门</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer6" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer6"),"video":{"url":"https://youku.com-youku.com/20180316/XOdLGDxr/900kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>    明代孝宗年间，施家镇出现扶桑鬼王（左颂升 饰）危害人间，并霸占美女施施（王祖贤 饰）为爱姬。鬼王伤害性命无数，惹得天怒人怨，皇上任命正直武官马尚峰（成奎安 饰）捉拿鬼王。正当愁眉不展之际，师爷向马举荐身怀绝技的草芦居士（林正英 饰）帮忙，却得知为除鬼王需牺牲自己的性命。马愤愤返回，草芦居士设计令马尚峰假死，使其化为金甲武士与徒弟（黄一山 饰）担任自己的左右护卫。师徒三人与鬼王展开艰苦鏖战，却由此导致天地玄门大开，正邪双方穿越时空，来至现代。在这里，师徒三人各自遭遇不同的蹊跷趣事。偶然机会，草芦居士发现酷似施施的女医生Gigi。绵延数百年的正邪大战将再次展开……<p></p><p></p><h2>正片 天地玄门</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer8" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer8"),"video":{"url":"https://youku.com-youku.com/20180316/XOdLGDxr/900kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>恐怖故事2</title>
+      <link href="/2019/08/13/%E6%81%90%E6%80%96%E6%95%85%E4%BA%8B2/"/>
+      <url>/2019/08/13/%E6%81%90%E6%80%96%E6%95%85%E4%BA%8B2/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    《恐怖故事2》是由Soofilm公司制作，乐天娱乐出品的恐怖故事系列电影，是《恐怖故事》（2012年）的续篇。<p></p><p></p><h2>正片 恐怖故事2</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer9" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer9"),"video":{"url":"https://hot.jingpin88.com/ppvod/7B4D880799F1E27A8B502A744A9D0B0A.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>钵兰街大少</title>
+      <link href="/2019/08/13/%E9%92%B5%E5%85%B0%E8%A1%97%E5%A4%A7%E5%B0%91/"/>
+      <url>/2019/08/13/%E9%92%B5%E5%85%B0%E8%A1%97%E5%A4%A7%E5%B0%91/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    《钵兰街大少》是张乾文1993年执导的电影，由张卫健、任达华等主演。讲述了亚豹与大兜两人自小在砵兰街长大，一起揾食及媾女，过着沙保兄弟的生活而后来发生种种变故的故事。<br><a id="more"></a><p></p><p></p><h2>正片 钵兰街大少</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer14" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer14"),"video":{"url":"https://youku.com-t-youku.com/20190516/20901_f10582df/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>脱单好难</title>
+      <link href="/2019/08/13/%E8%84%B1%E5%8D%95%E5%A5%BD%E9%9A%BE/"/>
+      <url>/2019/08/13/%E8%84%B1%E5%8D%95%E5%A5%BD%E9%9A%BE/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    总是当电灯泡的单身女子崔娜，工作爱情都不顺，但天菜级的帅哥尼欧出现后，好运似乎开始降临。崔娜先是被晋升为广告企划，梦中情人般的尼欧更成了她的同事，让两人的距离迅速拉近。正当她以为终于可以摆脱单身，却发现尼欧有个儿子，而他的前妻也来搅局。崔娜能否跨越重重考验，得到她梦寐以求的真命天菜？<br><a id="more"></a><p></p><p></p><h2>正片 脱单好难</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer12" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer12"),"video":{"url":"https://56.com-t-56.com/20190612/23260_5b58b7f8/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>一代枭雄之三支旗</title>
+      <link href="/2019/08/13/%E4%B8%80%E4%BB%A3%E6%9E%AD%E9%9B%84%E4%B9%8B%E4%B8%89%E6%94%AF%E6%97%97/"/>
+      <url>/2019/08/13/%E4%B8%80%E4%BB%A3%E6%9E%AD%E9%9B%84%E4%B9%8B%E4%B8%89%E6%94%AF%E6%97%97/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br><a id="more"></a><br>    《一代枭雄之三支旗》是由黄泰来执导，吕良伟、吴毅将、叶玉卿等领衔主演的喜剧片。影片讲述了学警陈志超经过奋斗升为新部门“三支旗”的总舵主的故事。<p></p><p></p><h2>正片 一代枭雄之三支旗</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer2" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer2"),"video":{"url":"https://56.com-t-56.com/20190520/21526_31f0e53f/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
       
@@ -387,87 +463,11 @@
     
     
     <entry>
-      <title>钵兰街大少</title>
-      <link href="/2019/08/13/%E9%92%B5%E5%85%B0%E8%A1%97%E5%A4%A7%E5%B0%91/"/>
-      <url>/2019/08/13/%E9%92%B5%E5%85%B0%E8%A1%97%E5%A4%A7%E5%B0%91/</url>
+      <title>陈翔六点半之重楼别</title>
+      <link href="/2019/08/13/%E9%99%88%E7%BF%94%E5%85%AD%E7%82%B9%E5%8D%8A%E4%B9%8B%E9%87%8D%E6%A5%BC%E5%88%AB/"/>
+      <url>/2019/08/13/%E9%99%88%E7%BF%94%E5%85%AD%E7%82%B9%E5%8D%8A%E4%B9%8B%E9%87%8D%E6%A5%BC%E5%88%AB/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    《钵兰街大少》是张乾文1993年执导的电影，由张卫健、任达华等主演。讲述了亚豹与大兜两人自小在砵兰街长大，一起揾食及媾女，过着沙保兄弟的生活而后来发生种种变故的故事。<br><a id="more"></a><p></p><p></p><h2>正片 钵兰街大少</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer13" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer13"),"video":{"url":"https://youku.com-t-youku.com/20190516/20901_f10582df/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 电影收藏 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>脱单好难</title>
-      <link href="/2019/08/13/%E8%84%B1%E5%8D%95%E5%A5%BD%E9%9A%BE/"/>
-      <url>/2019/08/13/%E8%84%B1%E5%8D%95%E5%A5%BD%E9%9A%BE/</url>
-      
-        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    总是当电灯泡的单身女子崔娜，工作爱情都不顺，但天菜级的帅哥尼欧出现后，好运似乎开始降临。崔娜先是被晋升为广告企划，梦中情人般的尼欧更成了她的同事，让两人的距离迅速拉近。正当她以为终于可以摆脱单身，却发现尼欧有个儿子，而他的前妻也来搅局。崔娜能否跨越重重考验，得到她梦寐以求的真命天菜？<br><a id="more"></a><p></p><p></p><h2>正片 脱单好难</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer9" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer9"),"video":{"url":"https://56.com-t-56.com/20190612/23260_5b58b7f8/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 电影收藏 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>恐怖故事2</title>
-      <link href="/2019/08/13/%E6%81%90%E6%80%96%E6%95%85%E4%BA%8B2/"/>
-      <url>/2019/08/13/%E6%81%90%E6%80%96%E6%95%85%E4%BA%8B2/</url>
-      
-        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    《恐怖故事2》是由Soofilm公司制作，乐天娱乐出品的恐怖故事系列电影，是《恐怖故事》（2012年）的续篇。<p></p><p></p><h2>正片 恐怖故事2</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer8" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer8"),"video":{"url":"https://hot.jingpin88.com/ppvod/7B4D880799F1E27A8B502A744A9D0B0A.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 电影收藏 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>一代枭雄之三支旗</title>
-      <link href="/2019/08/13/%E4%B8%80%E4%BB%A3%E6%9E%AD%E9%9B%84%E4%B9%8B%E4%B8%89%E6%94%AF%E6%97%97/"/>
-      <url>/2019/08/13/%E4%B8%80%E4%BB%A3%E6%9E%AD%E9%9B%84%E4%B9%8B%E4%B8%89%E6%94%AF%E6%97%97/</url>
-      
-        <content type="html"><![CDATA[<p></p><h1>简介</h1><br><a id="more"></a><br>    《一代枭雄之三支旗》是由黄泰来执导，吕良伟、吴毅将、叶玉卿等领衔主演的喜剧片。影片讲述了学警陈志超经过奋斗升为新部门“三支旗”的总舵主的故事。<p></p><p></p><h2>正片 一代枭雄之三支旗</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer3" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer3"),"video":{"url":"https://56.com-t-56.com/20190520/21526_31f0e53f/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 电影收藏 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>逃学英雄传</title>
-      <link href="/2019/08/13/%E9%80%83%E5%AD%A6%E8%8B%B1%E9%9B%84%E4%BC%A0/"/>
-      <url>/2019/08/13/%E9%80%83%E5%AD%A6%E8%8B%B1%E9%9B%84%E4%BC%A0/</url>
-      
-        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>  《逃学英雄传》是由王晶执导， 郭富城、邱淑贞、张坚庭、张敏、吴孟达、黄一山主演的喜剧片。<br>   影片讲述了圣育强中学的顽劣学生、卧底老师之间的搞笑故事。<br> <a id="more"></a><p></p><p></p><h2>正片 逃学英雄传</h2><br><div id="dplayer10" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer10"),"video":{"url":"https://sina.com-h-sina.com/20190126/28914_0c231c0c/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script><p></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>  《陈翔六点半之重楼别》是由陈翔执导，毛台、冷檬、闰土、蘑菇头主演的爆笑戏曲喜剧。<p></p><p></p><h2>正片 陈翔六点半之重楼别</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer15" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer15"),"video":{"url":"https://56.com-t-56.com/20190711/23647_3194d7c8/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
       
@@ -486,7 +486,7 @@
       <link href="/2019/08/13/%E4%BD%BF%E5%BE%92%E8%A1%8C%E8%80%852%EF%BC%9A%E8%B0%8D%E5%BD%B1%E8%A1%8C%E5%8A%A8/"/>
       <url>/2019/08/13/%E4%BD%BF%E5%BE%92%E8%A1%8C%E8%80%852%EF%BC%9A%E8%B0%8D%E5%BD%B1%E8%A1%8C%E5%8A%A8/</url>
       
-        <content type="html"><![CDATA[<p><script type="text/javascript" src="/assets/js/hls.min.js"></script></p><p></p><h1>简介</h1><br><a id="more"></a><br>    影片讲述一对兄弟幼时失散，30年后因一桩罪案相见，随着对罪案调查的深入，一个多年来隐于幕后的黑警组织渐渐浮出水面的故事 [2]  。<p></p><p></p><h2>正片 使徒行者2：谍影行动</h2><br><div id="dplayer14" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer14"),"video":{"url":"https://iqiyi.com-l-iqiyi.com/20190823/22551_706ce3a1/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script><p></p>]]></content>
+        <content type="html"><![CDATA[<p><script type="text/javascript" src="/assets/js/hls.min.js"></script></p><p></p><h1>简介</h1><br><a id="more"></a><br>    影片讲述一对兄弟幼时失散，30年后因一桩罪案相见，随着对罪案调查的深入，一个多年来隐于幕后的黑警组织渐渐浮出水面的故事 [2]  。<p></p><p></p><h2>正片 使徒行者2：谍影行动</h2><br><div id="dplayer5" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer5"),"video":{"url":"https://iqiyi.com-l-iqiyi.com/20190823/22551_706ce3a1/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script><p></p>]]></content>
       
       
       
@@ -501,11 +501,11 @@
     
     
     <entry>
-      <title>陈翔六点半之重楼别</title>
-      <link href="/2019/08/13/%E9%99%88%E7%BF%94%E5%85%AD%E7%82%B9%E5%8D%8A%E4%B9%8B%E9%87%8D%E6%A5%BC%E5%88%AB/"/>
-      <url>/2019/08/13/%E9%99%88%E7%BF%94%E5%85%AD%E7%82%B9%E5%8D%8A%E4%B9%8B%E9%87%8D%E6%A5%BC%E5%88%AB/</url>
+      <title>逃学英雄传</title>
+      <link href="/2019/08/13/%E9%80%83%E5%AD%A6%E8%8B%B1%E9%9B%84%E4%BC%A0/"/>
+      <url>/2019/08/13/%E9%80%83%E5%AD%A6%E8%8B%B1%E9%9B%84%E4%BC%A0/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>  《陈翔六点半之重楼别》是由陈翔执导，毛台、冷檬、闰土、蘑菇头主演的爆笑戏曲喜剧。<p></p><p></p><h2>正片 陈翔六点半之重楼别</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer12" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer12"),"video":{"url":"https://56.com-t-56.com/20190711/23647_3194d7c8/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>  《逃学英雄传》是由王晶执导， 郭富城、邱淑贞、张坚庭、张敏、吴孟达、黄一山主演的喜剧片。<br>   影片讲述了圣育强中学的顽劣学生、卧底老师之间的搞笑故事。<br> <a id="more"></a><p></p><p></p><h2>正片 逃学英雄传</h2><br><div id="dplayer13" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer13"),"video":{"url":"https://sina.com-h-sina.com/20190126/28914_0c231c0c/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script><p></p>]]></content>
       
       
       
