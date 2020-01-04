@@ -274,6 +274,75 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-一代枭雄之三支旗" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2019/08/13/一代枭雄之三支旗/" class="article-date">
+      <time datetime="2019-08-13T14:30:12.000Z" itemprop="datePublished">2019-08-13</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/13/一代枭雄之三支旗/">一代枭雄之三支旗</a>
+    </h1>
+  
+
+        
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <p></p><h1>简介</h1><br>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/电影收藏/">电影收藏</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2019/08/13/一代枭雄之三支旗/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+  
+
+
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-逃学英雄传" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -892,100 +961,6 @@
 
 
   
-    <article id="post-owncloud" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2019/05/28/owncloud/" class="article-date">
-      <time datetime="2019-05-28T02:23:09.000Z" itemprop="datePublished">2019-05-28</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/28/owncloud/">owncloud</a>
-    </h1>
-  
-
-        
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <hr>
-<p>owncloud 数据库从SQLite 迁移到MySQL/MariaDB遇到的坑</p>
-<pre><code>1. 查看配置文件config.php，找到字符&apos;dbtype&apos;=&gt;&apos;sqlite3&apos;证明数据库类型为SQLite
-2. 修改配置文件config.php   备注：本文的配置文件路径/var/www/html/owncloud/config/config.php
-   修改配置文件config.php，将installed那行改为：&apos;installed&apos; =&gt; false,
-
-3. 新建MySQL数据库
-
-注：这里就是我自己入的坑了，我利用PHPmyadmin登录进去，新建一个用户并建一个同名的数据库，
-设置密码后，授权所有权限。设置完后，访问owncloud 安装页面，重新配置OWNCLOUD管理员用户，配置数据库。
-提交后出现mysql：ERROR 1045 (28000): Access denied for user &apos;owncloud@&apos;localhost&apos; (using password: YES)错误！
-然后用SHELL命令进去mysql #mysql -u root -p
-#select user,password from mysql.user;  //查看数据库账号和密码
-//发现新建的owncloud没有设置密码，好，手动再设置密码。设置完毕后再次提交，显示还是一样的错误。
-/*好小子，我就把这个账号删除了！重新来过！*/
-#mysql -uroot -p //进去mysql
-MySQL&gt; create database owncloud;  //新建数据库owncloud
-Query OK, 1 row affected (0.00 sec)
-
-MySQL&gt; CREATE USER &apos;owncloud&apos;@&apos;localhost&apos; IDENTIFIED BY &apos;owncloud&apos;; //新建数据库用户owncloud,密码owncloud
-Query OK, 0 rows affected (0.00 sec)
-
-MySQL&gt; GRANT ALL PRIVILEGES ON owncloud.* TO &apos;owncloud&apos;@&apos;localhost&apos;; //分配用户权限
-Query OK, 0 rows affected (0.00 sec)
-
-MySQL&gt; FLUSH PRIVILEGES;   //刷新用户权限
-Query OK, 0 rows affected (0.00 sec)
-4. 重新创建owncloud管理员用户，配置数据库
-浏览器访问 localhost/owncloud/，重新配置数据库
-</code></pre><p>   1st.管理员用户和密码填写用SQLite时配置的那个一样<br>   2nd.文件夹采用默认<br>   3rd.配置数据库 选择MySQL并根据你的数据库填写下面四栏信息<br>   备注：owncloud<br>         owncloud<br>         owncloud<br>         localhost<br>填写完毕后提交，居然安装成功了！！！！我也一脸懵逼啊，为啥之前是使用PHPmyadmin建的数据库和账号不可以呢？还是权限没设置对！！！</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/something-wrong/">something wrong</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-  
-
-
-</article>
-
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -997,7 +972,7 @@ Query OK, 0 rows affected (0.00 sec)
         <div id="footer-info">
             <div class="footer-left">
                 <i class="fa fa-copyright"></i> 
-                2018-2019 Xiaonan Chen
+                2018-2020 Xiaonan Chen
             </div>
             <div class="footer-right">
                 <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo Coding</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>

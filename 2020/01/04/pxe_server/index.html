@@ -15,18 +15,24 @@
 
 
 
-<meta name="description" content="简介  《陈翔六点半之重楼别》是由陈翔执导，毛台、冷檬、闰土、蘑菇头主演的爆笑戏曲喜剧。 正片 陈翔六点半之重楼别">
-<meta name="keywords" content="电影收藏">
+<meta name="description" content="PXE批量安装CentOS7操作系统批量部署前首先应该拥有一台部署完成的系统，也就是Server端。PXE_Server部署DHCP、TFTP、Xinetd、Kickstart、(HTTP/FTP/NFS任选其一，本次部署采用FTP)，用来提供安装所需要的系统文件以及所要安装的软件。关闭Firewalld/SElinux(为实验方便，减少麻烦，生产环境不推荐)PXE批量部署原理：  PXE Cli">
+<meta name="keywords" content="linux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="陈翔六点半之重楼别">
-<meta property="og:url" content="https://suixin.ltd/2019/08/13/陈翔六点半之重楼别/index.html">
+<meta property="og:title" content="pxe_server install linux and windows">
+<meta property="og:url" content="https://suixin.ltd/2020/01/04/pxe_server/index.html">
 <meta property="og:site_name" content="小南同学的笔记">
-<meta property="og:description" content="简介  《陈翔六点半之重楼别》是由陈翔执导，毛台、冷檬、闰土、蘑菇头主演的爆笑戏曲喜剧。 正片 陈翔六点半之重楼别">
+<meta property="og:description" content="PXE批量安装CentOS7操作系统批量部署前首先应该拥有一台部署完成的系统，也就是Server端。PXE_Server部署DHCP、TFTP、Xinetd、Kickstart、(HTTP/FTP/NFS任选其一，本次部署采用FTP)，用来提供安装所需要的系统文件以及所要安装的软件。关闭Firewalld/SElinux(为实验方便，减少麻烦，生产环境不推荐)PXE批量部署原理：  PXE Cli">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-09-13T06:44:43.211Z">
+<meta property="og:image" content="https://suixin.ltd/2020/01/04/pxe_server/pxe/1.jpg">
+<meta property="og:image" content="https://suixin.ltd/2020/01/04/pxe_server/pxe/4.jpg">
+<meta property="og:image" content="https://suixin.ltd/2020/01/04/pxe_server/pxe/1.jpg">
+<meta property="og:image" content="https://suixin.ltd/2020/01/04/pxe_server/pxe/3.jpg">
+<meta property="og:image" content="https://suixin.ltd/2020/01/04/pxe_server/pxe/2.jpg">
+<meta property="og:updated_time" content="2020-01-04T07:02:17.548Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="陈翔六点半之重楼别">
-<meta name="twitter:description" content="简介  《陈翔六点半之重楼别》是由陈翔执导，毛台、冷檬、闰土、蘑菇头主演的爆笑戏曲喜剧。 正片 陈翔六点半之重楼别">
+<meta name="twitter:title" content="pxe_server install linux and windows">
+<meta name="twitter:description" content="PXE批量安装CentOS7操作系统批量部署前首先应该拥有一台部署完成的系统，也就是Server端。PXE_Server部署DHCP、TFTP、Xinetd、Kickstart、(HTTP/FTP/NFS任选其一，本次部署采用FTP)，用来提供安装所需要的系统文件以及所要安装的软件。关闭Firewalld/SElinux(为实验方便，减少麻烦，生产环境不推荐)PXE批量部署原理：  PXE Cli">
+<meta name="twitter:image" content="https://suixin.ltd/2020/01/04/pxe_server/pxe/1.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -58,7 +64,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>陈翔六点半之重楼别 | 小南同学的笔记</title>
+<title>pxe_server install linux and windows | 小南同学的笔记</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -92,7 +98,7 @@
 
 
 
-<link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"></script></head>
+</head>
 <body>
   <div id="container">
     <div class="left-col">
@@ -272,11 +278,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-陈翔六点半之重楼别" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-pxe_server" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2019/08/13/陈翔六点半之重楼别/" class="article-date">
-      <time datetime="2019-08-13T14:29:12.000Z" itemprop="datePublished">2019-08-13</time>
+      <a href="/2020/01/04/pxe_server/" class="article-date">
+      <time datetime="2020-01-04T07:00:37.000Z" itemprop="datePublished">2020-01-04</time>
 </a>
 
 
@@ -291,7 +297,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      陈翔六点半之重楼别
+      pxe_server install linux and windows
     </h1>
   
 
@@ -303,7 +309,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/电影收藏/">电影收藏</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -313,9 +319,147 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p></p><h1>简介</h1><br>  《陈翔六点半之重楼别》是由陈翔执导，毛台、冷檬、闰土、蘑菇头主演的爆笑戏曲喜剧。<p></p>
-<p></p><h2>正片 陈翔六点半之重楼别</h2><br><a id="more"></a><p></p>
-<p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer12" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer12"),"video":{"url":"https://56.com-t-56.com/20190711/23647_3194d7c8/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>
+        <p></p><h1>PXE批量安装CentOS7操作系统</h1><br>批量部署前首先应该拥有一台部署完成的系统，也就是Server端。<br>PXE_Server部署DHCP、TFTP、Xinetd、Kickstart、(HTTP/FTP/NFS任选其一，本次部署采用FTP)，用来提供安装所需要的系统文件以及所要安装的软件。<br>关闭Firewalld/SElinux(为实验方便，减少麻烦，生产环境不推荐)<br>PXE批量部署原理：<p></p>
+<ol>
+<li>PXE Client 从自己的PXE网卡启动，向本网络中的DHCP服务器请求IP；</li>
+<li>DHCP 服务器返回分配给客户机的IP 以及PXE文件的放置位置<br>(该文件一般是放在一台TFTP服务器上)；</li>
+<li>PXE Client 向本网络中的TFTP服务器索取pxelinux.0 文件<br>(在 PXE Client 的 ROM 中，已经存在 TFTP Client)；</li>
+<li>PXE Client 取得pxelinux.0 文件后之执行该文件；</li>
+<li>根据pxelinux.0 的执行结果，通过TFTP服务器加载内核和文件系统 ；</li>
+<li>进入安装画面, 此时可以通过选择HTTP、FTP、NFS 方式之一进行安装；</li>
+</ol>
+<p>1、DHCP服务器：为 PXE-client 分配 IP ，获得安装程序文件位置<br>2、TFTP服务器：传输安装文件、内核、菜单文件等给 PXE-client<br>3、Xinetd: TFTP服务超级守护进程, 用于唤醒TFTP服务;<br>4、Kickstart：生成的ks.cfg配置文件 本文没有介绍Kickstart 安装<br>5、HTTP/NFS/FTP 服务中的任意一种，用于传送安装源文件给 PXE-client<br>;:<br><a id="more"></a><br>安装DHCP服务</p>
+<pre><code>yum install dhcp -y
+</code></pre><p>修改配置文件</p>
+<pre><code>#vim /etc/dhcp/dhcpd.conf
+</code></pre><p>#———可用最简配置——————-</p>
+<h1 id="网络和子网掩码-根据自己实际情况编写"><a href="#网络和子网掩码-根据自己实际情况编写" class="headerlink" title="网络和子网掩码(根据自己实际情况编写)"></a>网络和子网掩码(根据自己实际情况编写)</h1><pre><code>subnet 192.168.2.0 netmask 255.255.255.0 { 
+  option routers 192.168.2.11;     
+  range 192.168.2.3 192.168.2.25;   # 指定DHCP地址池
+  next-server 192.168.2.11; # 指定tftp服务器地址
+  filename &quot;pxelinux.0&quot;; #指定pxelinux.0文件
+}
+</code></pre><p>如果是在多网卡的情况下需要指定某块网卡启动DHCP服务，复制文件，修改配置文件，重新注册服务</p>
+<pre><code>cp /usr/lib/systemd/system/dhcpd.service /etc/systemd/system/
+vi /etc/systemd/system/dhcpd.service
+ExecStart=/usr/sbin/dhcpd -f -cf /etc/dhcp/dhcpd.conf -user dhcpd -group dhcpd --no-pid &lt;your_interface_name(s)&gt;(我要使用的网卡是ens192)
+systemctl --system daemon-reload
+</code></pre><p>启动服务</p>
+<pre><code>systemctl start dhcpd.service
+systemctl enable dhcpd.service
+</code></pre><p>安装TFTP服务(无需认证，小文件传输)<br>安装xinetd、tftp-server和syslinux服务</p>
+<p>#syslinux 会在 /usr/share/syslinux/pxelinux.0 生成pxelinux.0文件 ，需要手动复制到/var/lib/tftpboot/ 目录中，后面详细介绍。<br>syslinux文件解析</p>
+<pre><code>        isolinux.bin       注：光盘镜像引导文件   
+        isolinux.cfg       注：启动菜单的配置文件;自编辑   
+        memdisk          注：引导IMG镜像的文件   
+        vesamenu.c32(或menu.c32)  注：官方提供的二种窗口模块   
+        chain.c32         注：指定分区启动  如：chain.c32 hd0,1 (或chain.c32 hd0,2)   
+        reboot.c32       注：重新启动计算机的文件   
+        m16-640x640-syslinux.jpg(或syslinux_splash.jpg)  注：自己可以定义新的图片作为背景，图图片格式 640*480  jpg/png）
+
+yum install xinetd -y
+yum install tftp-server syslinux -y
+</code></pre><p>配置xinetd，由xinetd管理tftp</p>
+<pre><code>service tftp
+
+{
+        socket_type             = dgram
+        protocol                = udp
+        wait                    = yes
+        user                    = root
+        server                  = /usr/sbin/in.tftpd
+        server_args             = -s /var/lib/tftpboot        
+        disable                 = no  #默认disable是yes的，把它改为no即可
+        per_source              = 11
+        cps                     = 100 2
+        flags                   = IPv4
+}
+</code></pre><p>启动服务</p>
+<pre><code>systemctl enable tftp
+systemctl enable xinetd
+systemctl start tftp
+systemctl start xinetd
+</code></pre><p>安装FTP服务</p>
+<pre><code>yum install vsftp -y
+</code></pre><p>启动服务</p>
+<pre><code>systemctl enable vsftpd.service &amp;&amp; systemctl start vsftpd.service
+</code></pre><p>复制内核文件<br>内核文件、虚拟根文件以及菜单文件，我们都是通过tftp服务来提供的，由于系统及版本的不同，对于一个比较复制机群来说，我们需要准备不同系统，不同版本的内核文件，initrd.img文件。菜单文件只需要一份即可。</p>
+<p>挂载光驱</p>
+<pre><code>mount /dev/cdrom /mnt  #挂载
+# cp /mnt/images/pxeboot/vmlinuz     /var/lib/tftpboot/     #vmlinuz文件，在镜像文件images/pxeboot/目录中，
+vmlinuz是可引导的、压缩的内核文件，vmlinuz是vmlinux的压缩文件。是可执行的Linux内核
+# cp /mnt/images/pxeboot/initrd.img  /var/lib/tftpboot/     #initrd.img文件，在镜像文件images/pxeboot/目录中，
+initrd是“initial ram disk”的简写。initrd用来临时的引导硬件到实际内核vmlinuz能够接管并继续引导的状态
+</code></pre><p>复制pxelinux.0文件到tftp目录下</p>
+<pre><code># cp /usr/share/syslinux/pxelinux.0 /var/lib/tftpboot/
+</code></pre><p>复制一个菜单功能文件到/var/lib/tftpboot/</p>
+<pre><code>#cp /usr/share/syslinux/vesamenu.c32 /var/lib/tftpboot/
+</code></pre><p>创建pxelinux.cfg/default 文件</p>
+<pre><code>mkdir -p /var/lib/tftpboot/pxelinux.cfg/default
+</code></pre><p>编写default文件</p>
+<pre><code>default vesamenu.c32
+menu tabmsg XiaoNan NIUBI
+menu title XiaoNan auto-install system
+timeout 300
+label install Centos7
+        kernel vmlinuz
+        append initrd=initrd.img inst.repo=ftp://192.168.2.11/centos7
+</code></pre><p>启动客户端进行安装<br><img src="/2020/01/04/pxe_server/pxe/1.jpg" alt=""><br><img src="/2020/01/04/pxe_server/pxe/4.jpg" alt=""><br>大功告成!</p>
+<p>当然这还需要人工点击开始安装并配置才能安装，如想实现无人值守安装参照小白都能玩转的COBBLER无人值守安装<a href="https://blog.csdn.net/qq_37242520/article/details/100545758" target="_blank" rel="noopener">https://blog.csdn.net/qq_37242520/article/details/100545758</a><br>或者搜索kickstart实现无人值守安装！</p>
+<p></p><h1>PXE批量安装windows操作系统</h1><br>在之前的环境下我们需要samba来共享windows安装文件<br>安装samba相关包<p></p>
+<pre><code>#yum install samba samba-client cifs-utils -y
+</code></pre><p>创建共享的文件夹</p>
+<pre><code>mkdir /smbshare/windows10
+useradd xiaonan
+smbpasswd -a xiaonan
+chown xiaonan:xiaonan /smbshare/
+</code></pre><p>修改samba配置文件,修改以下内容<br>vim /etc/samba/smb.conf</p>
+<pre><code>[global]
+        workgroup = SAMBA
+        security = user
+        netbios name = pxe
+        passdb backend = tdbsam
+
+        printing = cups
+        printcap name = cups
+        load printers = yes
+        cups options = raw
+[install]
+         comment = Installation Media
+         path = /smbshare
+         public = yes
+         writable = no
+         printable = no
+         browseable = yes
+</code></pre><p>启动samba服务</p>
+<pre><code>systemctl start smb nmb &amp;&amp; systemctl enable smb nmb
+</code></pre><p>复制WIN10镜像文件到samba共享目录</p>
+<pre><code>cp -rf win10.iso /smbshare/windows10/
+</code></pre><p>创建windows10PE<br>我们需要windows ADK去制作自己的winpe,访问微软官方网站<a href="https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install下载并安装" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install下载并安装</a><br>我这里下载的是下面两个软件，安装过程下一步就好。</p>
+<pre><code>Download the Windows ADK for Windows 10, version 1903
+Download the Windows PE add-on for the ADK
+</code></pre><p>安装完成之后以管理员身份运行Deployment and Imaging Tools Environment</p>
+<pre><code>copype amd64 c:\winpe
+</code></pre><p>挂载Boot.wim到临时目录</p>
+<pre><code>Dism /Mount-Image /ImageFile:&quot;c:\winpe\media\sources\boot.wim&quot; /index:1 /MountDir:&quot;c:\winpe\mount&quot;
+</code></pre><p>修改启动脚本</p>
+<pre><code>notepad c:\winpe\mount\Windows\System32\Startnet.cmd
+</code></pre><p>添加以下内容,注意字符之间的空格</p>
+<pre><code>wpeinit 
+net use z: \\pxe\install\windows10 /user:xiaonan xiaonan
+z:\setup.exe
+</code></pre><p>卸载并保存boot.vim</p>
+<pre><code>Dism /Unmount-Image /MountDir:&quot;c:\winpe\mount&quot; /commit
+</code></pre><p>生成win10pe.iso</p>
+<pre><code>MakeWinPEMedia /ISO c:\winpe c:\win10pe.iso
+</code></pre><p>把生成的win10pe.iso复制到/var/lib/tftpboot/winpe/下<br>添加win10选项到PXE启动菜单</p>
+<p>#vim default</p>
+<pre><code>label Install MS Windows 10
+menu label Install MS Windows 10
+        kernel memdisk
+        initrd /winpe/win10pe.iso
+append iso raw
+</code></pre><p>大功告成！启动客户端!!!!<br><img src="/2020/01/04/pxe_server/pxe/1.jpg" alt=""><br><img src="/2020/01/04/pxe_server/pxe/3.jpg" alt=""><br><img src="/2020/01/04/pxe_server/pxe/2.jpg" alt=""><br>如果想让WINDOWS系统无人值守安装可以创建无人值守自动应答文件AutoUnattend.xml<br>详情可参考<a href="https://blog.csdn.net/zuoliang365/article/details/86592025" target="_blank" rel="noopener">https://blog.csdn.net/zuoliang365/article/details/86592025</a></p>
 
       
     </div>
@@ -324,13 +468,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2019/08/13/陈翔六点半之重楼别/">陈翔六点半之重楼别</a></p>
+        <p><span>本文标题:</span><a href="/2020/01/04/pxe_server/">pxe_server install linux and windows</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Xiaonan Chen</a></p>
-        <p><span>发布时间:</span>2019-08-13, 22:29:12</p>
-        <p><span>最后更新:</span>2019-09-13, 14:44:43</p>
+        <p><span>发布时间:</span>2020-01-04, 15:00:37</p>
+        <p><span>最后更新:</span>2020-01-04, 15:02:17</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2019/08/13/陈翔六点半之重楼别/" title="陈翔六点半之重楼别">https://suixin.ltd/2019/08/13/陈翔六点半之重楼别/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://suixin.ltd/2019/08/13/陈翔六点半之重楼别/　　作者: Xiaonan Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2020/01/04/pxe_server/" title="pxe_server install linux and windows">https://suixin.ltd/2020/01/04/pxe_server/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://suixin.ltd/2020/01/04/pxe_server/　　作者: Xiaonan Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -342,16 +486,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2019/08/13/使徒行者2：谍影行动/">
-                    使徒行者2：谍影行动
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2019/08/13/猛鬼屠房/">
-                    猛鬼屠房
+                <a href="/2019/11/15/grafana/">
+                    磁盘满了，原来是僵尸进程惹的祸、Grafana图形展示ZABBIX
                 </a>
             </div>
         
@@ -393,7 +531,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.1.</span> <span class="toc-text">正片 陈翔六点半之重楼别</span></a></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text">PXE批量安装CentOS7操作系统</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#网络和子网掩码-根据自己实际情况编写"><span class="toc-number">2.</span> <span class="toc-text">网络和子网掩码(根据自己实际情况编写)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-number">3.</span> <span class="toc-text">PXE批量安装windows操作系统</span></a></li></ol>
         
     </div>
     <style>
@@ -429,7 +567,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"陈翔六点半之重楼别　| 小南同学的笔记　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"pxe_server install linux and windows　| 小南同学的笔记　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -470,15 +608,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2019/08/13/使徒行者2：谍影行动/" title="上一篇: 使徒行者2：谍影行动">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2019/08/13/猛鬼屠房/" title="下一篇: 猛鬼屠房">
+            <a href="/2019/11/15/grafana/" title="下一篇: 磁盘满了，原来是僵尸进程惹的祸、Grafana图形展示ZABBIX">
                 <i class="fa fa-angle-right"></i>
             </a>
         
