@@ -230,7 +230,7 @@
                 
                 <section class="switch-part switch-part4">
                 
-                    <div id="js-aboutme">我就是我，不一样的烟火</div>
+                    <div id="js-aboutme">我是英俊潇洒风流倜傥人见人爱花见花开鬼见愁，欢迎你打我、骂我、k我、扁我、踢我、踹我、揍我，甚至把我煎、炒、炸、焖、炖、红烧、清蒸、水煮我都毫无怨言，但前提是：这个人必须是天底下最可爱、美丽、温柔、善良、贤惠、有气质的大美女</div>
                 </section>
                 
             </div>
@@ -595,6 +595,23 @@ endif
         }
     
 </script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂) 我藏好了哦~ " + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*) 被你发现啦~ " + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
 
 
   </div>

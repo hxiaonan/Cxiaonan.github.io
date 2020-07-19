@@ -605,7 +605,7 @@ a {
   width: 100%;
 }
 #header a {
-  color: #696969;
+  color: #05fdb7;
 }
 #header a:hover {
   color: #b0a0aa;
@@ -788,6 +788,8 @@ a {
   left: 300%;
   text-align: left;
   line-height: 30px;
+  font-size: larger;
+  color: #f70606;
 }
 #header .header-nav .social {
   margin-top: 10px;
