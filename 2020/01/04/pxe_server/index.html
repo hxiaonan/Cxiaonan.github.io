@@ -15,23 +15,23 @@
 
 
 
-<meta name="description" content="PXE批量安装CentOS7操作系统批量部署前首先应该拥有一台部署完成的系统，也就是Server端。PXE_Server部署DHCP、TFTP、Xinetd、Kickstart、(HTTP/FTP/NFS任选其一，本次部署采用FTP)，用来提供安装所需要的系统文件以及所要安装的软件。关闭Firewalld/SElinux(为实验方便，减少麻烦，生产环境不推荐)PXE批量部署原理：  PXE Cli">
+<meta name="description" content="PXE批量安装CentOS7操作系统批量部署前首先应该拥有一台部署完成的系统，也就是Server端。PXE_Server部署DHCP、TFTP、Xinetd、Kickstart、(HTTP/FTP/NFS任选其一，本次部署采用FTP)，用来提供安装所需要的系统文件以及所要安装的软件。关闭Firewalld/SElinux(为实验方便，减少麻烦，生产环境不推荐)">
 <meta name="keywords" content="linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pxe_server install linux and windows">
 <meta property="og:url" content="https://suixin.ltd/2020/01/04/pxe_server/index.html">
 <meta property="og:site_name" content="小南同学的笔记">
-<meta property="og:description" content="PXE批量安装CentOS7操作系统批量部署前首先应该拥有一台部署完成的系统，也就是Server端。PXE_Server部署DHCP、TFTP、Xinetd、Kickstart、(HTTP/FTP/NFS任选其一，本次部署采用FTP)，用来提供安装所需要的系统文件以及所要安装的软件。关闭Firewalld/SElinux(为实验方便，减少麻烦，生产环境不推荐)PXE批量部署原理：  PXE Cli">
+<meta property="og:description" content="PXE批量安装CentOS7操作系统批量部署前首先应该拥有一台部署完成的系统，也就是Server端。PXE_Server部署DHCP、TFTP、Xinetd、Kickstart、(HTTP/FTP/NFS任选其一，本次部署采用FTP)，用来提供安装所需要的系统文件以及所要安装的软件。关闭Firewalld/SElinux(为实验方便，减少麻烦，生产环境不推荐)">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://suixin.ltd/2020/01/04/pxe_server/1.jpg">
 <meta property="og:image" content="https://suixin.ltd/2020/01/04/pxe_server/4.jpg">
 <meta property="og:image" content="https://suixin.ltd/2020/01/04/pxe_server/1.jpg">
 <meta property="og:image" content="https://suixin.ltd/2020/01/04/pxe_server/3.jpg">
 <meta property="og:image" content="https://suixin.ltd/2020/01/04/pxe_server/2.jpg">
-<meta property="og:updated_time" content="2020-01-04T07:25:52.302Z">
+<meta property="og:updated_time" content="2020-07-28T06:29:50.112Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="pxe_server install linux and windows">
-<meta name="twitter:description" content="PXE批量安装CentOS7操作系统批量部署前首先应该拥有一台部署完成的系统，也就是Server端。PXE_Server部署DHCP、TFTP、Xinetd、Kickstart、(HTTP/FTP/NFS任选其一，本次部署采用FTP)，用来提供安装所需要的系统文件以及所要安装的软件。关闭Firewalld/SElinux(为实验方便，减少麻烦，生产环境不推荐)PXE批量部署原理：  PXE Cli">
+<meta name="twitter:description" content="PXE批量安装CentOS7操作系统批量部署前首先应该拥有一台部署完成的系统，也就是Server端。PXE_Server部署DHCP、TFTP、Xinetd、Kickstart、(HTTP/FTP/NFS任选其一，本次部署采用FTP)，用来提供安装所需要的系统文件以及所要安装的软件。关闭Firewalld/SElinux(为实验方便，减少麻烦，生产环境不推荐)">
 <meta name="twitter:image" content="https://suixin.ltd/2020/01/04/pxe_server/1.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
@@ -211,7 +211,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Operation/">Operation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/crontab/">crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deleted/">deleted</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grafana/">grafana</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-specific/">linux-specific</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something-wrong/">something wrong</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/youtube视频/">youtube视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生活/">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/电影收藏/">电影收藏</a></li></ul>
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Operation/">Operation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/crontab/">crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deleted/">deleted</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docs/">docs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grafana/">grafana</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kali-linux/">kali linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-specific/">linux-specific</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something-wrong/">something wrong</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/youtube视频/">youtube视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生活/">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/电影收藏/">电影收藏</a></li></ul>
                     </div>
                 </section>
                 
@@ -331,7 +331,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p></p><h1>PXE批量安装CentOS7操作系统</h1><br>批量部署前首先应该拥有一台部署完成的系统，也就是Server端。<br>PXE_Server部署DHCP、TFTP、Xinetd、Kickstart、(HTTP/FTP/NFS任选其一，本次部署采用FTP)，用来提供安装所需要的系统文件以及所要安装的软件。<br>关闭Firewalld/SElinux(为实验方便，减少麻烦，生产环境不推荐)<br>PXE批量部署原理：<p></p>
+        <p></p><h1>PXE批量安装CentOS7操作系统</h1><br>批量部署前首先应该拥有一台部署完成的系统，也就是Server端。<br>PXE_Server部署DHCP、TFTP、Xinetd、Kickstart、(HTTP/FTP/NFS任选其一，本次部署采用FTP)，用来提供安装所需要的系统文件以及所要安装的软件。<br>关闭Firewalld/SElinux(为实验方便，减少麻烦，生产环境不推荐)<br><a id="more"></a><br>PXE批量部署原理：<p></p>
 <ol>
 <li>PXE Client 从自己的PXE网卡启动，向本网络中的DHCP服务器请求IP；</li>
 <li>DHCP 服务器返回分配给客户机的IP 以及PXE文件的放置位置<br>(该文件一般是放在一台TFTP服务器上)；</li>
@@ -340,7 +340,8 @@
 <li>根据pxelinux.0 的执行结果，通过TFTP服务器加载内核和文件系统 ；</li>
 <li>进入安装画面, 此时可以通过选择HTTP、FTP、NFS 方式之一进行安装；</li>
 </ol>
-<p>1、DHCP服务器：为 PXE-client 分配 IP ，获得安装程序文件位置<br>2、TFTP服务器：传输安装文件、内核、菜单文件等给 PXE-client<br>3、Xinetd: TFTP服务超级守护进程, 用于唤醒TFTP服务;<br>4、Kickstart：生成的ks.cfg配置文件 本文没有介绍Kickstart 安装<br>5、HTTP/NFS/FTP 服务中的任意一种，用于传送安装源文件给 PXE-client<br>;:<br><a id="more"></a><br>安装DHCP服务</p>
+<p>1、DHCP服务器：为 PXE-client 分配 IP ，获得安装程序文件位置<br>2、TFTP服务器：传输安装文件、内核、菜单文件等给 PXE-client<br>3、Xinetd: TFTP服务超级守护进程, 用于唤醒TFTP服务;<br>4、Kickstart：生成的ks.cfg配置文件 本文没有介绍Kickstart 安装<br>5、HTTP/NFS/FTP 服务中的任意一种，用于传送安装源文件给 PXE-client<br>;:</p>
+<p>安装DHCP服务</p>
 <pre><code>yum install dhcp -y
 </code></pre><p>修改配置文件</p>
 <pre><code>#vim /etc/dhcp/dhcpd.conf
@@ -483,7 +484,7 @@ append iso raw
         <p><span>本文标题:</span><a href="/2020/01/04/pxe_server/">pxe_server install linux and windows</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Xiaonan Chen</a></p>
         <p><span>发布时间:</span>2020-01-04, 15:00:37</p>
-        <p><span>最后更新:</span>2020-01-04, 15:25:52</p>
+        <p><span>最后更新:</span>2020-07-28, 14:29:50</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2020/01/04/pxe_server/" title="pxe_server install linux and windows">https://suixin.ltd/2020/01/04/pxe_server/</a>
             <span class="copy-path" data-clipboard-text="原文: https://suixin.ltd/2020/01/04/pxe_server/　　作者: Xiaonan Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -497,6 +498,12 @@ append iso raw
 
 
     <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2020/07/28/hexo-docs-commands/">
+                    hexo_docs_commands
+                </a>
+            </div>
         
         
             <div id="article-nav-older" class="article-nav-title">
@@ -620,7 +627,9 @@ append iso raw
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+            <a href="/2020/07/28/hexo-docs-commands/" title="上一篇: hexo_docs_commands">
+                <i class="fa fa-angle-left"></i>
+            </a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
@@ -632,7 +641,7 @@ append iso raw
         
     </div>
 
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/01/04/pxe_server/">pxe_server install linux and windows</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/15/grafana/">磁盘满了，原来是僵尸进程惹的祸、Grafana图形展示ZABBIX</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/15/ffmpeg/">ffmpeg and youtube</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/13/Linux Operation/">Linux Operation and Maintenance interview</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/13/at-and-cron/">Linux计划任务</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/12/mysql5.7/">Install mysql5.7</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/ElasticSearch/">Install ElasticSearch</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/rhel8_specific/">RHEL8.0_specific</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/05/Naked Weapon/">Naked Weapon</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/鬼干部/">鬼干部</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/灵幻至尊/">灵幻至尊</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/音乐僵尸/">音乐僵尸</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/一眉道人/">一眉道人</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/僵尸先生/">僵尸先生</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/僵尸家族/">僵尸家族</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/天地玄门/">天地玄门</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/脱单好难/">脱单好难</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/恐怖故事2/">恐怖故事2</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/二代宗师/">二代宗师</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/一代枭雄之三支旗/">一代枭雄之三支旗</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/钵兰街大少/">钵兰街大少</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/陈翔六点半之重楼别/">陈翔六点半之重楼别</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/逃学英雄传/">逃学英雄传</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/使徒行者2：谍影行动/">使徒行者2：谍影行动</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/猛鬼屠房/">猛鬼屠房</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/06/zhenhunjie/">zhenhunjie</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/04/baisheyuanqi/">baisheyuanqi</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/31/birthday/">birthday</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/23/test/">test</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/15/rhel7-specific/">rhel7_specific</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/28/owncloud/">owncloud</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/03/Recruit-marriage/">Recruit marriage</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/17/pdf-upload-test/">pdf-upload-test</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/16/instructions-for-linux/">instructions-for-linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/09/RHEL7题库/">RHEL7题库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/14/cp/">cp</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/13/newlinux/">newlinux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/11/linux/">Linux系统raid1更换故障硬盘处理过程</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/07/28/a-freshman-story/">a freshman story</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/07/28/hexo-docs-commands/">hexo_docs_commands</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/04/pxe_server/">pxe_server install linux and windows</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/15/grafana/">磁盘满了，原来是僵尸进程惹的祸、Grafana图形展示ZABBIX</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/15/ffmpeg/">ffmpeg and youtube</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/13/Linux Operation/">Linux Operation and Maintenance interview</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/13/at-and-cron/">Linux计划任务</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/12/mysql5.7/">Install mysql5.7</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/ElasticSearch/">Install ElasticSearch</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/rhel8_specific/">RHEL8.0_specific</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/05/Naked Weapon/">Naked Weapon</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/鬼干部/">鬼干部</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/灵幻至尊/">灵幻至尊</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/音乐僵尸/">音乐僵尸</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/一眉道人/">一眉道人</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/僵尸先生/">僵尸先生</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/僵尸家族/">僵尸家族</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/天地玄门/">天地玄门</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/二代宗师/">二代宗师</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/脱单好难/">脱单好难</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/恐怖故事2/">恐怖故事2</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/钵兰街大少/">钵兰街大少</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/一代枭雄之三支旗/">一代枭雄之三支旗</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/使徒行者2：谍影行动/">使徒行者2：谍影行动</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/逃学英雄传/">逃学英雄传</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/陈翔六点半之重楼别/">陈翔六点半之重楼别</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/猛鬼屠房/">猛鬼屠房</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/06/zhenhunjie/">zhenhunjie</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/04/baisheyuanqi/">baisheyuanqi</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/31/birthday/">birthday</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/23/test/">test</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/15/rhel7-specific/">rhel7_specific</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/28/owncloud/">owncloud</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/03/Recruit-marriage/">Recruit marriage</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/17/pdf-upload-test/">pdf-upload-test</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/16/instructions-for-linux/">instructions-for-linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/09/RHEL7题库/">RHEL7题库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/14/cp/">cp</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/13/newlinux/">newlinux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/11/linux/">Linux系统raid1更换故障硬盘处理过程</a></li></ul>
 
 
 
