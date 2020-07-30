@@ -23,7 +23,7 @@
 <meta property="og:site_name" content="小南同学的笔记">
 <meta property="og:description" content="Hexo 指令  安装 hexonpm install hexo-cli -g">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-07-28T07:41:08.616Z">
+<meta property="og:updated_time" content="2020-07-29T01:26:01.328Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hexo_docs_commands">
 <meta name="twitter:description" content="Hexo 指令  安装 hexonpm install hexo-cli -g">
@@ -75,6 +75,40 @@
         fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
         scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
         search: true
+    }
+</script>
+
+<script>
+    document.oncontextmenu = function (event) {
+        if (window.event) {
+            event = window.event;
+        }
+        try {
+            var the = event.srcElement;
+            if (!((the.tagName == "INPUT" && the.type.toLowerCase() == "text") || the.tagName == "TEXTAREA")) {
+                return false;
+            }
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+</script>
+
+<script>
+    document.onkeydown = function () {
+        if (window.event && window.event.keyCode == 123) {
+            alert("F12被禁用");
+            event.keyCode = 0;
+            event.returnValue = false;
+        }
+        if (window.event && window.event.keyCode == 13) {
+            window.event.keyCode = 505;
+        }
+        if (window.event && window.event.keyCode == 8) {
+            alert(str + "\n请使用Del键进行字符的删除操作！");
+            window.event.returnValue = false;
+        }
     }
 </script>
 
@@ -179,13 +213,13 @@
                         
                             <li><a href="/archives/">所有文章</a></li>
                         
-                            <li><a href="/tags/">标签云</a></li>
+                            <li><a href="/tags/">标 签 云</a></li>
                         
-                            <li><a href="/about/">工具箱</a></li>
+                            <li><a href="/about/">工 具 箱</a></li>
                         
-                            <li><a href="/favorite/">电影</a></li>
+                            <li><a href="/favorite/">电   影</a></li>
                         
-                            <li><a href="/music/">音乐</a></li>
+                            <li><a href="/music/">音   乐</a></li>
                         
                         </ul>
                     </nav>
@@ -197,6 +231,8 @@
                                 <a class="fa GitHub" href="#" title="GitHub"></a>
                             
                                 <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 博客园" href="https://www.cnblogs.com/suixinnan/" title="博客园"></a>
                             
                         </ul>
                     </nav>
@@ -258,13 +294,13 @@
                 
                     <li><a href="/archives/">所有文章</a></li>
                 
-                    <li><a href="/tags/">标签云</a></li>
+                    <li><a href="/tags/">标 签 云</a></li>
                 
-                    <li><a href="/about/">工具箱</a></li>
+                    <li><a href="/about/">工 具 箱</a></li>
                 
-                    <li><a href="/favorite/">电影</a></li>
+                    <li><a href="/favorite/">电   影</a></li>
                 
-                    <li><a href="/music/">音乐</a></li>
+                    <li><a href="/music/">音   乐</a></li>
                 
                 <div class="clearfix"></div>
                 </ul>
@@ -277,6 +313,8 @@
                                 <a class="fa GitHub" target="_blank" href="#" title="GitHub"></a>
                             
                                 <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 博客园" target="_blank" href="https://www.cnblogs.com/suixinnan/" title="博客园"></a>
                             
                         </ul>
             </nav>
@@ -358,7 +396,7 @@ $ ssh-keygen -t rsa -C &quot;******@outlook.com&quot;       //使用ssh-keygen�
 $ ssh -T git@github.com                         //把本地公钥添加到github中；在GitHub中，点击右侧图像下拉选项，选择“Settings”，在“SSH and GPG keys”中，点击“New SSH key”，并将~/.ssh/id_rsa.pub文件里的内容复制上去，保存退出；使用“ssh -T git@github.com”命令，测试添加ssh是否成功；
 </code></pre><p>HexoBlog部署到git，需要安装hexo-deployer-git插件，在blog目录下运行以下命令进行安装；</p>
 <pre><code>$ npm install hexo-deployer-git --save
-</code></pre><h1 id="在-config-yml（如果有已存在的请删除）添加如下配置："><a href="#在-config-yml（如果有已存在的请删除）添加如下配置：" class="headerlink" title="在 _config.yml（如果有已存在的请删除）添加如下配置："></a>在 _config.yml（如果有已存在的请删除）添加如下配置：</h1><p>deploy:<br>  type: git<br>  repo: <a href="https://github.com/" target="_blank" rel="noopener">https://github.com/</a><username>/<project></project></username></p>
+</code></pre><h1 id="在-config-yml（如果有已存在的请删除）添加如下配置："><a href="#在-config-yml（如果有已存在的请删除）添加如下配置：" class="headerlink" title="在 _config.yml（如果有已存在的请删除）添加如下配置："></a>在 _config.yml（如果有已存在的请删除）添加如下配置：</h1><p>deploy:<br>  type: git<br>  repo: <a href="https://github.com/xx/xx" target="_blank" rel="noopener">https://github.com/xx/xx</a></p>
 <h1 id="example-https-github-com-hexojs-hexojs-github-io"><a href="#example-https-github-com-hexojs-hexojs-github-io" class="headerlink" title="example, https://github.com/hexojs/hexojs.github.io"></a>example, <a href="https://github.com/hexojs/hexojs.github.io" target="_blank" rel="noopener">https://github.com/hexojs/hexojs.github.io</a></h1><p>  branch: gh-pages<br>完成這些操作你就可以執行hexo d上傳你的博客到github pages啦！！！</p>
 
       
@@ -371,7 +409,7 @@ $ ssh -T git@github.com                         //把本地公钥添加到github
         <p><span>本文标题:</span><a href="/2020/07/28/hexo-docs-commands/">hexo_docs_commands</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Xiaonan Chen</a></p>
         <p><span>发布时间:</span>2020-07-28, 11:03:53</p>
-        <p><span>最后更新:</span>2020-07-28, 15:41:08</p>
+        <p><span>最后更新:</span>2020-07-29, 09:26:01</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2020/07/28/hexo-docs-commands/" title="hexo_docs_commands">https://suixin.ltd/2020/07/28/hexo-docs-commands/</a>
             <span class="copy-path" data-clipboard-text="原文: https://suixin.ltd/2020/07/28/hexo-docs-commands/　　作者: Xiaonan Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -528,7 +566,7 @@ $ ssh -T git@github.com                         //把本地公钥添加到github
         
     </div>
 
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/07/28/a-freshman-story/">a freshman story</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/07/28/hexo-docs-commands/">hexo_docs_commands</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/04/pxe_server/">pxe_server install linux and windows</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/15/grafana/">磁盘满了，原来是僵尸进程惹的祸、Grafana图形展示ZABBIX</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/15/ffmpeg/">ffmpeg and youtube</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/13/Linux Operation/">Linux Operation and Maintenance interview</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/13/at-and-cron/">Linux计划任务</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/12/mysql5.7/">Install mysql5.7</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/ElasticSearch/">Install ElasticSearch</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/rhel8_specific/">RHEL8.0_specific</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/05/Naked Weapon/">Naked Weapon</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/鬼干部/">鬼干部</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/灵幻至尊/">灵幻至尊</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/音乐僵尸/">音乐僵尸</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/一眉道人/">一眉道人</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/僵尸先生/">僵尸先生</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/僵尸家族/">僵尸家族</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/天地玄门/">天地玄门</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/二代宗师/">二代宗师</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/脱单好难/">脱单好难</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/恐怖故事2/">恐怖故事2</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/钵兰街大少/">钵兰街大少</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/一代枭雄之三支旗/">一代枭雄之三支旗</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/使徒行者2：谍影行动/">使徒行者2：谍影行动</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/逃学英雄传/">逃学英雄传</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/陈翔六点半之重楼别/">陈翔六点半之重楼别</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/猛鬼屠房/">猛鬼屠房</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/06/zhenhunjie/">zhenhunjie</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/04/baisheyuanqi/">baisheyuanqi</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/31/birthday/">birthday</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/23/test/">test</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/15/rhel7-specific/">rhel7_specific</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/28/owncloud/">owncloud</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/03/Recruit-marriage/">Recruit marriage</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/17/pdf-upload-test/">pdf-upload-test</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/16/instructions-for-linux/">instructions-for-linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/09/RHEL7题库/">RHEL7题库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/14/cp/">cp</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/13/newlinux/">newlinux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/11/linux/">Linux系统raid1更换故障硬盘处理过程</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/07/28/a-freshman-story/">a freshman story</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/07/28/hexo-docs-commands/">hexo_docs_commands</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/04/pxe_server/">pxe_server install linux and windows</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/15/grafana/">磁盘满了，原来是僵尸进程惹的祸、Grafana图形展示ZABBIX</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/15/ffmpeg/">ffmpeg and youtube</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/13/Linux Operation/">Linux Operation and Maintenance interview</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/13/at-and-cron/">Linux计划任务</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/12/mysql5.7/">Install mysql5.7</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/ElasticSearch/">Install ElasticSearch</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/rhel8_specific/">RHEL8.0_specific</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/05/Naked Weapon/">Naked Weapon</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/鬼干部/">鬼干部</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/灵幻至尊/">灵幻至尊</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/音乐僵尸/">音乐僵尸</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/一眉道人/">一眉道人</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/僵尸先生/">僵尸先生</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/僵尸家族/">僵尸家族</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/天地玄门/">天地玄门</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/一代枭雄之三支旗/">一代枭雄之三支旗</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/二代宗师/">二代宗师</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/恐怖故事2/">恐怖故事2</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/钵兰街大少/">钵兰街大少</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/脱单好难/">脱单好难</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/逃学英雄传/">逃学英雄传</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/使徒行者2：谍影行动/">使徒行者2：谍影行动</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/陈翔六点半之重楼别/">陈翔六点半之重楼别</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/猛鬼屠房/">猛鬼屠房</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/06/zhenhunjie/">zhenhunjie</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/04/baisheyuanqi/">baisheyuanqi</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/31/birthday/">birthday</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/23/test/">test</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/15/rhel7-specific/">rhel7_specific</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/28/owncloud/">owncloud</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/03/Recruit-marriage/">Recruit marriage</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/17/pdf-upload-test/">pdf-upload-test</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/16/instructions-for-linux/">instructions-for-linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/09/RHEL7题库/">RHEL7题库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/14/cp/">cp</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/13/newlinux/">newlinux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/11/linux/">Linux系统raid1更换故障硬盘处理过程</a></li></ul>
 
 
 

@@ -78,6 +78,40 @@
     }
 </script>
 
+<script>
+    document.oncontextmenu = function (event) {
+        if (window.event) {
+            event = window.event;
+        }
+        try {
+            var the = event.srcElement;
+            if (!((the.tagName == "INPUT" && the.type.toLowerCase() == "text") || the.tagName == "TEXTAREA")) {
+                return false;
+            }
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+</script>
+
+<script>
+    document.onkeydown = function () {
+        if (window.event && window.event.keyCode == 123) {
+            alert("F12被禁用");
+            event.keyCode = 0;
+            event.returnValue = false;
+        }
+        if (window.event && window.event.keyCode == 13) {
+            window.event.keyCode = 505;
+        }
+        if (window.event && window.event.keyCode == 8) {
+            alert(str + "\n请使用Del键进行字符的删除操作！");
+            window.event.returnValue = false;
+        }
+    }
+</script>
+
 
     <script>
         yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
@@ -179,13 +213,13 @@
                         
                             <li><a href="/archives/">所有文章</a></li>
                         
-                            <li><a href="/tags/">标签云</a></li>
+                            <li><a href="/tags/">标 签 云</a></li>
                         
-                            <li><a href="/about/">工具箱</a></li>
+                            <li><a href="/about/">工 具 箱</a></li>
                         
-                            <li><a href="/favorite/">电影</a></li>
+                            <li><a href="/favorite/">电   影</a></li>
                         
-                            <li><a href="/music/">音乐</a></li>
+                            <li><a href="/music/">音   乐</a></li>
                         
                         </ul>
                     </nav>
@@ -197,6 +231,8 @@
                                 <a class="fa GitHub" href="#" title="GitHub"></a>
                             
                                 <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 博客园" href="https://www.cnblogs.com/suixinnan/" title="博客园"></a>
                             
                         </ul>
                     </nav>
@@ -258,13 +294,13 @@
                 
                     <li><a href="/archives/">所有文章</a></li>
                 
-                    <li><a href="/tags/">标签云</a></li>
+                    <li><a href="/tags/">标 签 云</a></li>
                 
-                    <li><a href="/about/">工具箱</a></li>
+                    <li><a href="/about/">工 具 箱</a></li>
                 
-                    <li><a href="/favorite/">电影</a></li>
+                    <li><a href="/favorite/">电   影</a></li>
                 
-                    <li><a href="/music/">音乐</a></li>
+                    <li><a href="/music/">音   乐</a></li>
                 
                 <div class="clearfix"></div>
                 </ul>
@@ -277,6 +313,8 @@
                                 <a class="fa GitHub" target="_blank" href="#" title="GitHub"></a>
                             
                                 <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 博客园" target="_blank" href="https://www.cnblogs.com/suixinnan/" title="博客园"></a>
                             
                         </ul>
             </nav>
@@ -846,6 +884,75 @@
 
 
   
+    <article id="post-一代枭雄之三支旗" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2019/08/13/一代枭雄之三支旗/" class="article-date">
+      <time datetime="2019-08-13T14:30:12.000Z" itemprop="datePublished">2019-08-13</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/13/一代枭雄之三支旗/">一代枭雄之三支旗</a>
+    </h1>
+  
+
+        
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <p></p><h1>简介</h1><br>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/电影收藏/">电影收藏</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2019/08/13/一代枭雄之三支旗/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+  
+
+
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-二代宗师" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -893,75 +1000,6 @@
       
         <p class="article-more-link">
           <a href="/2019/08/13/二代宗师/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-  
-
-
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-脱单好难" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2019/08/13/脱单好难/" class="article-date">
-      <time datetime="2019-08-13T14:30:12.000Z" itemprop="datePublished">2019-08-13</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/13/脱单好难/">脱单好难</a>
-    </h1>
-  
-
-        
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <p></p><h1>简介</h1><br>    总是当电灯泡的单身女子崔娜，工作爱情都不顺，但天菜级的帅哥尼欧出现后，好运似乎开始降临。崔娜先是被晋升为广告企划，梦中情人般的尼欧更成了她的同事，让两人的距离迅速拉近。正当她以为终于可以摆脱单身，却发现尼欧有个儿子，而他的前妻也来搅局。崔娜能否跨越重重考验，得到她梦寐以求的真命天菜？<br>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/电影收藏/">电影收藏</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2019/08/13/脱单好难/#more">阅读全文 >></a>
         </p>
       
       <div class="clearfix"></div>

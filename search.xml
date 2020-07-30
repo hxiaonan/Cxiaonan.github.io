@@ -29,7 +29,7 @@
       <link href="/2020/07/28/hexo-docs-commands/"/>
       <url>/2020/07/28/hexo-docs-commands/</url>
       
-        <content type="html"><![CDATA[<h1>Hexo 指令</h1><h1 id="安装-hexo"><a href="#安装-hexo" class="headerlink" title="安装 hexo"></a>安装 hexo</h1><pre><code>npm install hexo-cli -g</code></pre><a id="more"></a><h1 id="新建一篇文章"><a href="#新建一篇文章" class="headerlink" title="新建一篇文章"></a>新建一篇文章</h1><pre><code>$ hexo new [layout] &lt;title&gt;（新建一篇文章。如果没有设置 layout 的话，默认使用 _config.yml 中的 default_layout 参数代替。如果标题包含空格的话，请使用引号括起来。）$ hexo new &quot;post title with whitespace&quot;</code></pre><h1 id="生成静态文件"><a href="#生成静态文件" class="headerlink" title="生成静态文件"></a>生成静态文件</h1><pre><code>$ hexo generate$ hexo generate -f (強制重新生成靜態文件)</code></pre><h1 id="发布草稿"><a href="#发布草稿" class="headerlink" title="发布草稿"></a>发布草稿</h1><pre><code>hexo publish [layout] &lt;filename&gt;</code></pre><h1 id="启动服务器。默认情况下，访问网址为：-http-localhost-4000"><a href="#启动服务器。默认情况下，访问网址为：-http-localhost-4000" class="headerlink" title="启动服务器。默认情况下，访问网址为： http://localhost:4000/"></a>启动服务器。默认情况下，访问网址为： <a href="http://localhost:4000/" target="_blank" rel="noopener">http://localhost:4000/</a></h1><pre><code>$ hexo server</code></pre><h1 id="发表草稿"><a href="#发表草稿" class="headerlink" title="发表草稿"></a>发表草稿</h1><pre><code>$ hexo publish [layout] &lt;filename&gt;</code></pre><h1 id="新建一个网站。如果没有设置-folder-，Hexo-默认在目前的文件夹建立网站"><a href="#新建一个网站。如果没有设置-folder-，Hexo-默认在目前的文件夹建立网站" class="headerlink" title="新建一个网站。如果没有设置 folder ，Hexo 默认在目前的文件夹建立网站"></a>新建一个网站。如果没有设置 folder ，Hexo 默认在目前的文件夹建立网站</h1><pre><code>$ hexo init [folder]</code></pre><h1 id="清除缓存文件-db-json-和已生成的静态文件-public"><a href="#清除缓存文件-db-json-和已生成的静态文件-public" class="headerlink" title="清除缓存文件 (db.json) 和已生成的静态文件 (public)"></a>清除缓存文件 (db.json) 和已生成的静态文件 (public)</h1><pre><code>$ hexo clean</code></pre><h1 id="列出网站资料"><a href="#列出网站资料" class="headerlink" title="列出网站资料"></a>列出网站资料</h1><pre><code>$ hexo list &lt;type&gt;</code></pre><h1 id="部署网站"><a href="#部署网站" class="headerlink" title="部署网站"></a>部署网站</h1><pre><code>$ hexo deploy</code></pre><h1 id="以上命令可以簡寫爲：hexo-n-hexo-g-hexo-s-hexo-d。-eg"><a href="#以上命令可以簡寫爲：hexo-n-hexo-g-hexo-s-hexo-d。-eg" class="headerlink" title="以上命令可以簡寫爲：hexo n,hexo g,hexo s,hexo d。 .eg"></a>以上命令可以簡寫爲：hexo n,hexo g,hexo s,hexo d。 .eg</h1><h1 id="更多命令詳情在官網地址獲取https-hexo-io-zh-cn-docs-commands"><a href="#更多命令詳情在官網地址獲取https-hexo-io-zh-cn-docs-commands" class="headerlink" title="更多命令詳情在官網地址獲取https://hexo.io/zh-cn/docs/commands"></a>更多命令詳情在官網地址獲取<a href="https://hexo.io/zh-cn/docs/commands" target="_blank" rel="noopener">https://hexo.io/zh-cn/docs/commands</a></h1><h1>hexo 託管到GitHub Pages</h1><h1 id="安裝Node-js"><a href="#安裝Node-js" class="headerlink" title="安裝Node.js"></a>安裝Node.js</h1><pre><code>wget https://nodejs.org/dist/v12.18.3/node-v12.18.3.tar.gz    // 下载tar -zxvf node-v12.18.3.tar.gz                                   // 解压cd node-v12.18.1-linux-x64                                              // 进入解压目录./configure                                                            //編譯make&amp;&amp;make install                                                  //安裝node -v                                                              //查看版本，以及驗證是否安裝成功npm install                                                            //安裝npmnpm install -g cnpm --registry=https://registry.npm.taobao.org          //因为npm比较慢，可以安装cnpm替代之后的npm命令</code></pre><h1 id="安裝GIT"><a href="#安裝GIT" class="headerlink" title="安裝GIT"></a>安裝GIT</h1><pre><code>yum -y install git                        //如果yum安裝git版本不是自己想要的，可以源碼安裝</code></pre><h1 id="创建Git仓库"><a href="#创建Git仓库" class="headerlink" title="创建Git仓库"></a>创建Git仓库</h1><p>打开GitHub，点击“New repository”，创建一个新仓库，用来专门存放博客日志信息；仓库名要按照格式：账户名.github.io，比如：Ccn.github.io；否则，后边的操作会出现问题；创建仓库时勾选上“Initialize this repository with a README”；进入创建好的仓库Mshrimp.github.io，点击右侧的“Settings”，向下拉找到Github Pages，会看到网站是：<a href="https://Ccn.github.io/，点击就可以访问，也可以通过外网访问，这时这个博客项目已经部署到网站上了，但是是个空的网站，没有内容；这个网址是博客的默认地址，如果有兴趣可以自己购买域名换成想要的地址。" target="_blank" rel="noopener">https://Ccn.github.io/，点击就可以访问，也可以通过外网访问，这时这个博客项目已经部署到网站上了，但是是个空的网站，没有内容；这个网址是博客的默认地址，如果有兴趣可以自己购买域名换成想要的地址。</a></p><pre><code>$ git config --global user.name &quot;Ccn&quot;$ git config --global user.email &quot;******@outlook.com&quot;            //配置GIT環境$ ssh-keygen -t rsa -C &quot;******@outlook.com&quot;       //使用ssh-keygen生成私钥和公钥$ ssh -T git@github.com                         //把本地公钥添加到github中；在GitHub中，点击右侧图像下拉选项，选择“Settings”，在“SSH and GPG keys”中，点击“New SSH key”，并将~/.ssh/id_rsa.pub文件里的内容复制上去，保存退出；使用“ssh -T git@github.com”命令，测试添加ssh是否成功；</code></pre><p>HexoBlog部署到git，需要安装hexo-deployer-git插件，在blog目录下运行以下命令进行安装；</p><pre><code>$ npm install hexo-deployer-git --save</code></pre><h1 id="在-config-yml（如果有已存在的请删除）添加如下配置："><a href="#在-config-yml（如果有已存在的请删除）添加如下配置：" class="headerlink" title="在 _config.yml（如果有已存在的请删除）添加如下配置："></a>在 _config.yml（如果有已存在的请删除）添加如下配置：</h1><p>deploy:<br>  type: git<br>  repo: <a href="https://github.com/" target="_blank" rel="noopener">https://github.com/</a><username>/<project></project></username></p><h1 id="example-https-github-com-hexojs-hexojs-github-io"><a href="#example-https-github-com-hexojs-hexojs-github-io" class="headerlink" title="example, https://github.com/hexojs/hexojs.github.io"></a>example, <a href="https://github.com/hexojs/hexojs.github.io" target="_blank" rel="noopener">https://github.com/hexojs/hexojs.github.io</a></h1><p>  branch: gh-pages<br>完成這些操作你就可以執行hexo d上傳你的博客到github pages啦！！！</p>]]></content>
+        <content type="html"><![CDATA[<h1>Hexo 指令</h1><h1 id="安装-hexo"><a href="#安装-hexo" class="headerlink" title="安装 hexo"></a>安装 hexo</h1><pre><code>npm install hexo-cli -g</code></pre><a id="more"></a><h1 id="新建一篇文章"><a href="#新建一篇文章" class="headerlink" title="新建一篇文章"></a>新建一篇文章</h1><pre><code>$ hexo new [layout] &lt;title&gt;（新建一篇文章。如果没有设置 layout 的话，默认使用 _config.yml 中的 default_layout 参数代替。如果标题包含空格的话，请使用引号括起来。）$ hexo new &quot;post title with whitespace&quot;</code></pre><h1 id="生成静态文件"><a href="#生成静态文件" class="headerlink" title="生成静态文件"></a>生成静态文件</h1><pre><code>$ hexo generate$ hexo generate -f (強制重新生成靜態文件)</code></pre><h1 id="发布草稿"><a href="#发布草稿" class="headerlink" title="发布草稿"></a>发布草稿</h1><pre><code>hexo publish [layout] &lt;filename&gt;</code></pre><h1 id="启动服务器。默认情况下，访问网址为：-http-localhost-4000"><a href="#启动服务器。默认情况下，访问网址为：-http-localhost-4000" class="headerlink" title="启动服务器。默认情况下，访问网址为： http://localhost:4000/"></a>启动服务器。默认情况下，访问网址为： <a href="http://localhost:4000/" target="_blank" rel="noopener">http://localhost:4000/</a></h1><pre><code>$ hexo server</code></pre><h1 id="发表草稿"><a href="#发表草稿" class="headerlink" title="发表草稿"></a>发表草稿</h1><pre><code>$ hexo publish [layout] &lt;filename&gt;</code></pre><h1 id="新建一个网站。如果没有设置-folder-，Hexo-默认在目前的文件夹建立网站"><a href="#新建一个网站。如果没有设置-folder-，Hexo-默认在目前的文件夹建立网站" class="headerlink" title="新建一个网站。如果没有设置 folder ，Hexo 默认在目前的文件夹建立网站"></a>新建一个网站。如果没有设置 folder ，Hexo 默认在目前的文件夹建立网站</h1><pre><code>$ hexo init [folder]</code></pre><h1 id="清除缓存文件-db-json-和已生成的静态文件-public"><a href="#清除缓存文件-db-json-和已生成的静态文件-public" class="headerlink" title="清除缓存文件 (db.json) 和已生成的静态文件 (public)"></a>清除缓存文件 (db.json) 和已生成的静态文件 (public)</h1><pre><code>$ hexo clean</code></pre><h1 id="列出网站资料"><a href="#列出网站资料" class="headerlink" title="列出网站资料"></a>列出网站资料</h1><pre><code>$ hexo list &lt;type&gt;</code></pre><h1 id="部署网站"><a href="#部署网站" class="headerlink" title="部署网站"></a>部署网站</h1><pre><code>$ hexo deploy</code></pre><h1 id="以上命令可以簡寫爲：hexo-n-hexo-g-hexo-s-hexo-d。-eg"><a href="#以上命令可以簡寫爲：hexo-n-hexo-g-hexo-s-hexo-d。-eg" class="headerlink" title="以上命令可以簡寫爲：hexo n,hexo g,hexo s,hexo d。 .eg"></a>以上命令可以簡寫爲：hexo n,hexo g,hexo s,hexo d。 .eg</h1><h1 id="更多命令詳情在官網地址獲取https-hexo-io-zh-cn-docs-commands"><a href="#更多命令詳情在官網地址獲取https-hexo-io-zh-cn-docs-commands" class="headerlink" title="更多命令詳情在官網地址獲取https://hexo.io/zh-cn/docs/commands"></a>更多命令詳情在官網地址獲取<a href="https://hexo.io/zh-cn/docs/commands" target="_blank" rel="noopener">https://hexo.io/zh-cn/docs/commands</a></h1><h1>hexo 託管到GitHub Pages</h1><h1 id="安裝Node-js"><a href="#安裝Node-js" class="headerlink" title="安裝Node.js"></a>安裝Node.js</h1><pre><code>wget https://nodejs.org/dist/v12.18.3/node-v12.18.3.tar.gz    // 下载tar -zxvf node-v12.18.3.tar.gz                                   // 解压cd node-v12.18.1-linux-x64                                              // 进入解压目录./configure                                                            //編譯make&amp;&amp;make install                                                  //安裝node -v                                                              //查看版本，以及驗證是否安裝成功npm install                                                            //安裝npmnpm install -g cnpm --registry=https://registry.npm.taobao.org          //因为npm比较慢，可以安装cnpm替代之后的npm命令</code></pre><h1 id="安裝GIT"><a href="#安裝GIT" class="headerlink" title="安裝GIT"></a>安裝GIT</h1><pre><code>yum -y install git                        //如果yum安裝git版本不是自己想要的，可以源碼安裝</code></pre><h1 id="创建Git仓库"><a href="#创建Git仓库" class="headerlink" title="创建Git仓库"></a>创建Git仓库</h1><p>打开GitHub，点击“New repository”，创建一个新仓库，用来专门存放博客日志信息；仓库名要按照格式：账户名.github.io，比如：Ccn.github.io；否则，后边的操作会出现问题；创建仓库时勾选上“Initialize this repository with a README”；进入创建好的仓库Mshrimp.github.io，点击右侧的“Settings”，向下拉找到Github Pages，会看到网站是：<a href="https://Ccn.github.io/，点击就可以访问，也可以通过外网访问，这时这个博客项目已经部署到网站上了，但是是个空的网站，没有内容；这个网址是博客的默认地址，如果有兴趣可以自己购买域名换成想要的地址。" target="_blank" rel="noopener">https://Ccn.github.io/，点击就可以访问，也可以通过外网访问，这时这个博客项目已经部署到网站上了，但是是个空的网站，没有内容；这个网址是博客的默认地址，如果有兴趣可以自己购买域名换成想要的地址。</a></p><pre><code>$ git config --global user.name &quot;Ccn&quot;$ git config --global user.email &quot;******@outlook.com&quot;            //配置GIT環境$ ssh-keygen -t rsa -C &quot;******@outlook.com&quot;       //使用ssh-keygen生成私钥和公钥$ ssh -T git@github.com                         //把本地公钥添加到github中；在GitHub中，点击右侧图像下拉选项，选择“Settings”，在“SSH and GPG keys”中，点击“New SSH key”，并将~/.ssh/id_rsa.pub文件里的内容复制上去，保存退出；使用“ssh -T git@github.com”命令，测试添加ssh是否成功；</code></pre><p>HexoBlog部署到git，需要安装hexo-deployer-git插件，在blog目录下运行以下命令进行安装；</p><pre><code>$ npm install hexo-deployer-git --save</code></pre><h1 id="在-config-yml（如果有已存在的请删除）添加如下配置："><a href="#在-config-yml（如果有已存在的请删除）添加如下配置：" class="headerlink" title="在 _config.yml（如果有已存在的请删除）添加如下配置："></a>在 _config.yml（如果有已存在的请删除）添加如下配置：</h1><p>deploy:<br>  type: git<br>  repo: <a href="https://github.com/xx/xx" target="_blank" rel="noopener">https://github.com/xx/xx</a></p><h1 id="example-https-github-com-hexojs-hexojs-github-io"><a href="#example-https-github-com-hexojs-hexojs-github-io" class="headerlink" title="example, https://github.com/hexojs/hexojs.github.io"></a>example, <a href="https://github.com/hexojs/hexojs.github.io" target="_blank" rel="noopener">https://github.com/hexojs/hexojs.github.io</a></h1><p>  branch: gh-pages<br>完成這些操作你就可以執行hexo d上傳你的博客到github pages啦！！！</p>]]></content>
       
       
       
@@ -281,7 +281,7 @@
       <link href="/2019/08/24/%E9%AC%BC%E5%B9%B2%E9%83%A8/"/>
       <url>/2019/08/24/%E9%AC%BC%E5%B9%B2%E9%83%A8/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   影片中的剧情大概剧情是，五千年来，因血魔作祟，附于有权势之人身上，历代暴君，置人民于水深火热中，血流成河，无名英雄引血魔为伏羲针所镇，此举必需牺牲自己生命。文化大革命爆发，破四旧运动令本来深埋黑洞里的血魔逃出，自小有心脏病的梁国栋（红卫兵）与林刚（赤脚医生），因“运动”而对立，但在生离死别、家破人亡之后，两人误会冰释，联手与血魔对抗。血魔附于革委副主任雷复鸣身上，雷性情大变。其女雷珊，与栋及刚又有微妙三角关系，三人一起与血魔展开决战，林刚目睹文革毒害，不但丧失一代文化精英，且举国人魔不分，尸横遍野，终看破红尘，斩断情缘，成全手足 。<p></p><p></p><h2>正片 鬼干部</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer17" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer17"),"video":{"url":"https://youku.com-l-youku.com/20181218/4273_40719655/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   影片中的剧情大概剧情是，五千年来，因血魔作祟，附于有权势之人身上，历代暴君，置人民于水深火热中，血流成河，无名英雄引血魔为伏羲针所镇，此举必需牺牲自己生命。文化大革命爆发，破四旧运动令本来深埋黑洞里的血魔逃出，自小有心脏病的梁国栋（红卫兵）与林刚（赤脚医生），因“运动”而对立，但在生离死别、家破人亡之后，两人误会冰释，联手与血魔对抗。血魔附于革委副主任雷复鸣身上，雷性情大变。其女雷珊，与栋及刚又有微妙三角关系，三人一起与血魔展开决战，林刚目睹文革毒害，不但丧失一代文化精英，且举国人魔不分，尸横遍野，终看破红尘，斩断情缘，成全手足 。<p></p><p></p><h2>正片 鬼干部</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer16" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer16"),"video":{"url":"https://youku.com-l-youku.com/20181218/4273_40719655/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
       
@@ -300,7 +300,7 @@
       <link href="/2019/08/24/%E7%81%B5%E5%B9%BB%E8%87%B3%E5%B0%8A/"/>
       <url>/2019/08/24/%E7%81%B5%E5%B9%BB%E8%87%B3%E5%B0%8A/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   茅山弟子傲天龙（林正英 饰）与大黄（郑则士 饰）同时爱上了师傅的掌上明珠梦梦，师傅临终前设局考验二人谁更真心，大黄用计赢得了师傅的信任。虽然梦梦倾心天龙，无奈父命难为，天龙于是愤然出走。一晃十八年过去了，大黄和梦梦的儿子连高（金少龙 饰）已经长成英俊少年，而天龙的女儿凝红（黎姿 饰）也成年。天龙父女俩这天回家乡探亲，半途上遇到红袍火鬼为祸人间。天龙费尽九牛二虎之力将其收伏，关在鬼笼内。回到家乡，大黄和天龙两师兄弟心里还是有隔阂，互相敌视。连高无意中放出了火鬼，此时的火鬼法力大增，天龙和大黄都已无法独力应付。为了对付火鬼，二人终于抛开成见，再次合作。<p></p><p></p><h2>正片 灵幻至尊(1991）</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer10" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer10"),"video":{"url":"https://v-acfun.com/20180908/19128_7347a396/800k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   茅山弟子傲天龙（林正英 饰）与大黄（郑则士 饰）同时爱上了师傅的掌上明珠梦梦，师傅临终前设局考验二人谁更真心，大黄用计赢得了师傅的信任。虽然梦梦倾心天龙，无奈父命难为，天龙于是愤然出走。一晃十八年过去了，大黄和梦梦的儿子连高（金少龙 饰）已经长成英俊少年，而天龙的女儿凝红（黎姿 饰）也成年。天龙父女俩这天回家乡探亲，半途上遇到红袍火鬼为祸人间。天龙费尽九牛二虎之力将其收伏，关在鬼笼内。回到家乡，大黄和天龙两师兄弟心里还是有隔阂，互相敌视。连高无意中放出了火鬼，此时的火鬼法力大增，天龙和大黄都已无法独力应付。为了对付火鬼，二人终于抛开成见，再次合作。<p></p><p></p><h2>正片 灵幻至尊(1991）</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer9" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer9"),"video":{"url":"https://v-acfun.com/20180908/19128_7347a396/800k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
       
@@ -319,7 +319,7 @@
       <link href="/2019/08/24/%E9%9F%B3%E4%B9%90%E5%83%B5%E5%B0%B8/"/>
       <url>/2019/08/24/%E9%9F%B3%E4%B9%90%E5%83%B5%E5%B0%B8/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   茅山道士麻麻地（冯淬帆 饰）与同行不和，带着两个徒弟阿豪（李家声 饰）和阿强（熊欣欣 饰）另起炉灶，在江南一带赶事为业。两个徒弟顽劣非常，经常操纵僵尸互相对打。阿豪自认法术修成，请求师傅让其独立赶尸。得到师傅应允，阿豪赶着一只大地主任天棠的僵尸独自上路。路遇从旧金山归国的时尚女孩珠珠（李丽珍 饰），玩心骤起，将珠珠戏耍了一番。然而半夜阿豪遭到一群人袭击，僵尸被抢。幕后指示者原来是一个外国科学家，他希望研究僵尸获得诺贝尔奖。但在注射一种药物之后僵尸复活，大开杀戒，似乎只有珠珠怀表中的音乐能让他安静下来……<p></p><p></p><h2>正片 音乐僵尸</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer16" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer16"),"video":{"url":"https://youku.cdn-tudou.com/20180531/6206_9d68fc4d/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   茅山道士麻麻地（冯淬帆 饰）与同行不和，带着两个徒弟阿豪（李家声 饰）和阿强（熊欣欣 饰）另起炉灶，在江南一带赶事为业。两个徒弟顽劣非常，经常操纵僵尸互相对打。阿豪自认法术修成，请求师傅让其独立赶尸。得到师傅应允，阿豪赶着一只大地主任天棠的僵尸独自上路。路遇从旧金山归国的时尚女孩珠珠（李丽珍 饰），玩心骤起，将珠珠戏耍了一番。然而半夜阿豪遭到一群人袭击，僵尸被抢。幕后指示者原来是一个外国科学家，他希望研究僵尸获得诺贝尔奖。但在注射一种药物之后僵尸复活，大开杀戒，似乎只有珠珠怀表中的音乐能让他安静下来……<p></p><p></p><h2>正片 音乐僵尸</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer15" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer15"),"video":{"url":"https://youku.cdn-tudou.com/20180531/6206_9d68fc4d/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
       
@@ -338,7 +338,7 @@
       <link href="/2019/08/24/%E4%B8%80%E7%9C%89%E9%81%93%E4%BA%BA/"/>
       <url>/2019/08/24/%E4%B8%80%E7%9C%89%E9%81%93%E4%BA%BA/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   一眉道人修为高强，擅长茅山道术，和徒弟阿豪住在一个小镇上，他养了一只清朝的小僵尸，小僵尸经常帮他和阿豪办事。一天，一眉道人被邻镇的人邀请去捉鬼，因为邻镇瘟疫蔓延，不时有僵尸出没。邻镇乡公所的所长意外令西洋僵尸复活了，一场精彩的中国法术对付西洋僵尸的好戏上演了。<p></p><p></p><h2>正片 一眉道人(1989)</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer3" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer3"),"video":{"url":"https://vip.okokbo.com/20171221/XduVSyRI/800kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   一眉道人修为高强，擅长茅山道术，和徒弟阿豪住在一个小镇上，他养了一只清朝的小僵尸，小僵尸经常帮他和阿豪办事。一天，一眉道人被邻镇的人邀请去捉鬼，因为邻镇瘟疫蔓延，不时有僵尸出没。邻镇乡公所的所长意外令西洋僵尸复活了，一场精彩的中国法术对付西洋僵尸的好戏上演了。<p></p><p></p><h2>正片 一眉道人(1989)</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer2" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer2"),"video":{"url":"https://vip.okokbo.com/20171221/XduVSyRI/800kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
       
@@ -357,7 +357,7 @@
       <link href="/2019/08/24/%E5%83%B5%E5%B0%B8%E5%85%88%E7%94%9F/"/>
       <url>/2019/08/24/%E5%83%B5%E5%B0%B8%E5%85%88%E7%94%9F/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   富贵乡绅任发（黄虾 饰）先父当年威逼利诱求得一块风水宝地，经风水先生指点，其父下葬二十年后起坟迁葬，以利子孙。然九叔（林正英 饰）察看墓穴得知，当年风水先生与任家私怨在身，在墓穴中做下手脚，二十年后任老太爷尸体已生恶变。九叔提议就地火化，在任老爷请求下才将尸骨移往义庄。虽经小心看护，但任老太爷仍化作僵尸，将其子任发杀害。九叔断定任老太爷和任发的僵尸将再次出现，于是命令徒弟秋生（钱小豪 饰）和文才（许冠英 饰）小心应付……<p></p><p></p><h2>正片 僵尸先生(1985)</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer6" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer6"),"video":{"url":"https://vip.okokbo.com/20171213/fTGJqOpC/800kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   富贵乡绅任发（黄虾 饰）先父当年威逼利诱求得一块风水宝地，经风水先生指点，其父下葬二十年后起坟迁葬，以利子孙。然九叔（林正英 饰）察看墓穴得知，当年风水先生与任家私怨在身，在墓穴中做下手脚，二十年后任老太爷尸体已生恶变。九叔提议就地火化，在任老爷请求下才将尸骨移往义庄。虽经小心看护，但任老太爷仍化作僵尸，将其子任发杀害。九叔断定任老太爷和任发的僵尸将再次出现，于是命令徒弟秋生（钱小豪 饰）和文才（许冠英 饰）小心应付……<p></p><p></p><h2>正片 僵尸先生(1985)</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer5" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer5"),"video":{"url":"https://vip.okokbo.com/20171213/fTGJqOpC/800kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
       
@@ -376,7 +376,7 @@
       <link href="/2019/08/24/%E5%83%B5%E5%B0%B8%E5%AE%B6%E6%97%8F/"/>
       <url>/2019/08/24/%E5%83%B5%E5%B0%B8%E5%AE%B6%E6%97%8F/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   一次偶然中，古董商人郭敦煌（钟发 饰）和其徒弟发现了一座古墓，墓中躺着三具额头上贴有符纸的僵尸，在僵尸的身上，郭敦煌发现了生财之道，却在无意之中将镇压僵尸的符纸弄掉，引得僵尸复活，他的徒弟亦因为和僵尸搏斗而身负重伤。郭敦煌一行人找到了林医生（林正英 饰），求其救治，林医生告诉三人，僵尸十分危险，必须将其彻底消灭。然而，郭敦煌却并不愿意放弃好不容易弄到手的摇钱树，与此同时，警方亦闻风而动，情势十分混乱。男僵尸（张荣祥 饰）和女僵尸（王玉环 饰）千方百计寻找逃脱的办法，小僵尸（何建成 饰）却和人类小孩交起了朋友。<p></p><p></p><h2>正片 僵尸家族(1986)</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer7" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer7"),"video":{"url":"https://vip.okokbo.com/20171231/s750us5P/800kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   一次偶然中，古董商人郭敦煌（钟发 饰）和其徒弟发现了一座古墓，墓中躺着三具额头上贴有符纸的僵尸，在僵尸的身上，郭敦煌发现了生财之道，却在无意之中将镇压僵尸的符纸弄掉，引得僵尸复活，他的徒弟亦因为和僵尸搏斗而身负重伤。郭敦煌一行人找到了林医生（林正英 饰），求其救治，林医生告诉三人，僵尸十分危险，必须将其彻底消灭。然而，郭敦煌却并不愿意放弃好不容易弄到手的摇钱树，与此同时，警方亦闻风而动，情势十分混乱。男僵尸（张荣祥 饰）和女僵尸（王玉环 饰）千方百计寻找逃脱的办法，小僵尸（何建成 饰）却和人类小孩交起了朋友。<p></p><p></p><h2>正片 僵尸家族(1986)</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer6" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer6"),"video":{"url":"https://vip.okokbo.com/20171231/s750us5P/800kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
       
@@ -395,83 +395,7 @@
       <link href="/2019/08/24/%E5%A4%A9%E5%9C%B0%E7%8E%84%E9%97%A8/"/>
       <url>/2019/08/24/%E5%A4%A9%E5%9C%B0%E7%8E%84%E9%97%A8/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>    明代孝宗年间，施家镇出现扶桑鬼王（左颂升 饰）危害人间，并霸占美女施施（王祖贤 饰）为爱姬。鬼王伤害性命无数，惹得天怒人怨，皇上任命正直武官马尚峰（成奎安 饰）捉拿鬼王。正当愁眉不展之际，师爷向马举荐身怀绝技的草芦居士（林正英 饰）帮忙，却得知为除鬼王需牺牲自己的性命。马愤愤返回，草芦居士设计令马尚峰假死，使其化为金甲武士与徒弟（黄一山 饰）担任自己的左右护卫。师徒三人与鬼王展开艰苦鏖战，却由此导致天地玄门大开，正邪双方穿越时空，来至现代。在这里，师徒三人各自遭遇不同的蹊跷趣事。偶然机会，草芦居士发现酷似施施的女医生Gigi。绵延数百年的正邪大战将再次展开……<p></p><p></p><h2>正片 天地玄门</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer8" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer8"),"video":{"url":"https://youku.com-youku.com/20180316/XOdLGDxr/900kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 电影收藏 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>二代宗师</title>
-      <link href="/2019/08/13/%E4%BA%8C%E4%BB%A3%E5%AE%97%E5%B8%88/"/>
-      <url>/2019/08/13/%E4%BA%8C%E4%BB%A3%E5%AE%97%E5%B8%88/</url>
-      
-        <content type="html"><![CDATA[<p></p><h1>简介</h1><br><a id="more"></a><br>    2019年5月21日，由董伟导演，蔡丙国出品，陈洛曦监制，吴建雯、李开浓、方培勇、卢冠廷制片，张致恒、金丽婷、钟一宪、高维蔓、王曦主演的电影《二代宗师》<p></p><p></p><h2>正片 二代宗师</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer4" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer4"),"video":{"url":"https://youku.com-okzy.com/20190521/426_5de616ef/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 电影收藏 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>脱单好难</title>
-      <link href="/2019/08/13/%E8%84%B1%E5%8D%95%E5%A5%BD%E9%9A%BE/"/>
-      <url>/2019/08/13/%E8%84%B1%E5%8D%95%E5%A5%BD%E9%9A%BE/</url>
-      
-        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    总是当电灯泡的单身女子崔娜，工作爱情都不顺，但天菜级的帅哥尼欧出现后，好运似乎开始降临。崔娜先是被晋升为广告企划，梦中情人般的尼欧更成了她的同事，让两人的距离迅速拉近。正当她以为终于可以摆脱单身，却发现尼欧有个儿子，而他的前妻也来搅局。崔娜能否跨越重重考验，得到她梦寐以求的真命天菜？<br><a id="more"></a><p></p><p></p><h2>正片 脱单好难</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer12" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer12"),"video":{"url":"https://56.com-t-56.com/20190612/23260_5b58b7f8/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 电影收藏 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>恐怖故事2</title>
-      <link href="/2019/08/13/%E6%81%90%E6%80%96%E6%95%85%E4%BA%8B2/"/>
-      <url>/2019/08/13/%E6%81%90%E6%80%96%E6%95%85%E4%BA%8B2/</url>
-      
-        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    《恐怖故事2》是由Soofilm公司制作，乐天娱乐出品的恐怖故事系列电影，是《恐怖故事》（2012年）的续篇。<p></p><p></p><h2>正片 恐怖故事2</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer9" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer9"),"video":{"url":"https://hot.jingpin88.com/ppvod/7B4D880799F1E27A8B502A744A9D0B0A.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 电影收藏 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>钵兰街大少</title>
-      <link href="/2019/08/13/%E9%92%B5%E5%85%B0%E8%A1%97%E5%A4%A7%E5%B0%91/"/>
-      <url>/2019/08/13/%E9%92%B5%E5%85%B0%E8%A1%97%E5%A4%A7%E5%B0%91/</url>
-      
-        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    《钵兰街大少》是张乾文1993年执导的电影，由张卫健、任达华等主演。讲述了亚豹与大兜两人自小在砵兰街长大，一起揾食及媾女，过着沙保兄弟的生活而后来发生种种变故的故事。<br><a id="more"></a><p></p><p></p><h2>正片 钵兰街大少</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer14" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer14"),"video":{"url":"https://youku.com-t-youku.com/20190516/20901_f10582df/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>    明代孝宗年间，施家镇出现扶桑鬼王（左颂升 饰）危害人间，并霸占美女施施（王祖贤 饰）为爱姬。鬼王伤害性命无数，惹得天怒人怨，皇上任命正直武官马尚峰（成奎安 饰）捉拿鬼王。正当愁眉不展之际，师爷向马举荐身怀绝技的草芦居士（林正英 饰）帮忙，却得知为除鬼王需牺牲自己的性命。马愤愤返回，草芦居士设计令马尚峰假死，使其化为金甲武士与徒弟（黄一山 饰）担任自己的左右护卫。师徒三人与鬼王展开艰苦鏖战，却由此导致天地玄门大开，正邪双方穿越时空，来至现代。在这里，师徒三人各自遭遇不同的蹊跷趣事。偶然机会，草芦居士发现酷似施施的女医生Gigi。绵延数百年的正邪大战将再次展开……<p></p><p></p><h2>正片 天地玄门</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer7" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer7"),"video":{"url":"https://youku.com-youku.com/20180316/XOdLGDxr/900kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
       
@@ -490,7 +414,7 @@
       <link href="/2019/08/13/%E4%B8%80%E4%BB%A3%E6%9E%AD%E9%9B%84%E4%B9%8B%E4%B8%89%E6%94%AF%E6%97%97/"/>
       <url>/2019/08/13/%E4%B8%80%E4%BB%A3%E6%9E%AD%E9%9B%84%E4%B9%8B%E4%B8%89%E6%94%AF%E6%97%97/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>简介</h1><br><a id="more"></a><br>    《一代枭雄之三支旗》是由黄泰来执导，吕良伟、吴毅将、叶玉卿等领衔主演的喜剧片。影片讲述了学警陈志超经过奋斗升为新部门“三支旗”的总舵主的故事。<p></p><p></p><h2>正片 一代枭雄之三支旗</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer2" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer2"),"video":{"url":"https://56.com-t-56.com/20190520/21526_31f0e53f/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br><a id="more"></a><br>    《一代枭雄之三支旗》是由黄泰来执导，吕良伟、吴毅将、叶玉卿等领衔主演的喜剧片。影片讲述了学警陈志超经过奋斗升为新部门“三支旗”的总舵主的故事。<p></p><p></p><h2>正片 一代枭雄之三支旗</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer1" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer1"),"video":{"url":"https://56.com-t-56.com/20190520/21526_31f0e53f/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
       
@@ -505,11 +429,68 @@
     
     
     <entry>
-      <title>使徒行者2：谍影行动</title>
-      <link href="/2019/08/13/%E4%BD%BF%E5%BE%92%E8%A1%8C%E8%80%852%EF%BC%9A%E8%B0%8D%E5%BD%B1%E8%A1%8C%E5%8A%A8/"/>
-      <url>/2019/08/13/%E4%BD%BF%E5%BE%92%E8%A1%8C%E8%80%852%EF%BC%9A%E8%B0%8D%E5%BD%B1%E8%A1%8C%E5%8A%A8/</url>
+      <title>二代宗师</title>
+      <link href="/2019/08/13/%E4%BA%8C%E4%BB%A3%E5%AE%97%E5%B8%88/"/>
+      <url>/2019/08/13/%E4%BA%8C%E4%BB%A3%E5%AE%97%E5%B8%88/</url>
       
-        <content type="html"><![CDATA[<p><script type="text/javascript" src="/assets/js/hls.min.js"></script></p><p></p><h1>简介</h1><br><a id="more"></a><br>    影片讲述一对兄弟幼时失散，30年后因一桩罪案相见，随着对罪案调查的深入，一个多年来隐于幕后的黑警组织渐渐浮出水面的故事 [2]  。<p></p><p></p><h2>正片 使徒行者2：谍影行动</h2><br><div id="dplayer5" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer5"),"video":{"url":"https://iqiyi.com-l-iqiyi.com/20190823/22551_706ce3a1/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script><p></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br><a id="more"></a><br>    2019年5月21日，由董伟导演，蔡丙国出品，陈洛曦监制，吴建雯、李开浓、方培勇、卢冠廷制片，张致恒、金丽婷、钟一宪、高维蔓、王曦主演的电影《二代宗师》<p></p><p></p><h2>正片 二代宗师</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer3" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer3"),"video":{"url":"https://youku.com-okzy.com/20190521/426_5de616ef/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>恐怖故事2</title>
+      <link href="/2019/08/13/%E6%81%90%E6%80%96%E6%95%85%E4%BA%8B2/"/>
+      <url>/2019/08/13/%E6%81%90%E6%80%96%E6%95%85%E4%BA%8B2/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    《恐怖故事2》是由Soofilm公司制作，乐天娱乐出品的恐怖故事系列电影，是《恐怖故事》（2012年）的续篇。<p></p><p></p><h2>正片 恐怖故事2</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer8" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer8"),"video":{"url":"https://hot.jingpin88.com/ppvod/7B4D880799F1E27A8B502A744A9D0B0A.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>钵兰街大少</title>
+      <link href="/2019/08/13/%E9%92%B5%E5%85%B0%E8%A1%97%E5%A4%A7%E5%B0%91/"/>
+      <url>/2019/08/13/%E9%92%B5%E5%85%B0%E8%A1%97%E5%A4%A7%E5%B0%91/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    《钵兰街大少》是张乾文1993年执导的电影，由张卫健、任达华等主演。讲述了亚豹与大兜两人自小在砵兰街长大，一起揾食及媾女，过着沙保兄弟的生活而后来发生种种变故的故事。<br><a id="more"></a><p></p><p></p><h2>正片 钵兰街大少</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer13" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer13"),"video":{"url":"https://youku.com-t-youku.com/20190516/20901_f10582df/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>脱单好难</title>
+      <link href="/2019/08/13/%E8%84%B1%E5%8D%95%E5%A5%BD%E9%9A%BE/"/>
+      <url>/2019/08/13/%E8%84%B1%E5%8D%95%E5%A5%BD%E9%9A%BE/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    总是当电灯泡的单身女子崔娜，工作爱情都不顺，但天菜级的帅哥尼欧出现后，好运似乎开始降临。崔娜先是被晋升为广告企划，梦中情人般的尼欧更成了她的同事，让两人的距离迅速拉近。正当她以为终于可以摆脱单身，却发现尼欧有个儿子，而他的前妻也来搅局。崔娜能否跨越重重考验，得到她梦寐以求的真命天菜？<br><a id="more"></a><p></p><p></p><h2>正片 脱单好难</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer11" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer11"),"video":{"url":"https://56.com-t-56.com/20190612/23260_5b58b7f8/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
       
@@ -528,7 +509,26 @@
       <link href="/2019/08/13/%E9%80%83%E5%AD%A6%E8%8B%B1%E9%9B%84%E4%BC%A0/"/>
       <url>/2019/08/13/%E9%80%83%E5%AD%A6%E8%8B%B1%E9%9B%84%E4%BC%A0/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>  《逃学英雄传》是由王晶执导， 郭富城、邱淑贞、张坚庭、张敏、吴孟达、黄一山主演的喜剧片。<br>   影片讲述了圣育强中学的顽劣学生、卧底老师之间的搞笑故事。<br> <a id="more"></a><p></p><p></p><h2>正片 逃学英雄传</h2><br><div id="dplayer13" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer13"),"video":{"url":"https://sina.com-h-sina.com/20190126/28914_0c231c0c/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script><p></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>  《逃学英雄传》是由王晶执导， 郭富城、邱淑贞、张坚庭、张敏、吴孟达、黄一山主演的喜剧片。<br>   影片讲述了圣育强中学的顽劣学生、卧底老师之间的搞笑故事。<br> <a id="more"></a><p></p><p></p><h2>正片 逃学英雄传</h2><br><div id="dplayer12" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer12"),"video":{"url":"https://sina.com-h-sina.com/20190126/28914_0c231c0c/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script><p></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>使徒行者2：谍影行动</title>
+      <link href="/2019/08/13/%E4%BD%BF%E5%BE%92%E8%A1%8C%E8%80%852%EF%BC%9A%E8%B0%8D%E5%BD%B1%E8%A1%8C%E5%8A%A8/"/>
+      <url>/2019/08/13/%E4%BD%BF%E5%BE%92%E8%A1%8C%E8%80%852%EF%BC%9A%E8%B0%8D%E5%BD%B1%E8%A1%8C%E5%8A%A8/</url>
+      
+        <content type="html"><![CDATA[<p><script type="text/javascript" src="/assets/js/hls.min.js"></script></p><p></p><h1>简介</h1><br><a id="more"></a><br>    影片讲述一对兄弟幼时失散，30年后因一桩罪案相见，随着对罪案调查的深入，一个多年来隐于幕后的黑警组织渐渐浮出水面的故事 [2]  。<p></p><p></p><h2>正片 使徒行者2：谍影行动</h2><br><div id="dplayer4" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer4"),"video":{"url":"https://iqiyi.com-l-iqiyi.com/20190823/22551_706ce3a1/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script><p></p>]]></content>
       
       
       
@@ -547,7 +547,7 @@
       <link href="/2019/08/13/%E9%99%88%E7%BF%94%E5%85%AD%E7%82%B9%E5%8D%8A%E4%B9%8B%E9%87%8D%E6%A5%BC%E5%88%AB/"/>
       <url>/2019/08/13/%E9%99%88%E7%BF%94%E5%85%AD%E7%82%B9%E5%8D%8A%E4%B9%8B%E9%87%8D%E6%A5%BC%E5%88%AB/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>  《陈翔六点半之重楼别》是由陈翔执导，毛台、冷檬、闰土、蘑菇头主演的爆笑戏曲喜剧。<p></p><p></p><h2>正片 陈翔六点半之重楼别</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer15" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer15"),"video":{"url":"https://56.com-t-56.com/20190711/23647_3194d7c8/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>  《陈翔六点半之重楼别》是由陈翔执导，毛台、冷檬、闰土、蘑菇头主演的爆笑戏曲喜剧。<p></p><p></p><h2>正片 陈翔六点半之重楼别</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer14" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer14"),"video":{"url":"https://56.com-t-56.com/20190711/23647_3194d7c8/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
       
@@ -566,7 +566,7 @@
       <link href="/2019/08/13/%E7%8C%9B%E9%AC%BC%E5%B1%A0%E6%88%BF/"/>
       <url>/2019/08/13/%E7%8C%9B%E9%AC%BC%E5%B1%A0%E6%88%BF/</url>
       
-        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    故事讲述的是Eric、Pat、JoJo、龙、Bill、Ken、岚七人本去前往离岛露营，但怎料碰上狂风暴雨，七人遂来到一间空屋暂避。可是没想到意外却发生了，就在当天晚上，古怪的事情接二连三发生。JoJo 联同Bill 及Ken 捉弄龙，令龙无地自容，结果龙更被魔力扯进镜内……<br>    翌日，众人商议再停留多玩乐一天，怎料Ken 竟失踪，Bill、JoJo 先后被杀，令Eric 不寒而栗……<br><a id="more"></a><p></p><p></p><h2>正片 猛鬼屠房</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer11" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer11"),"video":{"url":"https://cdn.kuyunbo.club/20190422/19588_3ed61841/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    故事讲述的是Eric、Pat、JoJo、龙、Bill、Ken、岚七人本去前往离岛露营，但怎料碰上狂风暴雨，七人遂来到一间空屋暂避。可是没想到意外却发生了，就在当天晚上，古怪的事情接二连三发生。JoJo 联同Bill 及Ken 捉弄龙，令龙无地自容，结果龙更被魔力扯进镜内……<br>    翌日，众人商议再停留多玩乐一天，怎料Ken 竟失踪，Bill、JoJo 先后被杀，令Eric 不寒而栗……<br><a id="more"></a><p></p><p></p><h2>正片 猛鬼屠房</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer10" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer10"),"video":{"url":"https://cdn.kuyunbo.club/20190422/19588_3ed61841/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
       
@@ -598,7 +598,7 @@
       <link href="/2019/08/04/baisheyuanqi/"/>
       <url>/2019/08/04/baisheyuanqi/</url>
       
-        <content type="html"><![CDATA[<hr><p></p><h1>简介</h1><br>    晚唐年间，国师发动民众大量捕蛇。前去刺杀国师的白蛇意外失忆，被捕蛇村少年救下。<br>    为帮助少女找回记忆，两人踏上一段冒险旅程，冒险的过程让两人感情迅速升温，但少女蛇妖的身份也逐渐显露，<br>    另一边国师与蛇族之间不可避免的大战也即将打响，两人的爱情将要接受巨大考验。<p></p><p></p><h2>正片 白蛇：缘起</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer1" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer1"),"video":{"url":"https://leshi.iqiyi-kuyunzy.com/20190303/3992_50164f35/800k/hls/index.m3u8"},"danmaku":{"api":"http://dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+        <content type="html"><![CDATA[<hr><p></p><h1>简介</h1><br>    晚唐年间，国师发动民众大量捕蛇。前去刺杀国师的白蛇意外失忆，被捕蛇村少年救下。<br>    为帮助少女找回记忆，两人踏上一段冒险旅程，冒险的过程让两人感情迅速升温，但少女蛇妖的身份也逐渐显露，<br>    另一边国师与蛇族之间不可避免的大战也即将打响，两人的爱情将要接受巨大考验。<p></p><p></p><h2>正片 白蛇：缘起</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer17" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer17"),"video":{"url":"https://leshi.iqiyi-kuyunzy.com/20190303/3992_50164f35/800k/hls/index.m3u8"},"danmaku":{"api":"http://dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
       
       
       

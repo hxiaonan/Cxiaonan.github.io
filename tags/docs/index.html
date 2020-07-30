@@ -73,6 +73,40 @@
     }
 </script>
 
+<script>
+    document.oncontextmenu = function (event) {
+        if (window.event) {
+            event = window.event;
+        }
+        try {
+            var the = event.srcElement;
+            if (!((the.tagName == "INPUT" && the.type.toLowerCase() == "text") || the.tagName == "TEXTAREA")) {
+                return false;
+            }
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+</script>
+
+<script>
+    document.onkeydown = function () {
+        if (window.event && window.event.keyCode == 123) {
+            alert("F12被禁用");
+            event.keyCode = 0;
+            event.returnValue = false;
+        }
+        if (window.event && window.event.keyCode == 13) {
+            window.event.keyCode = 505;
+        }
+        if (window.event && window.event.keyCode == 8) {
+            alert(str + "\n请使用Del键进行字符的删除操作！");
+            window.event.returnValue = false;
+        }
+    }
+</script>
+
 
     <script>
         yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
@@ -174,13 +208,13 @@
                         
                             <li><a href="/archives/">所有文章</a></li>
                         
-                            <li><a href="/tags/">标签云</a></li>
+                            <li><a href="/tags/">标 签 云</a></li>
                         
-                            <li><a href="/about/">工具箱</a></li>
+                            <li><a href="/about/">工 具 箱</a></li>
                         
-                            <li><a href="/favorite/">电影</a></li>
+                            <li><a href="/favorite/">电   影</a></li>
                         
-                            <li><a href="/music/">音乐</a></li>
+                            <li><a href="/music/">音   乐</a></li>
                         
                         </ul>
                     </nav>
@@ -192,6 +226,8 @@
                                 <a class="fa GitHub" href="#" title="GitHub"></a>
                             
                                 <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 博客园" href="https://www.cnblogs.com/suixinnan/" title="博客园"></a>
                             
                         </ul>
                     </nav>
@@ -253,13 +289,13 @@
                 
                     <li><a href="/archives/">所有文章</a></li>
                 
-                    <li><a href="/tags/">标签云</a></li>
+                    <li><a href="/tags/">标 签 云</a></li>
                 
-                    <li><a href="/about/">工具箱</a></li>
+                    <li><a href="/about/">工 具 箱</a></li>
                 
-                    <li><a href="/favorite/">电影</a></li>
+                    <li><a href="/favorite/">电   影</a></li>
                 
-                    <li><a href="/music/">音乐</a></li>
+                    <li><a href="/music/">音   乐</a></li>
                 
                 <div class="clearfix"></div>
                 </ul>
@@ -272,6 +308,8 @@
                                 <a class="fa GitHub" target="_blank" href="#" title="GitHub"></a>
                             
                                 <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 博客园" target="_blank" href="https://www.cnblogs.com/suixinnan/" title="博客园"></a>
                             
                         </ul>
             </nav>
