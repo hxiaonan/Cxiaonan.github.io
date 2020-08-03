@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Xiaonan Chen" />
+
+
+
+<meta name="description" content="Linux系统日常运维管理 Linux用户管理1.1 基于命令行管理工具">
+<meta name="keywords" content="Linux,运維">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux系統日常運維管理">
+<meta property="og:url" content="https://suixin.ltd/2020/08/02/Linux系統日常運維管理/index.html">
+<meta property="og:site_name" content="小南同学的笔记">
+<meta property="og:description" content="Linux系统日常运维管理 Linux用户管理1.1 基于命令行管理工具">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-08-03T04:12:16.076Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux系統日常運維管理">
+<meta name="twitter:description" content="Linux系统日常运维管理 Linux用户管理1.1 基于命令行管理工具">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="小南同学的笔记" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Linux系統日常運維管理 | 小南同学的笔记</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+<script>
+    document.oncontextmenu = function (event) {
+        if (window.event) {
+            event = window.event;
+        }
+        try {
+            var the = event.srcElement;
+            if (!((the.tagName == "INPUT" && the.type.toLowerCase() == "text") || the.tagName == "TEXTAREA")) {
+                return false;
+            }
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+</script>
+
+<script>
+    document.onkeydown = function () {
+        if (window.event && window.event.keyCode == 123) {
+            alert("F12被禁用");
+            event.keyCode = 0;
+            event.returnValue = false;
+        }
+        if (window.event && window.event.keyCode == 13) {
+            window.event.keyCode = 505;
+        }
+        if (window.event && window.event.keyCode == 8) {
+            alert(str + "\n请使用Del键进行字符的删除操作！");
+            window.event.returnValue = false;
+        }
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?f9d9277586d422411c07db0ae5db60cc";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/cat.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Xiaonan Chen</a></h1>
+          <p><a>那个女孩对我说</a></p>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="搜索了解我吧(*^__^*)" class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/favorite/">电影收藏</a></li>
+                        
+                            <li><a href="/tags/">标 签 云</a></li>
+                        
+                            <li><a href="/about/">工 具 箱</a></li>
+                        
+                            <li><a href="/music/">音 乐 庫</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:3076337595@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 博客园" href="https://www.cnblogs.com/suixinnan/" title="博客园"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Operation/">Operation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/crontab/">crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deleted/">deleted</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docs/">docs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grafana/">grafana</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kali-linux/">kali linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-specific/">linux-specific</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something-wrong/">something wrong</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/youtube视频/">youtube视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生活/">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/电影收藏/">电影收藏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/运維/">运維</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://www.cnblogs.com/suixinnan/">SuiXin南</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">我是英俊潇洒风流倜傥人见人爱花见花开鬼见愁，欢迎你打我、骂我、k我、扁我、踢我、踹我、揍我，甚至把我煎、炒、炸、焖、炖、红烧、清蒸、水煮我都毫无怨言，但前提是：这个人必须是天底下最可爱、美丽、温柔、善良、贤惠、有气质的大美女</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Xiaonan Chen</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/cat.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Xiaonan Chen</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/favorite/">电影收藏</a></li>
+                
+                    <li><a href="/tags/">标 签 云</a></li>
+                
+                    <li><a href="/about/">工 具 箱</a></li>
+                
+                    <li><a href="/music/">音 乐 庫</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:3076337595@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 博客园" target="_blank" href="https://www.cnblogs.com/suixinnan/" title="博客园"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Linux系統日常運維管理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2020/08/02/Linux系統日常運維管理/" class="article-date">
+      <time datetime="2020-08-02T09:40:53.000Z" itemprop="datePublished">2020-08-02</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Linux系統日常運維管理
+    </h1>
+  
+
+        
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/运維/">运維</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>Linux系统日常运维管理<br> </p><h1>Linux用户管理</h1><br>1.1 基于命令行管理工具<br><a id="more"></a><br>1.useradd:建立用户<br>作用：用来建立用户账号和创建用户的起始目录。<br>用法：USERADD [选项] LOGIN<br>说明：增加用户账号就是在/etc/passwd文件中为新用户增加一条记录，同时更新其他系统文件。如/etc/shadow、/etc/group等。通常用passwd设定账号密码。<br>应用实例：<p></p>
+<pre><code>#useradd –d /usr/ccn –m ccn –创建一个用户ccn ,登录名:ccn,并产生一个主目录/usr/ccn
+</code></pre><p>查看useradd命令的默认设置</p>
+<pre><code>#useradd –D 
+</code></pre><p>默认设置保存在文件/etc/default/useradd中</p>
+<p>2.userdel:删除用户<br>实例:</p>
+<pre><code>#userdel –r ccn ----把用户的主目录一起删除
+</code></pre><p>3.usermod:修改已有用户的信息<br>实例如下：</p>
+<pre><code>#usermod –s /bin/tcsh –d /home/ccn –g developer ccn
+</code></pre><p>将用户ccn的登录shell修改为tcsh，主目录改为/home/ccn,用户组改为developer.</p>
+<p>4.passwd:设置密码<br>作用：用来修改账号的登录密码<br>用法:passwd  [选项]  账号名称</p>
+<p>5.chage:密码老化<br>用法：chage  [-l] 用户名<br>应用实例：<br>如果系统管理员想让用户ccn在首次登录时设置密码，用户的密码可以被设置为立即过期，从而强制用户在首次登录后立即改变他:</p>
+<pre><code>#chage  d  0  ccn
+</code></pre><p>6.groupadd:添加组<br>使用权限：超级用户<br>用法：groupadd [选项] group<br>应用实例:</p>
+<pre><code>#groupadd –g 744 ccn -----建立一个新组，并设置组ID加入系统
+</code></pre><p>7.groupdel:删除组账户<br>说明：groupdel命令无选项。删除一个已有的用户组账户，可以是使用该命令，但是该账户不能作为所有组被其他用户引用。<br>应用实例如下：<br>用户AB使用组账号CCN做其私有组时，不能直接删除组账号CCN，要先删除yon过户AB,再删除组账号CCN，命令如下：</p>
+<pre><code>#userdel –r ab
+#groupdel ccn
+</code></pre><p>8.groupmod:修改组属性<br>用法：groupmod [] 用户组名<br>实例：<br>将GROUP1的组标识号修改为102</p>
+<pre><code>#groupmod –g 102 group1
+</code></pre><p>9.vipw:编辑/etc/passwd文件</p>
+<pre><code>用法:vipw
+</code></pre><p>10.vigr:编辑/etc/group文件</p>
+<pre><code>用法：vigr
+</code></pre><p>11.newgrp:转化组</p>
+<pre><code>作用：用来转化用户的当前组到指定的组账户，用户必须属于该组才能执行。
+用法：newgrp 要转化的用户组账号名
+</code></pre><p>说明：如果一个用户同时属于多个用户组，那么用户可以在用户组之间切换，以便具有其他用户的权限。用户可以在登录后，使用命令newgrp切换到其他用户组，这个命令的参数就是目的用户组。</p>
+<p>12.groups: 显示组</p>
+<pre><code>用法：groups 用户名
+</code></pre><p>13.gpasswd:添加组</p>
+<pre><code>作用：用来添加用户到组
+用法：gpasswd [选项] group
+</code></pre><p>实例如下：<br>设定user1用户为user组管理员</p>
+<pre><code>#gpasswd –A user1 user
+</code></pre><p>14.whoami:显示当前用户名称</p>
+<pre><code>使用权限：所有用户
+</code></pre><p>15.who:显示登录用户</p>
+<pre><code>作用：用来显示系统中有哪些用户登录系统及其修改信息。
+用法：who [选项] [记录文件
+</code></pre><p>16.id：显示用户信息</p>
+<pre><code>作用：用来显示用户当前的GID.UID.用户所属组列表。
+用法：id [选项] [用户名称]
+</code></pre><p>17.su:切换身份</p>
+<pre><code>用法：su [选项] – [用户 [参数]..]
+</code></pre><p>实例:</p>
+<pre><code>#su –c /root/bin/w3bak webadmin root
+</code></pre><p>该命令使超级用户转化成一般使用者webadmin，并执行/root/bin/w3bak这个shell脚本，然后恢复超级用户<br>18.pwck:检测账户</p>
+<pre><code>作用：用于检测用户账号信息的完整性。
+用法：pwck [-q][-r][-s] [passwd [shadow]]
+说明：pwck命令检测文件/etc/passwd 和 /etc/shadow的每一行字段的用法和数值是否正确。
+</code></pre><p>实例：</p>
+<pre><code>#pwck  /etc/passwd  --验证存在于用户数据库中的所有用户和管理员，并报告（但不修正）任何错误
+</code></pre><p>19.grpck:检测用户组账号信息的完整性<br>20.chsh:设置shell</p>
+<pre><code>使用权限：所有使用者
+用法：chsh [-s shell][--list-shell][--help][--version] 用户名称
+</code></pre><p>21.chfn:修改用户信息</p>
+<pre><code>用法：chfn [-f full-name][-o ofice][-p office-phone][-h home-phone][-u][-v] 用户名称
+修改后的内容存放在/etc/passwd文件中
+</code></pre><p>22.ac显示用户在线时间的统计信息</p>
+<pre><code>用法：ac
+</code></pre><p>实例：<br>显示所有用户登录时间</p>
+<pre><code>#ac –p
+</code></pre><p>显示所有ccn登录时间（包括年份）</p>
+<pre><code>#ac  –d  –y  –p  ccn
+</code></pre><p>23.grpconv:开启群组的投影密码<br>说明：Linux系统里的用户和群组密码，分别存放在/etc目录下的passwd 和group文件中。因系统运作所需，任何人都可以读取他们，造成安全上的破绽。投影密码将文件内的密码改存在/etc目录下的shadow和gshadow文件内，只允许系统管理者读取，同时把原密码换成x字符。<br>24.grpunconv:关闭群组的投影密码<br>25.lastlog:显示最近登录用户的用户名、登录端口和登录时间</p>
+<pre><code>用法：lastlog [选项]
+</code></pre><p>26.logname:显示当前用户的名称<br>27.users：显示当前登录到系统的用户<br>28.lastb:显示登录系统失败用户的相关信息<br>说明：单独执行lastb指令，它会读取位于/var/log目录下btmp的文件，并把该文件内容列出。<br>实例：<br>显示最近5个登录失败记录</p>
+<pre><code>#lastb  –n  5
+</code></pre><p>显示2016-12-12前的最近3个登录失败记录</p>
+<pre><code>#lastb  –c  20161212000000  –n  3
+</code></pre>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2020/08/02/Linux系統日常運維管理/">Linux系統日常運維管理</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Xiaonan Chen</a></p>
+        <p><span>发布时间:</span>2020-08-02, 17:40:53</p>
+        <p><span>最后更新:</span>2020-08-03, 12:12:16</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2020/08/02/Linux系統日常運維管理/" title="Linux系統日常運維管理">https://suixin.ltd/2020/08/02/Linux系統日常運維管理/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://suixin.ltd/2020/08/02/Linux系統日常運維管理/　　作者: Xiaonan Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2020/07/28/a-freshman-story/">
+                    a freshman story
+                </a>
+            </div>
+        
+    </nav>
+
+  
+  
+    <! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+       搬运工需要安慰，需要支持！（￥1.0）
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/img/donate.png" alt="支付宝打赏"> 
+        <!-- 微信打赏图案 -->
+   <!-- <img src="/img/weixin.jpg" alt="微信打赏">  -->
+    
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+  
+
+
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text">Linux用户管理</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Linux系統日常運維管理　| 小南同学的笔记　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC80NTY5Ny8yMjIwOA==">
+	<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+	</script>
+<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+      
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2020/07/28/a-freshman-story/" title="下一篇: a freshman story">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/08/02/Linux系統日常運維管理/">Linux系統日常運維管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/07/28/a-freshman-story/">a freshman story</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/07/28/hexo-docs-commands/">hexo_docs_commands</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/04/pxe_server/">pxe_server install linux and windows</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/15/grafana/">磁盘满了，原来是僵尸进程惹的祸、Grafana图形展示ZABBIX</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/15/ffmpeg/">ffmpeg and youtube</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/13/Linux Operation/">Linux Operation and Maintenance interview</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/13/at-and-cron/">Linux计划任务</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/12/mysql5.7/">Install mysql5.7</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/ElasticSearch/">Install ElasticSearch</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/rhel8_specific/">RHEL8.0_specific</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/05/Naked Weapon/">Naked Weapon</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/鬼干部/">鬼干部</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/灵幻至尊/">灵幻至尊</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/音乐僵尸/">音乐僵尸</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/一眉道人/">一眉道人</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/僵尸先生/">僵尸先生</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/僵尸家族/">僵尸家族</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/天地玄门/">天地玄门</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/一代枭雄之三支旗/">一代枭雄之三支旗</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/二代宗师/">二代宗师</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/恐怖故事2/">恐怖故事2</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/脱单好难/">脱单好难</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/钵兰街大少/">钵兰街大少</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/使徒行者2：谍影行动/">使徒行者2：谍影行动</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/逃学英雄传/">逃学英雄传</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/陈翔六点半之重楼别/">陈翔六点半之重楼别</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/猛鬼屠房/">猛鬼屠房</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/06/zhenhunjie/">zhenhunjie</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/04/baisheyuanqi/">baisheyuanqi</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/31/birthday/">birthday</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/23/test/">test</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/15/rhel7-specific/">rhel7_specific</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/28/owncloud/">owncloud</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/03/Recruit-marriage/">Recruit marriage</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/17/pdf-upload-test/">pdf-upload-test</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/16/instructions-for-linux/">instructions-for-linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/09/RHEL7题库/">RHEL7题库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/14/cp/">cp</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/13/newlinux/">newlinux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/11/linux/">Linux系统raid1更换故障硬盘处理过程</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2018-2020 Xiaonan Chen
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo Coding</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+            <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <script src="https://myhkw.cn/player/js/player.js" id="myhk" key="159451959418" m="1"></script>
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-5.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂) 我藏好了哦~ " + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*) 被你发现啦~ " + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+
+  </div>
+</body>
+</html>
