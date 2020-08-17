@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Xiaonan Chen" />
+
+
+
+<meta name="description" content="mac安装sqlserver 本篇較為精簡，以下是本篇的小建議：    1 聽過 Mac   2 聽過 Terminal   3 聽過 Docker   4 聽過 DataBase">
+<meta name="keywords" content="MAC,SQLSERVER,Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mac安装sqlserver">
+<meta property="og:url" content="https://suixin.ltd/2020/08/17/mac安装sqlserver/index.html">
+<meta property="og:site_name" content="小南同学的笔记">
+<meta property="og:description" content="mac安装sqlserver 本篇較為精簡，以下是本篇的小建議：    1 聽過 Mac   2 聽過 Terminal   3 聽過 Docker   4 聽過 DataBase">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://dotblogsfile.blob.core.windows.net/user/incredible/c618f813-8e98-4651-94ba-f9030a5b9da9/1541855714_94078.png">
+<meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2018/01/1515480613-7638-docker-app-in-apps.png">
+<meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2018/01/1515480612-6026-whale-in-menu-bar.png">
+<meta property="og:image" content="https://dotblogsfile.blob.core.windows.net/user/incredible/c618f813-8e98-4651-94ba-f9030a5b9da9/1541908711_42496.png">
+<meta property="og:image" content="https://dotblogsfile.blob.core.windows.net/user/incredible/c618f813-8e98-4651-94ba-f9030a5b9da9/1541914550_56774.png">
+<meta property="og:updated_time" content="2020-08-17T07:45:20.910Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mac安装sqlserver">
+<meta name="twitter:description" content="mac安装sqlserver 本篇較為精簡，以下是本篇的小建議：    1 聽過 Mac   2 聽過 Terminal   3 聽過 Docker   4 聽過 DataBase">
+<meta name="twitter:image" content="https://dotblogsfile.blob.core.windows.net/user/incredible/c618f813-8e98-4651-94ba-f9030a5b9da9/1541855714_94078.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="小南同学的笔记" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>mac安装sqlserver | 小南同学的笔记</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+<script>
+    document.oncontextmenu = function (event) {
+        if (window.event) {
+            event = window.event;
+        }
+        try {
+            var the = event.srcElement;
+            if (!((the.tagName == "INPUT" && the.type.toLowerCase() == "text") || the.tagName == "TEXTAREA")) {
+                return false;
+            }
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+</script>
+
+<script>
+    document.onkeydown = function () {
+        if (window.event && window.event.keyCode == 123) {
+            alert("F12被禁用");
+            event.keyCode = 0;
+            event.returnValue = false;
+        }
+        if (window.event && window.event.keyCode == 13) {
+            window.event.keyCode = 505;
+        }
+        if (window.event && window.event.keyCode == 8) {
+            alert(str + "\n请使用Del键进行字符的删除操作！");
+            window.event.returnValue = false;
+        }
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?f9d9277586d422411c07db0ae5db60cc";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/cat.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Xiaonan Chen</a></h1>
+          <p><a>那个女孩对我说</a></p>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="搜索了解我吧(*^__^*)" class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/favorite/">电影收藏</a></li>
+                        
+                            <li><a href="/bilibili/">B 站追番</a></li>
+                        
+                            <li><a href="/tags/">标 签 云</a></li>
+                        
+                            <li><a href="/about/">工 具 箱</a></li>
+                        
+                            <li><a href="/music/">音 乐 庫</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:3076337595@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 博客园" href="https://www.cnblogs.com/suixinnan/" title="博客园"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MAC/">MAC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Operation/">Operation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQLSERVER/">SQLSERVER</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/crontab/">crontab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deleted/">deleted</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docs/">docs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grafana/">grafana</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kali-linux/">kali linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-specific/">linux-specific</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something-wrong/">something wrong</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/youtube视频/">youtube视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zabbix/">zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生活/">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/电影收藏/">电影收藏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/运維/">运維</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://www.cnblogs.com/suixinnan/">SuiXin南</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">我是英俊潇洒风流倜傥人见人爱花见花开鬼见愁，欢迎你打我、骂我、k我、扁我、踢我、踹我、揍我，甚至把我煎、炒、炸、焖、炖、红烧、清蒸、水煮我都毫无怨言，但前提是：这个人必须是天底下最可爱、美丽、温柔、善良、贤惠、有气质的大美女</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Xiaonan Chen</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/cat.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Xiaonan Chen</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/favorite/">电影收藏</a></li>
+                
+                    <li><a href="/bilibili/">B 站追番</a></li>
+                
+                    <li><a href="/tags/">标 签 云</a></li>
+                
+                    <li><a href="/about/">工 具 箱</a></li>
+                
+                    <li><a href="/music/">音 乐 庫</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:3076337595@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 博客园" target="_blank" href="https://www.cnblogs.com/suixinnan/" title="博客园"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-mac安装sqlserver" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2020/08/17/mac安装sqlserver/" class="article-date">
+      <time datetime="2020-08-17T02:45:28.000Z" itemprop="datePublished">2020-08-17</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mac安装sqlserver
+    </h1>
+  
+
+        
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MAC/">MAC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SQLSERVER/">SQLSERVER</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>mac安装sqlserver</p>
+<p>本篇較為精簡，以下是本篇的小建議：</p>
+<p>   1 聽過 Mac<br>   2 聽過 Terminal<br>   3 聽過 Docker<br>   4 聽過 DataBase<br><a id="more"></a></p>
+<p></p><h1>一、安裝 Docker</h1><br>安裝方法有兩種，個人建議用 brew 最快。<p></p>
+<p>1.1 安裝<br>1.1.1 從官方網站安裝</p>
+<p>下載網址：<a href="https://store.docker.com/editions/community/docker-ce-desktop-mac" target="_blank" rel="noopener">https://store.docker.com/editions/community/docker-ce-desktop-mac</a></p>
+<p>下載完雙擊下載的 .dmg 文件，然后将鲸鱼图标拖拽到 Application 文件夹即可<br><img src="https://dotblogsfile.blob.core.windows.net/user/incredible/c618f813-8e98-4651-94ba-f9030a5b9da9/1541855714_94078.png" alt=""></p>
+<p>1.1.2 從 Homebrew 安裝</p>
+<pre><code>$ brew cask install docker
+==&gt; Creating Caskroom at /usr/local/Caskroom
+==&gt; We&apos;ll set permissions properly so we won&apos;t need sudo in the future
+Password:          # 输入 macOS 密码
+==&gt; Satisfying dependencies
+==&gt; Downloading https://download.docker.com/mac/stable/21090/Docker.dmg
+######################################################################## 100.0%
+==&gt; Verifying checksum for Cask docker
+==&gt; Installing Cask docker
+==&gt; Moving App &apos;Docker.app&apos; to &apos;/Applications/Docker.app&apos;.
+&amp;#x1f37a;  docker was successfully installed!
+</code></pre><p>安裝好後就是啓動docker<br>从应用中找到 Docker 图标并点击运行。可能会询问 macOS 的登陆密码，输入即可。<br><img src="https://www.runoob.com/wp-content/uploads/2018/01/1515480613-7638-docker-app-in-apps.png" alt=""><br>等待頂部狀態欄中的鯨魚圖標溢滿，点击顶部状态栏中的鲸鱼图标会弹出操作菜单。<br><img src="https://www.runoob.com/wp-content/uploads/2018/01/1515480612-6026-whale-in-menu-bar.png" alt=""></p>
+<h1 id="記憶體配置"><a href="#記憶體配置" class="headerlink" title="記憶體配置"></a>記憶體配置</h1><p>SQL Server 最低需求配置為 3.25 GB，</p>
+<p>因此我們需要增加容器配置的記憶體。</p>
+<p>選擇 Preferences…<br><img src="https://dotblogsfile.blob.core.windows.net/user/incredible/c618f813-8e98-4651-94ba-f9030a5b9da9/1541908711_42496.png" alt=""><br>切換到 Advanced，將 Memory 增加至 4GB。</p>
+<h1 id="镜像加速"><a href="#镜像加速" class="headerlink" title="镜像加速"></a>镜像加速</h1><p>鉴于国内网络问题，后续拉取 Docker 镜像十分缓慢，我们可以需要配置加速器来解决，我使用的是网易的镜像地址：<a href="http://hub-mirror.c.163.com。" target="_blank" rel="noopener">http://hub-mirror.c.163.com。</a></p>
+<p>在任务栏点击 Docker for mac 应用图标 -&gt; Perferences… -&gt; Daemon -&gt; Registry mirrors。在列表中填写加速器地址即可。修改完成之后，点击 Apply &amp; Restart 按钮，Docker 就会重启并应用配置的镜像地址了。</p>
+<h1 id="下載映像檔"><a href="#下載映像檔" class="headerlink" title="下載映像檔"></a>下載映像檔</h1><p>拉取 SQL Server 2017 Docker 镜像</p>
+<pre><code>docker pull microsoft/mssql-server-linux:2017-latest
+</code></pre><h1 id="運行Docker鏡像"><a href="#運行Docker鏡像" class="headerlink" title="運行Docker鏡像"></a>運行Docker鏡像</h1><pre><code>docker run -e &apos;ACCEPT_EULA=Y&apos; -e &apos;MSSQL_SA_PASSWORD=您的密码&apos; -p 1433:1433 --name sqlserver -d microsoft/mssql-server-linux:2017-latest
+</code></pre><p>參數說明<br>-e ‘MSSQL_SA_PASSWORD=您的密码’     设置SA用户的密码<br>-p 1433:1433     映射端口<br>–name sqlserver     设置Docker容器名称为sqlserver<br>-e “ACCEPT_EULA=Y”     将 ACCEPT_EULA 变量设置为任意值，以确认接受最终用户许可协议。 SQL Server 映像的必需设置。</p>
+<p>檢查Docker容器運行情況</p>
+<pre><code>docker ps 
+docker ps -a (包含未運行的容器)
+</code></pre><p>更改SQLSERVER密碼</p>
+<pre><code>docker exec -it sql1 /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P &quot;您的密码&quot;   -Q &apos;ALTER LOGIN SA WITH PASSWORD=&quot;新密码&quot;&apos;
+</code></pre><h1 id="查看Images"><a href="#查看Images" class="headerlink" title="查看Images"></a>查看Images</h1><p>下載完畢後，利用 docker images 可以查看本地擁有的映像檔。</p>
+<pre><code>docker images
+</code></pre><h1 id="關閉SQLSERVER"><a href="#關閉SQLSERVER" class="headerlink" title="關閉SQLSERVER"></a>關閉SQLSERVER</h1><pre><code>docker stop sqlserver(CONTAINER ID)
+</code></pre><h1 id="如果sqlserver沒有啓動，則需要啓動它"><a href="#如果sqlserver沒有啓動，則需要啓動它" class="headerlink" title="如果sqlserver沒有啓動，則需要啓動它"></a>如果sqlserver沒有啓動，則需要啓動它</h1><pre><code>docker start sqlserver(CONTAINER ID)
+</code></pre><p>如果想要刪除容器，請記得先停止容器！</p>
+<p>利用 docker rm 指令，就可以刪除。</p>
+<pre><code>docker rm sql_server_demo
+</code></pre><p>如何刪除映像檔</p>
+<pre><code>docker rmi microsoft/mssql-server-linux    
+</code></pre><p>鏈接到SQLSERVER<br>在sqlserver容器中打開BASH終端</p>
+<pre><code>docker exec -it sqlserver &quot;bash&quot;
+</code></pre><p>在sqlserver容器的BASH終端中輸入</p>
+<pre><code>/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P &quot;您的密码&quot;
+</code></pre><p></p><h1>二、安裝圖形化鏈接工具</h1><br>我們一般會使用可視化管理工具去鏈接SQLSERVER，這裏我們安裝DBeaver<br>DBeaver 是 Mac 平台上一款免费通用的数据库工具，允许您查看数据库的结构，执行 SQL 查询和脚本，浏览和导出表数据，处理 BLOB / CLOB 值，修改数据库元对象等。<br>下載安裝包<a href="https://dbeaver.io/files/dbeaver-ce-latest-macos.dmg" target="_blank" rel="noopener">https://dbeaver.io/files/dbeaver-ce-latest-macos.dmg</a><br>安裝步驟跟docker一樣，可參考上面docker安裝。<br>在Application中雙擊圖標啓動DBeaver會提示下載驅動，按照所需下載即可。<br><img src="https://dotblogsfile.blob.core.windows.net/user/incredible/c618f813-8e98-4651-94ba-f9030a5b9da9/1541914550_56774.png" alt=""><br>還有一種免費的圖形化工具SQL Operations Studio<br>下載地址：<a href="https://docs.microsoft.com/zh-tw/sql/azure-data-studio/download?view=sql-server-2017" target="_blank" rel="noopener">https://docs.microsoft.com/zh-tw/sql/azure-data-studio/download?view=sql-server-2017</a><p></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2020/08/17/mac安装sqlserver/">mac安装sqlserver</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Xiaonan Chen</a></p>
+        <p><span>发布时间:</span>2020-08-17, 10:45:28</p>
+        <p><span>最后更新:</span>2020-08-17, 15:45:20</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2020/08/17/mac安装sqlserver/" title="mac安装sqlserver">https://suixin.ltd/2020/08/17/mac安装sqlserver/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://suixin.ltd/2020/08/17/mac安装sqlserver/　　作者: Xiaonan Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2020/08/03/hexo豆瓣卡片安裝遇到的坑/">
+                    hexo豆瓣卡片安裝遇到的坑
+                </a>
+            </div>
+        
+    </nav>
+
+  
+  
+    <! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+       搬运工需要安慰，需要支持！（￥1.0）
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/img/donate.png" alt="支付宝打赏"> 
+        <!-- 微信打赏图案 -->
+   <!-- <img src="/img/weixin.jpg" alt="微信打赏">  -->
+    
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+  
+
+
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text">一、安裝 Docker</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#記憶體配置"><span class="toc-number">2.</span> <span class="toc-text">記憶體配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#镜像加速"><span class="toc-number">3.</span> <span class="toc-text">镜像加速</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#下載映像檔"><span class="toc-number">4.</span> <span class="toc-text">下載映像檔</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#運行Docker鏡像"><span class="toc-number">5.</span> <span class="toc-text">運行Docker鏡像</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#查看Images"><span class="toc-number">6.</span> <span class="toc-text">查看Images</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#關閉SQLSERVER"><span class="toc-number">7.</span> <span class="toc-text">關閉SQLSERVER</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#如果sqlserver沒有啓動，則需要啓動它"><span class="toc-number">8.</span> <span class="toc-text">如果sqlserver沒有啓動，則需要啓動它</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-number">9.</span> <span class="toc-text">二、安裝圖形化鏈接工具</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"mac安装sqlserver　| 小南同学的笔记　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC80NTY5Ny8yMjIwOA==">
+	<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+	</script>
+<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+      
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2020/08/03/hexo豆瓣卡片安裝遇到的坑/" title="下一篇: hexo豆瓣卡片安裝遇到的坑">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/08/17/mac安装sqlserver/">mac安装sqlserver</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/08/03/hexo豆瓣卡片安裝遇到的坑/">hexo豆瓣卡片安裝遇到的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/08/02/Linux系統日常運維管理/">Linux系統日常運維管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/07/28/a-freshman-story/">a freshman story</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/07/28/hexo-docs-commands/">hexo_docs_commands</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/04/pxe_server/">pxe_server install linux and windows</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/15/grafana/">磁盘满了，原来是僵尸进程惹的祸、Grafana图形展示ZABBIX</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/15/ffmpeg/">ffmpeg and youtube</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/13/Linux Operation/">Linux Operation and Maintenance interview</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/13/at-and-cron/">Linux计划任务</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/12/mysql5.7/">Install mysql5.7</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/ElasticSearch/">Install ElasticSearch</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/11/rhel8_specific/">RHEL8.0_specific</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/05/Naked Weapon/">Naked Weapon</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/鬼干部/">鬼干部</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/灵幻至尊/">灵幻至尊</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/音乐僵尸/">音乐僵尸</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/一眉道人/">一眉道人</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/僵尸先生/">僵尸先生</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/僵尸家族/">僵尸家族</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/24/天地玄门/">天地玄门</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/一代枭雄之三支旗/">一代枭雄之三支旗</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/二代宗师/">二代宗师</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/恐怖故事2/">恐怖故事2</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/脱单好难/">脱单好难</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/钵兰街大少/">钵兰街大少</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/使徒行者2：谍影行动/">使徒行者2：谍影行动</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/逃学英雄传/">逃学英雄传</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/陈翔六点半之重楼别/">陈翔六点半之重楼别</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/猛鬼屠房/">猛鬼屠房</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/06/zhenhunjie/">zhenhunjie</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/04/baisheyuanqi/">baisheyuanqi</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/31/birthday/">birthday</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/23/test/">test</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/15/rhel7-specific/">rhel7_specific</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/28/owncloud/">owncloud</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/03/Recruit-marriage/">Recruit marriage</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/17/pdf-upload-test/">pdf-upload-test</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/16/instructions-for-linux/">instructions-for-linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/09/RHEL7题库/">RHEL7题库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/14/cp/">cp</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/13/newlinux/">newlinux</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/11/linux/">Linux系统raid1更换故障硬盘处理过程</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2018-2020 Xiaonan Chen
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo Coding</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+            <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <script src="https://myhkw.cn/player/js/player.js" id="myhk" key="159451959418" m="1"></script>
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-5.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂) 我藏好了哦~ " + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*) 被你发现啦~ " + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

