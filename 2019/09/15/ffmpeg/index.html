@@ -24,7 +24,7 @@
 <meta property="og:description" content="大概所有的因果都是从入坑开始的吧  今天心血来潮就到油管上面下些视频素材在火狐浏览器附加组件中搜索YouTube 视频一键下载器 / YouTube HD Download进行添加后科学上网https://www.youtube.com/（也就是传说中的油管）选择你喜欢的MV如下图分别下在所需清晰度下载VIDEO AND AUDIO就是这样我踏上了入坑的道路。。。。。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://suixin.ltd/2019/09/15/ffmpeg/ffmpeg.png">
-<meta property="og:updated_time" content="2020-07-22T08:01:49.781Z">
+<meta property="og:updated_time" content="2020-08-20T03:32:35.905Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ffmpeg and youtube">
 <meta name="twitter:description" content="大概所有的因果都是从入坑开始的吧  今天心血来潮就到油管上面下些视频素材在火狐浏览器附加组件中搜索YouTube 视频一键下载器 / YouTube HD Download进行添加后科学上网https://www.youtube.com/（也就是传说中的油管）选择你喜欢的MV如下图分别下在所需清晰度下载VIDEO AND AUDIO就是这样我踏上了入坑的道路。。。。。">
@@ -484,6 +484,9 @@ file &apos;input3.mkv&apos;
 <pre><code>ffmpeg -i input1.mp4 -i input2.webm -i input3.avi -filter_complex &apos;[0:0] [0:1] [1:0] [1:1] [2:0] [2:1] concat=n=3:v=1:a=1 [v] [a]&apos; -map &apos;[v]&apos; -map &apos;[a]&apos; &lt;编码器选项&gt; output.mkv
 </code></pre><p>如你所见，上面的命令合并了三种不同格式的文件，FFmpeg concat 过滤器会重新编码它们。注意这是有损压缩。</p>
 <p>[0:0] [0:1] [1:0] [1:1] [2:0] <a href="https://trac.ffmpeg.org/ticket/1552" title="1552 (Packed B-frames cannot be remuxed into mkv) – FFmpeg" target="_blank" rel="noopener">2:1分别表示第一个输入文件的视频、音频、第二个输入文件的视频、音频、第三个输入文件的视频、音频。concat=n=3:v=1:a=1表示有三个输入文件，输出一条视频流和一条音频流。[v] [a] 就是得到的视频流和音频流的名字，注意在 bash 等 shell 中需要用引号，防止通配符扩展。<br>提示<br>       1、以上三种方法，在可能的情况下，最好使用第二种。第一种次之，第三种更次。第四种是后备方案，尽量避免。<br>    2、规格不同的视频合并后可能会有无法预测的结果。<br>    3、有些媒体需要先分离视频和音频，合并完成后再封装回去。<br>    4、对于 Packed B-Frames 的视频，如果封装成 MKV 格式的时候提示 -fflags +genpts</a></p>
+<p>#錄屏<br>ffmpeg -y -f x11grab -s 1920x1080 -framerate 30 -i :0 -f pulse -i alsa_output.pci-0000_00_1b.0.analog-stereo.monitor -vf ‘setpts=(RTCTIME-RTCSTART)/(TB*1000000)‘ -af asetpts=N/SR/TB,apad -shortest -c:v libx264 -profile:v high444 -preset:v veryfast -qp:v 0 -pix_fmt yuv444p -c:a flac screencast.mkv<br>获取音频：<br>pactl list | grep -A2 ‘Source #‘<br>Source #0<br>    State: IDLE</p>
+<pre><code>Name: alsa_output.pci-0000_00_1b.0.analog-stereo.monitor
+</code></pre><p>–<br>Source #1<br>    State: SUSPENDED<br>    Name: alsa_input.pci-0000_00_1b.0.analog-stereo</p>
 <ul>
 <li>一朝入坑深似海，几度流月静时春。</li>
 <li>同途偶遇是良人，从岁月，艳时光</li>
@@ -502,7 +505,7 @@ file &apos;input3.mkv&apos;
         <p><span>本文标题:</span><a href="/2019/09/15/ffmpeg/">ffmpeg and youtube</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Xiaonan Chen</a></p>
         <p><span>发布时间:</span>2019-09-15, 21:25:45</p>
-        <p><span>最后更新:</span>2020-07-22, 16:01:49</p>
+        <p><span>最后更新:</span>2020-08-20, 11:32:35</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2019/09/15/ffmpeg/" title="ffmpeg and youtube">https://suixin.ltd/2019/09/15/ffmpeg/</a>
             <span class="copy-path" data-clipboard-text="原文: https://suixin.ltd/2019/09/15/ffmpeg/　　作者: Xiaonan Chen" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
